@@ -1,13 +1,3 @@
----
-layout: post
-title: "Git tutorial"
-description: "git tutorial for the undergraduate students"
-date: 2019-11-11
-tags: [Computer science, Computer Engineering, Mathematics, 컴퓨터, 컴퓨터과학, 컴퓨터공학, git, github]
-category: "Why computer?"
-comments: true
-share: true
----
 
 Why git??
 =========
@@ -63,7 +53,7 @@ The second reason is that the method consumes vast storage. If the size of your 
 
 Git solves these two problems efficiently. It automatically saves and maintains your code history, and provides the way to access to a certain point of the past or revert the changes. Also, git only collects the information about the \"difference\" between each commit that you made, so that it can maintain full history with efficient storage usage.
 
-Then how can we save and manage history? It's easy. You might be already familiar using the command `git add` and `git commit`. Then why we need these two separate commands? It seems that using two commands generates unnecessary waste of time. However, `git add` command provides a significant advantage in which gives the user the authority to select *the range of commit*. For example, while you are implementing something, your high concentration might make you forget to commit frequently. You already worked in more than ten files. In this case, is it reasonable to commit all these works at once? The answer is **NO**. It is better to assign each small task to individual commitments, as it helps you manage the commit history. Now you might notice why you need `git add` command. In this situation, you can successively commit the change of each file by using the sequence of commands: `git add file1` $\rightarrow$ `git commit` $\rightarrow$ `git add file2` $\rightarrow$ `git commit` $\rightarrow$ `git add file2` \... and so on.
+Then how can we save and manage history? It's easy. You might be already familiar using the command `git add` and `git commit`. Then why we need these two separate commands? It seems that using two commands generates unnecessary waste of time. However, `git add` command provides a significant advantage in which gives the user the authority to select *the range of commit*. For example, while you are implementing something, your high concentration might make you forget to commit frequently. You already worked in more than ten files. In this case, is it reasonable to commit all these works at once? The answer is **NO**. It is better to assign each small task to individual commitments, as it helps you manage the commit history. Now you might notice why you need `git add` command. In this situation, you can successively commit the change of each file by using the sequence of commands: `git add file1` -> `git commit` -> `git add file2` -> `git commit` -> `git add file2` \... and so on.
 
 Backup
 ------
@@ -74,7 +64,7 @@ We already talk about the backup system provided by git. To be more specific, we
 
 Any existing folder(or directory) in your computer can be easily converted to a git repository using command git init. This command adds git repository configuration to the directory by creating a .git folder. Now we can call the directory *local git repository*, and can use any git command on it.
 
-However, you need to prepare against emergencies, such as the sudden broken of your computer. To keep your files in local git repository safe, you need to upload them somewhere. Sevices like Github or Gitlab provides *remote git repository* for the purpose. We can easily upload everything in your local git repository to remote git repository with this simple procedure:
+However, you need to prepare against emergencies, such as the sudden broken of your computer. To keep your files in local git repository safe, you need to upload them somewhere. Sevices like Github or Gitlab provides *remote git repository*  for the purpose. We can easily upload everything in your local git repository to remote git repository with this simple procedure:
 
 1.  Create an empty remote repository in Github(or Gitlab). Suppose that the URL of the remote repository is `https://github.com/testproject.git`.
 
@@ -148,6 +138,8 @@ Then how about `row 2` and `3`? For `row 2`, no one will doubt that the result w
 
 The algorithm for the 3-way merge is naive but gives a huge advantage. The core of the procedure is that it also uses the **Base** node to compare. Suppose that we only compare the values from branches **A** and **B**? Git will not be able to select amount automatically and ask a human to merge for not only row 3 but also for rows 1 and 2, as they have a different value. Now you may agree that the 3-way merge improves the efficiency of merging step a lot.
 
+Now you may understand what will happen when two branches merged. The same thing happens for the example for Bob, Alice, and Charlie. Alice's work will be treated as **Base**, and the branches **A** and **B** will represent the work or Bob and Charlie. 
+
 Useful Commands
 ===============
 
@@ -176,7 +168,5 @@ In this section, I'll introduce the set of useful git commands which can help yo
 -   `git log`
 
 -   `git log –graph –oneline`
-
-
 
 
