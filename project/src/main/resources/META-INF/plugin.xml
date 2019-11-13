@@ -1,11 +1,11 @@
 <idea-plugin>
-    <id>edu.postech.csed332.homework5</id>
-    <name>Project Structure Tool Window</name>
+    <id>project Team7</id>
+    <name>simpleIdeaVim</name>
     <vendor email="youremail@postech.ac.kr" url="http://csed332.postech.ac.kr">POSTECH CSED332</vendor>
 
     <description><![CDATA[
-    Homework 5<br>
-    <em>Problem 2</em> is building a tool window that shows Java project structure.
+    CESD332 Project<br>
+    <em>simpleIdeaVim</em> is simple vim emulator with functions of some vim plugins.
     ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
