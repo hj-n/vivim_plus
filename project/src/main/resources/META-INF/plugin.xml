@@ -16,7 +16,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <toolWindow id="Project Structure" anchor="right" factoryClass="skeleton.MyToolWindowFactory"/>
+        <toolWindow id="Project Structure" anchor="right" factoryClass="uml_navigate.MyToolWindowFactory"/>
     </extensions>
 
     <actions>
