@@ -1,20 +1,16 @@
 package uml_navigate;
 
-import com.intellij.ide.projectView.impl.nodes.PackageUtil;
-import com.intellij.ide.util.treeView.PresentableNodeDescriptor;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.openapi.project.Project;
-import com.thaiopensource.xml.dtd.om.Def;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalIconFactory;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
