@@ -10,7 +10,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import java.util.*;
 
-class ProjectTreeModelFactory {
+public class ProjectTreeModelFactory {
 
     /**
      * Create a tree model that describes the structure of a java project. This method use JavaElementVisitor to

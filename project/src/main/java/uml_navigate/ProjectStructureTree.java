@@ -153,7 +153,6 @@ class ProjectStructureTree extends Tree {
     }
 
     public void publicUpdateTree(@NotNull PsiElement target) {
-        // TODO: implement this method
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) getModel().getRoot();
 
         Enumeration e = root.breadthFirstEnumeration();
