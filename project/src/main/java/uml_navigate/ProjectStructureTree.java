@@ -70,6 +70,7 @@ class ProjectStructureTree extends Tree {
                 else if(element instanceof PsiPackage) {
                     setIcon(packageIcon);
                     append(((PsiPackage) element).getName());
+
                 }
                 else if(element instanceof PsiClass) {
                     setIcon(classIcon);
@@ -93,7 +94,7 @@ class ProjectStructureTree extends Tree {
             }
         });
         //addKeyListener(new MyKeyAdapter(intToClass));
-        addKeyListener(new MyKeyAdapter(strToClass, classToStr, curStrToClass, curClassToStr));
+        addKeyListener(new MyKeyAdapter(strToClass, classToStr, curStrToClass, curClassToStr, this));
 
         // Set a mouse listener to handle double-click events
         addMouseListener(new MouseAdapter() {
@@ -147,8 +148,13 @@ class ProjectStructureTree extends Tree {
     private void updateTree(@NotNull Project project, @NotNull PsiElement target) {
         // TODO: implement this method
         setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode) getModel().getRoot();
         updateClassMap(project);
+        publicUpdateTree(target);
+    }
+
+    public void publicUpdateTree(@NotNull PsiElement target) {
+        // TODO: implement this method
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) getModel().getRoot();
 
         Enumeration e = root.breadthFirstEnumeration();
         DefaultMutableTreeNode node;
@@ -163,6 +169,8 @@ class ProjectStructureTree extends Tree {
         } while(e.hasMoreElements());
 
     }
+
+
 
     /**
      * Returns an instance of PsiField, PsiMethod, PsiClass, or PsiPackage that is related to a change event
@@ -189,7 +197,7 @@ class ProjectStructureTree extends Tree {
     }
 
 
-    private void updateClassMap(Project project) {
+    public void updateClassMap(Project project) {
         // the root node of the tree
         final Integer[] count = {0};
         KeyIterator it = new KeyIterator();

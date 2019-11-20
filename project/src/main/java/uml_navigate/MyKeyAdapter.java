@@ -15,15 +15,18 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
     private HashMap<PsiElement, String> classToStr;
     private HashMap<String, PsiElement> curStrToClass;
     private HashMap<PsiElement, String> curClassToStr;
+    private ProjectStructureTree projectTree;
 
 
     MyKeyAdapter(HashMap <String, PsiElement> strMap,  HashMap <PsiElement, String> classMap,
-                 HashMap <String, PsiElement> curStrMap,  HashMap <PsiElement, String> curClassMap) {
+                 HashMap <String, PsiElement> curStrMap,  HashMap <PsiElement, String> curClassMap,
+                 ProjectStructureTree tree) {
         super();
         strToClass = strMap;
         classToStr = classMap;
         curStrToClass = curStrMap;
         curClassToStr = curClassMap;
+        projectTree = tree;
     }
 
     @Override
@@ -44,9 +47,14 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
                     curClassToStr.replace(key, curClassToStr.get(key).substring(1));
                 }
             }
+            for (String key: curStrToClass.keySet())
+            {
+                projectTree.publicUpdateTree(curStrToClass.get(key));
+            }
             if(curClassToStr.isEmpty()) {
                 for (String key : curStrToClass.keySet()) {
                     curClassToStr.put(curStrToClass.get(key), key);
+                    projectTree.publicUpdateTree(curStrToClass.get(key));
                 }
             }
             else {
@@ -82,6 +90,4 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
     public void keyReleased(KeyEvent e) {
         super.keyReleased(e);
     }
-
 }
-
