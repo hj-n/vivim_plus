@@ -1,10 +1,13 @@
 package uml_navigate;
 
+import com.intellij.ide.projectView.impl.nodes.PackageUtil;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.openapi.project.Project;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -33,7 +36,10 @@ class ProjectStructureTree extends Tree {
     private static final Icon fieldIcon = MetalIconFactory.getVerticalSliderThumbIcon();
     private static final Icon defaultIcon = MetalIconFactory.getTreeLeafIcon();
 
-
+    private HashMap<PsiElement, String> classToStr;
+    private HashMap<String, PsiElement> strToClass;
+    private HashMap<PsiElement, String> curClassToStr;
+    private HashMap<String, PsiElement> curStrToClass;
     /**
      * Creates a project structure tree for a given project.
      *
@@ -41,7 +47,13 @@ class ProjectStructureTree extends Tree {
      */
     ProjectStructureTree(@NotNull Project project) {
         setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
+        //TODO: Mapping each class to string instead integer
+        strToClass = new HashMap<>();
+        classToStr = new HashMap<>();
+        curStrToClass = new HashMap<>();
+        curClassToStr = new HashMap<>();
 
+        updateClassMap(project);
 
         // Set a cell renderer to display the name and icon of each node
         setCellRenderer(new ColoredTreeCellRenderer() {
@@ -61,24 +73,27 @@ class ProjectStructureTree extends Tree {
                 }
                 else if(element instanceof PsiClass) {
                     setIcon(classIcon);
-                    append(((PsiClass) element).getName());
+                    append(((PsiClass) element).getName() + " "
+                            + StringUtils.defaultString(curClassToStr.get(element)));
                 }
                 else if(element instanceof PsiMethod) {
                     setIcon(methodIcon);
-                    append(((PsiMethod) element).getName());
+                    append(((PsiMethod) element).getName() + " "
+                            + StringUtils.defaultString(curClassToStr.get(element)));
 
                 }
                 else if(element instanceof PsiField) {
                     setIcon(fieldIcon);
-                    append(((PsiField) element).getName());
+                    append(((PsiField) element).getName() + " "
+                            + StringUtils.defaultString(curClassToStr.get(element)));
                 }
                 else {
                     setIcon(defaultIcon);
                 }
-
-
             }
         });
+        //addKeyListener(new MyKeyAdapter(intToClass));
+        addKeyListener(new MyKeyAdapter(strToClass, classToStr, curStrToClass, curClassToStr));
 
         // Set a mouse listener to handle double-click events
         addMouseListener(new MouseAdapter() {
@@ -133,6 +148,7 @@ class ProjectStructureTree extends Tree {
         // TODO: implement this method
         setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) getModel().getRoot();
+        updateClassMap(project);
 
         Enumeration e = root.breadthFirstEnumeration();
         DefaultMutableTreeNode node;
@@ -170,5 +186,90 @@ class ProjectStructureTree extends Tree {
             }
         }
         return Optional.empty();
+    }
+
+
+    private void updateClassMap(Project project) {
+        // the root node of the tree
+        final Integer[] count = {0};
+        KeyIterator it = new KeyIterator();
+        strToClass.clear();
+        classToStr.clear();
+        curClassToStr.clear();
+        curStrToClass.clear();
+
+
+        // The visitor to traverse the Java hierarchy and to construct the tree
+        final JavaElementVisitor visitor = new JavaElementVisitor() {
+
+            @Override
+            public void visitPackage(PsiPackage pack) {
+                for(PsiClass Class : pack.getClasses()) {
+                    Class.accept(this);
+                }
+                for(PsiPackage Package : pack.getSubPackages()) {
+                    Package.accept(this);
+                }
+            }
+
+            @Override
+            public void visitClass(PsiClass aClass) {
+                String s = it.next();
+                classToStr.put(aClass, s);
+                strToClass.put(s, aClass);
+                for(PsiElement Child : aClass.getChildren()){
+                    Child.accept(this);
+                }
+            }
+            @Override
+            public void visitMethod(PsiMethod method) {
+                String s = it.next();
+                classToStr.put(method, s);
+                strToClass.put(s, method);
+            }
+
+            @Override
+            public void visitField(PsiField field) {
+                String s = it.next();
+                classToStr.put(field, s);
+                strToClass.put(s, field);
+            }
+        };
+
+        // apply the visitor for each root package in the source directory
+        getRootPackages(project).forEach(aPackage -> aPackage.accept(visitor));
+        curClassToStr.putAll(classToStr);
+        curStrToClass.putAll(strToClass);
+    }
+
+    /**
+     * Returns the root package(s) in the source directory of a project. The default package will not be considered, as
+     * it includes all Java classes. Note that classes in the default package (i.e., having no package statement) will
+     * be ignored for this assignment. To be completed, this case must be separately handled.
+     *
+     * @param project a project
+     * @return a set of root packages
+     */
+    private static Set<PsiPackage> getRootPackages(Project project) {
+        final Set<PsiPackage> rootPackages = new HashSet<>();
+        PsiElementVisitor visitor = new PsiElementVisitor() {
+            @Override
+            public void visitDirectory(PsiDirectory dir) {
+                final PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(dir);
+                if (psiPackage != null && !PackageUtil.isPackageDefault(psiPackage))
+                    rootPackages.add(psiPackage);
+                else
+                    Arrays.stream(dir.getSubdirectories()).forEach(sd -> sd.accept(this));
+            }
+        };
+
+        ProjectRootManager rootManager = ProjectRootManager.getInstance(project);
+        PsiManager psiManager = PsiManager.getInstance(project);
+        Arrays.stream(rootManager.getContentSourceRoots())
+                .map(psiManager::findDirectory)
+                .filter(Objects::nonNull)
+                .forEach(dir -> dir.accept(visitor));
+
+        return rootPackages;
     }
 }
