@@ -3,11 +3,8 @@ package uml_navigate;
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 
-import uml_navigate.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.security.Key;
 
 
 public class KeyIteratorTest extends BasePlatformTestCase {

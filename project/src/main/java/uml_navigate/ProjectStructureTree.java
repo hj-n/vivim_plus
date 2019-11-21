@@ -146,7 +146,6 @@ class ProjectStructureTree extends Tree {
      * @param target  a target element
      */
     private void updateTree(@NotNull Project project, @NotNull PsiElement target) {
-        // TODO: implement this method
         setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
         updateClassMap(project);
         publicUpdateTree(target);
