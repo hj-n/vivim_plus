@@ -15,8 +15,11 @@ import org.jetbrains.annotations.NotNull;
 public class MyToolWindowFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
+        ProjectStructureWindow psw = new ProjectStructureWindow();
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        Content content = contentFactory.createContent(new JBScrollPane(), "", false);
-        toolWindow.getContentManager().addContent(content);
+        //Content content = contentFactory.createContent(new JBScrollPane(), "", false);
+        Content contentWindow = contentFactory.createContent(psw.getContent(), "", false);
+        //toolWindow.getContentManager().addContent(content);
+        toolWindow.getContentManager().addContent(contentWindow);
     }
 }
