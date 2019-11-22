@@ -1,23 +1,26 @@
 package skeleton;
 
 import com.intellij.ide.projectView.impl.nodes.PackageUtil;
+import com.intellij.ide.util.treeView.PresentableNodeDescriptor;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.openapi.project.Project;
-import org.apache.batik.w3c.dom.events.KeyboardEvent;
+import com.thaiopensource.xml.dtd.om.Def;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalIconFactory;
 import javax.swing.tree.DefaultMutableTreeNode;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import javax.swing.tree.TreePath;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Optional;
+import java.util.*;
+
 
 /**
  * A tree GUI for our Project Structure plugin. It displays the corresponding name and icon for the nodes in our tree
@@ -56,22 +59,23 @@ class ProjectStructureTree extends Tree {
                     setIcon(projectIcon);
                     append(((Project) element).getName());
                 }
+
                 else if(element instanceof PsiPackage) {
                     setIcon(packageIcon);
-                    append(((PsiPackage) element).getName());
+                    append(((PsiPackage) element).getTextOffset() +" " + ((PsiPackage) element).getName());
                 }
                 else if(element instanceof PsiClass) {
                     setIcon(classIcon);
-                    append(((PsiClass) element).getName());
+                    append(((PsiClass) element).getTextOffset() +" " + ((PsiClass) element).getName());
                 }
                 else if(element instanceof PsiMethod) {
                     setIcon(methodIcon);
-                    append(((PsiMethod) element).getName());
+                    append(((PsiMethod) element).getTextOffset() +" " + ((PsiMethod) element).getName());
 
                 }
                 else if(element instanceof PsiField) {
                     setIcon(fieldIcon);
-                    append(((PsiField) element).getName());
+                    append(((PsiField) element).getTextOffset() +" " + ((PsiField) element).getName());
                 }
                 else {
                     setIcon(defaultIcon);
@@ -105,7 +109,7 @@ class ProjectStructureTree extends Tree {
         });
 
 
-        // Set a keyboard listener to handle open files/close files events
+      /*  // Set a keyboard listener to handle open files/close files events
         //problem: how to identify which file to open/close? if we open all the files, how to get these elements to open
         addKeyListener(new KeyAdapter() {
             @Override
@@ -116,7 +120,7 @@ class ProjectStructureTree extends Tree {
 
                 }
             }
-        });
+        });*/
 
         // Set a Psi tree change listener to handle changes in the project. We provide code for obtaining an instance
         // of PsiField, PsiMethod, PsiClass, or PsiPackage. Implement the updateTree method below.
@@ -149,7 +153,22 @@ class ProjectStructureTree extends Tree {
      */
     private void updateTree(@NotNull Project project, @NotNull PsiElement target) {
         // TODO: implement this method
+        setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) getModel().getRoot();
+
+        Enumeration e = root.breadthFirstEnumeration();
+        DefaultMutableTreeNode node;
+        do {
+            node = (DefaultMutableTreeNode) e.nextElement();
+            if(node.getUserObject().equals(target)) {
+                TreePath path = new TreePath(node.getPath());
+
+                setSelectionPath(path);
+                scrollPathToVisible(path);
+            }
+        } while(e.hasMoreElements());
     }
+
 
     /**
      * Returns an instance of PsiField, PsiMethod, PsiClass, or PsiPackage that is related to a change event

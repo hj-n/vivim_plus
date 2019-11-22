@@ -1,0 +1,15 @@
+<idea-plugin>
+  <version>1.0-SNAPSHOT</version>
+  <idea-version since-build="192.6262" until-build="192.*"/>
+  <id>project Team7</id>
+  <name>simpleIdeaVim</name>
+  <vendor email="youremail@postech.ac.kr" url="http://csed332.postech.ac.kr">POSTECH CSED332</vendor>
+  <description>
+    CESD332 Project&lt;br&gt;
+    &lt;em&gt;simpleIdeaVim&lt;/em&gt; is simple vim emulator with functions of some vim plugins.
+    </description>
+  <extensions defaultExtensionNs="com.intellij">
+    <toolWindow id="Project Structure" anchor="right" factoryClass="skeleton.MyToolWindowFactory"/>
+  </extensions>
+  <actions/>
+</idea-plugin>

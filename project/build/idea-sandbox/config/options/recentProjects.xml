@@ -1,0 +1,103 @@
+<application>
+  <component name="RecentProjectsManager">
+    <option name="recentPaths">
+      <list>
+        <option value="E:/POSTECH/softwareDesign/hw0" />
+        <option value="E:/POSTECH/softwareDesign/hw5/homework5" />
+        <option value="E:/POSTECH/softwareDesign/team7_project/project" />
+        <option value="E:/POSTECH/softwareDesign/hw5/homework5/problem2" />
+        <option value="E:/POSTECH/softwareDesign/hw5/share_hw5/problem2" />
+        <option value="E:/POSTECH/softwareDesign/hw1/homework1/problem1" />
+        <option value="E:/POSTECH/softwareDesign/team7_project" />
+      </list>
+    </option>
+    <option name="openPaths">
+      <list>
+        <option value="E:/POSTECH/softwareDesign/hw0" />
+      </list>
+    </option>
+    <option name="lastPath" value="E:/POSTECH/softwareDesign/hw0" />
+    <option name="pid" value="" />
+    <option name="additionalInfo">
+      <map>
+        <entry key="E:/POSTECH/softwareDesign/hw0">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IC-192.6262.58" />
+              <option name="productionCode" value="IC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1574390428874" />
+              <option name="buildTimestamp" value="1566310313499" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/POSTECH/softwareDesign/hw1/homework1/problem1">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IC-192.6262.58" />
+              <option name="productionCode" value="IC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1574347613646" />
+              <option name="buildTimestamp" value="1566310317649" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/POSTECH/softwareDesign/hw5/homework5">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IC-192.6262.58" />
+              <option name="productionCode" value="IC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1574390242607" />
+              <option name="buildTimestamp" value="1566310313499" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/POSTECH/softwareDesign/hw5/homework5/problem2">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IC-192.6262.58" />
+              <option name="productionCode" value="IC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1574383840167" />
+              <option name="buildTimestamp" value="1566310300831" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/POSTECH/softwareDesign/hw5/share_hw5/problem2">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IC-192.6262.58" />
+              <option name="productionCode" value="IC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1574383408653" />
+              <option name="buildTimestamp" value="1566310300831" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/POSTECH/softwareDesign/team7_project">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IC-192.6262.58" />
+              <option name="productionCode" value="IC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1574347362730" />
+              <option name="buildTimestamp" value="1566310317649" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+        <entry key="E:/POSTECH/softwareDesign/team7_project/project">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IC-192.6262.58" />
+              <option name="productionCode" value="IC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1574388022711" />
+              <option name="buildTimestamp" value="1566310294287" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</application>
