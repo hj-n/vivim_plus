@@ -23,9 +23,11 @@ import java.util.List;
 public class MyTypedHandler implements TypedActionHandler {
 
 
-
     private String currentCommand = null;
     private String currentSearchingString = null;
+
+    private modeEnum.modeType mode;
+
 
     private JPanel panel = null;
 
@@ -38,7 +40,12 @@ public class MyTypedHandler implements TypedActionHandler {
         if ((charTyped == ':' || charTyped == '/') && panel == null) {
             keyStrokeCommandMode(charTyped + " ", editor);
         }
+        if (charTyped == 'v') {
 
+        }
+        if (charTyped == 'i') {
+
+        }
     }
 
 
@@ -83,7 +90,6 @@ public class MyTypedHandler implements TypedActionHandler {
             }
         });
         panel.add(textField);
-
 
         JBPopupFactory a = JBPopupFactory.getInstance();
         JBPopup popup = a.createComponentPopupBuilder(panel, textField).createPopup();

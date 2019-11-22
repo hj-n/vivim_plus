@@ -19571,3 +19571,28 @@ Example: args.urlSchemes = ["your-protocol"] will handle following links: your-p
 2019-11-23 01:03:50,562 [  12835]   INFO - g.FileBasedIndexProjectHandler - Has changed files: false; project=Project '/Users/POSTecHyeoN/IdeaProjects/test' test 
 2019-11-23 01:03:53,212 [  15485]   INFO - ings.impl.UpdateCheckerService - channel: release 
 2019-11-23 01:04:09,989 [  32262]   INFO - mponents.impl.stores.StoreUtil - saveProjectsAndApp took 335 ms 
+2019-11-23 01:09:55,645 [ 377918]   INFO - stubs.SerializationManagerImpl - START StubSerializationManager SHUTDOWN 
+2019-11-23 01:09:55,645 [ 377918]   INFO - stubs.SerializationManagerImpl - END StubSerializationManager SHUTDOWN 
+2019-11-23 01:09:55,645 [ 377918]   INFO - il.indexing.FileBasedIndexImpl - START INDEX SHUTDOWN 
+2019-11-23 01:09:55,661 [ 377934]   INFO - il.indexing.FileBasedIndexImpl - END INDEX SHUTDOWN 
+2019-11-23 01:09:55,663 [ 377936]   INFO - org.jetbrains.io.BuiltInServer - web server stopped 
+2019-11-23 01:09:55,674 [ 377947]   INFO - Types.impl.FileTypeManagerImpl - FileTypeManager: 148 auto-detected files
+Elapsed time on auto-detect: 1460 ms 
+2019-11-23 01:09:55,677 [ 377950]   INFO - pl.local.NativeFileWatcherImpl - Watcher terminated with exit code 0 
+2019-11-23 01:09:55,677 [ 377950]   INFO - newvfs.persistent.PersistentFS - VFS dispose started 
+2019-11-23 01:09:55,678 [ 377951]   INFO - newvfs.persistent.PersistentFS - VFS dispose completed 
+2019-11-23 01:09:55,679 [ 377952]   INFO - plication.impl.ApplicationImpl - Write action Statistics:
+Event number:     21
+Total time spent: 233ms
+Average duration: 11ms
+Median  duration: 1ms
+Max     duration: 61ms (it was 'write action (class com.intellij.openapi.project.impl.ProjectManagerImpl$$Lambda$2943/0x0000000801f32840)') 
+2019-11-23 01:09:55,680 [ 377953]   INFO - plication.impl.ApplicationImpl - AnAction.update() Statistics:
+Event number:     1512
+Total time spent: 103ms
+Average duration: 0ms
+Median  duration: 0ms
+Max     duration: 33ms (it was 'Run anything action update (class com.intellij.ide.actions.runAnything.RunAnythingAction)') 
+2019-11-23 01:09:55,680 [ 377953]   INFO - plication.impl.ApplicationImpl - Global instance threads created counter = 17; ProcessIOExecutorService threads: 3 
+2019-11-23 01:09:55,682 [ 377955]   INFO -        #com.intellij.idea.Main - ------------------------------------------------------ IDE SHUTDOWN ------------------------------------------------------ 
+2019-11-23 01:09:55,683 [ 377956]   INFO - org.jetbrains.io.BuiltInServer - web server stopped 
