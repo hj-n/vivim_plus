@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>project Team7</id>
+    <id>project_Team7</id>
     <name>simpleIdeaVim</name>
     <vendor email="youremail@postech.ac.kr" url="http://csed332.postech.ac.kr">POSTECH CSED332</vendor>
 
@@ -16,10 +16,16 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <toolWindow id="Project Structure" anchor="right" factoryClass="skeleton.MyToolWindowFactory"/>
+        <toolWindow id="Project Structure" anchor="right" factoryClass="project_Team7.MyToolWindowFactory"/>
+        <editorTypedHandler id="vim command" implementationClass="project_Team7.MyTypedHandler"/>
     </extensions>
 
     <actions>
+
         <!-- Add your actions here -->
+        <action id="project_Team7.commandBarAction" class="project_Team7.vimCommandBarAction" text="vim command"
+                description="command bar action for vim plugin">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>
