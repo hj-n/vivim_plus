@@ -22,20 +22,6 @@ public class modeEnum {
         else if(type.equals(modeType.INSERT))
             modeToString = "INSERT MODE";
 
-//        JFrame frame = new JFrame("Current Mode");
-//        System.out.println("in modeEnum : " + modeToString);
-//        JLabel label = new JLabel(modeToString);
-//        label.setSize(60, 20);
-//        frame.add(label);
-//        frame.setSize(60, 20);
-//        frame.setVisible(true);
-//        System.out.println("in modeEnum frame is : " + frame);
-//        frame.addPropertyChangeListener("ModeType", new PropertyChangeListener() {
-//            @Override
-//            public void propertyChange(PropertyChangeEvent evt) {
-//                System.out.println("in show modeEnum : " + evt.getPropertyName());
-//            }
-//        });
     }
 
 

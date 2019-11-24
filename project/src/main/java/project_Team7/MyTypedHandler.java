@@ -10,6 +10,7 @@ import com.intellij.openapi.ui.popup.JBPopupListener;
 import com.intellij.openapi.ui.popup.LightweightWindowEvent;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.JBSplitter;
+import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.util.messages.impl.Message;
@@ -73,35 +74,10 @@ public class MyTypedHandler implements TypedActionHandler {
 
 
     private void modeViewer(Editor editor){
-//        modePanel = new JBPanel(new BorderLayout());
-//        JTextField textField = new JTextField(modeEnum.getModeToString());
-//        modePanel.setBackground(JBColor.background());
-//        modePanel.add(textField);
-//        modePanel.setAlignmentX(editor.getComponent().getAlignmentX());
-//        modePanel.setAlignmentY(editor.getComponent().getAlignmentY());
-//        modePanel.setPreferredSize(new Dimension(60, 20));
-//        modePanel.setSize(new Dimension(60, 20));
-//        modePanel.setEnabled(true);
-//        modePanel.setVisible(true);
-
         JBPopupFactory jbPopupFactory = JBPopupFactory.getInstance();
         JBPopup mes = jbPopupFactory.createMessage(modeEnum.getModeToString());
         mes.setRequestFocus(false);
-        mes.show(editor.getContentComponent());
-    //
-//        JBSplitter navigationSplitter = new JBSplitter(false);
-//        navigationSplitter.setFirstComponent(modePanel);
-//        navigationSplitter.setSecondComponent(textField);
-//        System.out.println("showing ? " + modePanel.isShowing());
-//        System.out.println("info? " + modePanel);
-
-//        JBLabel jbLabel = new JBLabel();
-//        jbLabel.setSize(new Dimension(60, 20));
-//        jbLabel.setAnchor(editor.getComponent());
-//        Image image = jbLabel.createImage(60, 20);
-//        System.out.println(image);
-//        System.out.println(jbLabel.isShowing());
-
+        mes.show(RelativePoint.fromScreen(editor.getComponent().getLocation()));
     }
 
     private void keyStrokeCommandMode(String command, Editor editor) {
