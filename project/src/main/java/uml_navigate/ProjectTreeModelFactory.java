@@ -58,7 +58,7 @@ public class ProjectTreeModelFactory {
             @Override
             public void visitPackage(PsiPackage pack) {
                 // TODO: add a new node to the parent node, and traverse the content of the package
-                if(pack.getParentPackage().getName() == null)
+                if(findNode(pack.getParentPackage()) == null)
                     root.add(new DefaultMutableTreeNode(pack));
                 else
                     findNode(pack.getParentPackage()).add(new DefaultMutableTreeNode(pack));
