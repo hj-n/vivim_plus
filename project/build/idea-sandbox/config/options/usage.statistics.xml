@@ -1,6 +1,6 @@
 <application>
   <component name="EventLogWhitelist">
-    <update recorder-id="FUS" last-modified="1574426459000" />
+    <update recorder-id="FUS" last-modified="1574497080000" />
   </component>
   <component name="FeatureUsageStatistics" first-run="1574174837472" have-been-shown="false" show-in-other="true" show-in-compilation="true">
     <feature id="editing.completion.smarttype.afternew" count="0" last-shown="0" last-used="0" shown-count="0" />
@@ -35,7 +35,7 @@
     <feature id="navigation.select.in" count="0" last-shown="0" last-used="0" shown-count="0" />
     <feature id="editing.completion.global.member.name" count="0" last-shown="0" last-used="0" shown-count="0" />
     <feature id="editing.completion.finishByExclamation" count="0" last-shown="0" last-used="0" shown-count="0" />
-    <feature id="ui.tree.speedsearch" count="22" last-shown="0" last-used="1574610098278" shown-count="0" />
+    <feature id="ui.tree.speedsearch" count="23" last-shown="0" last-used="1574629909336" shown-count="0" />
     <feature id="ui.horizontal.scrolling" count="0" last-shown="0" last-used="0" shown-count="0" />
     <feature id="refactoring.copyClass" count="0" last-shown="0" last-used="0" shown-count="0" />
     <feature id="move.element.left.right" count="0" last-shown="0" last-used="0" shown-count="0" />

@@ -12,6 +12,7 @@ import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.JBPopupListener;
 import com.intellij.openapi.ui.popup.LightweightWindowEvent;
+import com.intellij.ui.Gray;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.awt.RelativePoint;
@@ -52,10 +53,6 @@ public class MyTypedHandler implements TypedActionHandler {
     }
     private static char storedChar = 'x';
 
-    public MyTypedHandler(){
-
-    }
-
     public void setStoredChar(char c){
         storedChar = c;
         return ;
@@ -66,74 +63,50 @@ public class MyTypedHandler implements TypedActionHandler {
 
     @Override
     public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {
-//        System.out.println("storedChar is " + getStoredChar());
-
         if(getStoredChar() == 'i'){
             mode = new modeEnum(modeEnum.modeType.INSERT);
-//            System.out.println("insert mode ? " + modeEnum.getModeToString());
             modeViewer(editor);
             MyInsertModeHandler myInsertModeHandler = new MyInsertModeHandler();
             myInsertModeHandler.execute(editor, charTyped, dataContext);
         }
         else{
-            if ((charTyped == ':' || charTyped == '/') && commandPanel == null) {
-                keyStrokeCommandMode(charTyped + " ", editor);
-                mode = new modeEnum(modeEnum.modeType.COMMAND);
-                modeViewer(editor);
-            }
-            else if (charTyped == 'v') {
-                mode = new modeEnum(modeEnum.modeType.VISUAL);
-                modeViewer(editor);
-            }
-            else if (charTyped == 'i') {
-                mode = new modeEnum(modeEnum.modeType.INSERT);
-                modeViewer(editor);
-                setStoredChar(charTyped);
-            }
-            else if(charTyped == 27){
-//                System.out.println("in here~~~~~~~~~");
-                storedChar = 'x';
-            }
-            else{
-                mode = new modeEnum(modeEnum.modeType.NORMAL);
-                modeViewer(editor);
-            }
-            moveCursor(charTyped, editor);
-            //isTypedESC(editor);
-//            System.out.println("current mode is " + modeEnum.getModeToString());
-        }
-
-    }
-
-    public void isTypedESC(Editor editor){
-        editor.getContentComponent().addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
-                {
-                    System.out.println("typed esc key");
-                    if(mode.equals(modeEnum.modeType.COMMAND)){
-                        mode = new modeEnum(modeEnum.modeType.NORMAL);//code to execute if escape is pressed
-                    }
-                    else if(mode.equals(modeEnum.modeType.INSERT)){
-                        setStoredChar('x');
-                        mode = new modeEnum(modeEnum.modeType.NORMAL);//code to execute if escape is pressed
-                    }
-                    else if(mode.equals(modeEnum.modeType.VISUAL)){
-                        mode = new modeEnum(modeEnum.modeType.NORMAL);//code to execute if escape is pressed
-                    }
+            switch(charTyped) {
+                case ':':
+                case '/':
+                    keyStrokeCommandMode(charTyped + " ", editor);
+                    mode = new modeEnum(modeEnum.modeType.COMMAND);
                     modeViewer(editor);
-                }
+                    break;
+                case 'v':
+                    mode = new modeEnum(modeEnum.modeType.VISUAL);
+                    modeViewer(editor);
+                    break;
+                case 'i':
+                case 'I':
+                case 'a':
+                case 'A':
+                case 'o':
+                case 'O':
+                    changeCaretToInsertionMode(editor, getInsertionTypeFromChar(charTyped));
+                    mode = new modeEnum(modeEnum.modeType.INSERT);
+                    modeViewer(editor);
+                    setStoredChar('i');
+                    break;
+                case 'h':
+                case 'j':
+                case 'k':
+                case 'l':
+                    moveCursor(charTyped, editor);
+                    mode = new modeEnum(modeEnum.modeType.NORMAL);
+                    modeViewer(editor);
+                    break;
+
+
+                default:
+                    mode = new modeEnum(modeEnum.modeType.NORMAL);
+                    modeViewer(editor);
             }
-        });
+        }
     }
 
     private void moveCursor(char charTyped, Editor editor){
@@ -159,6 +132,18 @@ public class MyTypedHandler implements TypedActionHandler {
                 VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualPosition().getColumn() + 1);
                 caret.moveToVisualPosition(visualPosition);
             }
+
+
+            if(caret.getVisualLineStart() < caret.getOffset()) {
+                caret.setSelection(caret.getOffset() - 1, caret.getOffset());
+                caret.setVisualAttributes(new CaretVisualAttributes(editor.getColorsScheme().getDefaultBackground(), CaretVisualAttributes.Weight.THIN));
+            }
+            else {
+                caret.setSelection(caret.getOffset(), caret.getOffset());
+                caret.setVisualAttributes(new CaretVisualAttributes(new Color(88, 115, 173), CaretVisualAttributes.Weight.HEAVY));
+
+            }
+
         }
         catch(Exception e){
 
@@ -227,6 +212,63 @@ public class MyTypedHandler implements TypedActionHandler {
         });
     }
 
+
+
+    private void changeCaretToInsertionMode(Editor editor, enterInsertionType type) {
+        int position = 0;
+        switch(type) {
+            case i :
+                position = editor.getCaretModel().getCurrentCaret().getSelectionStart();
+                break;
+            case I :
+                position = editor.getCaretModel().getCurrentCaret().getVisualLineStart();
+                break;
+            case a :
+                position = editor.getCaretModel().getCurrentCaret().getSelectionStart() + 1;
+                break;
+            case A :
+                position = editor.getCaretModel().getCurrentCaret().getVisualLineEnd() - 1;
+                break;
+            case o :
+                Caret caret = editor.getCaretModel().getCurrentCaret();
+                editor.getDocument().replaceString(caret.getVisualLineEnd(), caret.getVisualLineEnd(), "\n");
+                position = editor.getCaretModel().getVisualLineEnd();
+                break;
+            case O :
+                Caret caret2 = editor.getCaretModel().getCurrentCaret();
+                editor.getDocument().replaceString(caret2.getVisualLineStart(), caret2.getVisualLineStart(), "\n");
+                position = editor.getCaretModel().getVisualLineStart() - 1;
+                break;
+
+        }
+        System.out.println(position);
+        Caret caret = editor.getCaretModel().getPrimaryCaret();
+        caret.setSelection(position, position);
+        caret.moveToOffset(position);
+        caret.setVisualAttributes(new CaretVisualAttributes(Gray._0, CaretVisualAttributes.Weight.NORMAL));
+    }
+
+    private enum enterInsertionType {
+        o, O, i, I, a, A
+    }
+
+    private enterInsertionType getInsertionTypeFromChar(char c) {
+        switch (c) {
+            case 'i':
+                return enterInsertionType.i;
+            case 'I':
+                return enterInsertionType.I;
+            case 'a':
+                return enterInsertionType.a;
+            case 'A':
+                return enterInsertionType.A;
+            case 'o':
+                return enterInsertionType.o;
+            case 'O':
+                return enterInsertionType.O;
+        }
+        return null;
+    }
 
 
 

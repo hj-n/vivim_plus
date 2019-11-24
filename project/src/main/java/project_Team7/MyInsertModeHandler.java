@@ -4,14 +4,12 @@ import android.inputmethodservice.KeyboardView;
 import com.android.tools.layoutlib.annotations.NotNull;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Caret;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.VisualPosition;
+import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
 import com.intellij.openapi.project.Project;
 import org.jsoup.select.Evaluator;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -37,7 +35,10 @@ public class MyInsertModeHandler implements TypedActionHandler {
                 if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
                 {
                     System.out.println("typed esc key");
+                    if(myTypedHandler.getStoredChar() != 'x')
+                        changeCaretToNormalMode(editor);
                     myTypedHandler.setStoredChar('x');
+
                     isESC = true;
                 }
             }
@@ -54,6 +55,19 @@ public class MyInsertModeHandler implements TypedActionHandler {
         }
 
 
+    }
+
+    public void changeCaretToNormalMode(Editor editor) {
+        Caret caret = editor.getCaretModel().getPrimaryCaret();
+        if(caret.getVisualLineStart() < caret.getOffset()) {
+            caret.setSelection(caret.getOffset() - 1, caret.getOffset());
+            caret.setVisualAttributes(new CaretVisualAttributes(editor.getColorsScheme().getDefaultBackground(), CaretVisualAttributes.Weight.THIN));
+        }
+        else {
+            caret.setSelection(caret.getOffset(), caret.getOffset());
+            caret.setVisualAttributes(new CaretVisualAttributes(new Color(88, 115, 173), CaretVisualAttributes.Weight.HEAVY));
+
+        }
     }
 }
 

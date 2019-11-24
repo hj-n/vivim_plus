@@ -1454,7 +1454,7 @@
       "from" : "1"
     } ],
     "rules" : {
-      "event_id" : [ "{enum:Package_Manager}" ],
+      "event_id" : [ "{enum:Update_Manager}" ],
       "event_data" : {
         "value" : [ "{enum:Toolbox_App|Snap|IDE}" ]
       }
@@ -1676,6 +1676,7 @@
     "rules" : {
       "event_id" : [ "{util#run_config_factory}", "{enum:started|ui.shown|finished}" ],
       "event_data" : {
+        "duration_ms" : [ "{regexp#integer}" ],
         "executor" : [ "{util#run_config_executor}" ],
         "factory" : [ "{util#run_config_factory}" ],
         "id" : [ "{util#run_config_id}" ],
@@ -2527,5 +2528,5 @@
       "version" : "(\\d+\\.?)*\\d+"
     }
   },
-  "version" : "916"
+  "version" : "919"
 }
