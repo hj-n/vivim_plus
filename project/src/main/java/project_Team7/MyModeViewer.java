@@ -32,6 +32,8 @@ public class MyModeViewer{
         frame = new JFrame("Current Mode");
         label = new JLabel(currentMode);
         frame.add(label);
+        frame.setSize(50, 20);
+        frame.setVisible(true);
 
         frame.addPropertyChangeListener("ModeType", new PropertyChangeListener() {
             @Override

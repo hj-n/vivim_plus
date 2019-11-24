@@ -12,6 +12,7 @@ import com.intellij.ui.JBColor;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
+import com.intellij.util.messages.impl.Message;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,21 +73,27 @@ public class MyTypedHandler implements TypedActionHandler {
 
 
     private void modeViewer(Editor editor){
-        modePanel = new JBPanel(new BorderLayout());
-        JTextField textField = new JTextField(modeEnum.getModeToString());
-        modePanel.setBackground(JBColor.background());
-        modePanel.add(textField);
-        modePanel.setAlignmentX(editor.getComponent().getAlignmentX());
-        modePanel.setAlignmentY(editor.getComponent().getAlignmentY());
-        modePanel.setPreferredSize(new Dimension(60, 20));
-        modePanel.setSize(new Dimension(60, 20));
-        modePanel.setEnabled(true);
-        modePanel.setVisible(true);
-        JBSplitter navigationSplitter = new JBSplitter(false);
-        navigationSplitter.setFirstComponent(modePanel);
-        navigationSplitter.setSecondComponent(textField);
-        System.out.println("showing ? " + modePanel.isShowing());
-        System.out.println("info? " + modePanel);
+//        modePanel = new JBPanel(new BorderLayout());
+//        JTextField textField = new JTextField(modeEnum.getModeToString());
+//        modePanel.setBackground(JBColor.background());
+//        modePanel.add(textField);
+//        modePanel.setAlignmentX(editor.getComponent().getAlignmentX());
+//        modePanel.setAlignmentY(editor.getComponent().getAlignmentY());
+//        modePanel.setPreferredSize(new Dimension(60, 20));
+//        modePanel.setSize(new Dimension(60, 20));
+//        modePanel.setEnabled(true);
+//        modePanel.setVisible(true);
+
+        JBPopupFactory jbPopupFactory = JBPopupFactory.getInstance();
+        JBPopup mes = jbPopupFactory.createMessage(modeEnum.getModeToString());
+        mes.setRequestFocus(false);
+        mes.show(editor.getContentComponent());
+    //
+//        JBSplitter navigationSplitter = new JBSplitter(false);
+//        navigationSplitter.setFirstComponent(modePanel);
+//        navigationSplitter.setSecondComponent(textField);
+//        System.out.println("showing ? " + modePanel.isShowing());
+//        System.out.println("info? " + modePanel);
 
 //        JBLabel jbLabel = new JBLabel();
 //        jbLabel.setSize(new Dimension(60, 20));
