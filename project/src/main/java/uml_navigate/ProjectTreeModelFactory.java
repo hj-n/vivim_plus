@@ -8,9 +8,12 @@ import com.intellij.psi.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
-public class ProjectTreeModelFactory {
+class ProjectTreeModelFactory {
 
     /**
      * Create a tree model that describes the structure of a java project. This method use JavaElementVisitor to
@@ -24,76 +27,61 @@ public class ProjectTreeModelFactory {
     public static TreeModel createProjectTreeModel(Project project) {
         // the root node of the tree
         final DefaultMutableTreeNode root = new DefaultMutableTreeNode(project);
-
+        
         // The visitor to traverse the Java hierarchy and to construct the tree
         final JavaElementVisitor visitor = new JavaElementVisitor() {
-            // TODO: add member variables if necessary
-
-            private DefaultMutableTreeNode findNode(PsiElement elem) {
-                Enumeration e = root.breadthFirstEnumeration();
-                DefaultMutableTreeNode node;
-                do {
-                    node = (DefaultMutableTreeNode) e.nextElement();
-                    if(node.getUserObject().equals(elem)) {
-                        return node;
-                    }
-                } while(e.hasMoreElements());
-                return null;
-            }
-
-            private DefaultMutableTreeNode findPackageNodeByString(String s) {
-                Enumeration e = root.breadthFirstEnumeration();
-                DefaultMutableTreeNode node;
-                do {
-                    node = (DefaultMutableTreeNode) e.nextElement();
-                    if(node.getUserObject() instanceof PsiPackage) {
-                        if (((PsiPackage) node.getUserObject()).toString().substring(11).equals(s))
-                            return node;
-                    }
-
-                } while(e.hasMoreElements());
-                return null;
-            }
+            // add member variables if necessary
+            DefaultMutableTreeNode parent = root;
 
             @Override
             public void visitPackage(PsiPackage pack) {
-                // TODO: add a new node to the parent node, and traverse the content of the package
-                if(findNode(pack.getParentPackage()) == null)
-                    root.add(new DefaultMutableTreeNode(pack));
-                else
-                    findNode(pack.getParentPackage()).add(new DefaultMutableTreeNode(pack));
 
-                for(PsiClass Class : pack.getClasses()) {
-                    Class.accept(this);
+                // add a new node to the parent node, and traverse the content of the package
+                DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(pack);
+                parent.add(newChild);
+                DefaultMutableTreeNode grand_parent = parent;
+                parent = newChild;
+                for (PsiPackage children:
+                     pack.getSubPackages()) {
+                    children.accept(this);
                 }
-                for(PsiPackage Package : pack.getSubPackages()) {
-                    Package.accept(this);
+                for (PsiClass children:
+                        pack.getClasses()) {
+                    children.accept(this);
                 }
+                parent = grand_parent;
             }
 
             @Override
             public void visitClass(PsiClass aClass) {
-                // TODO: add a new node the parent node, and traverse the content of the class
-                if(aClass.getParent() instanceof PsiClass)
-                    findNode(aClass.getParent()).add(new DefaultMutableTreeNode(aClass));
-                else
-                    findPackageNodeByString(((PsiJavaFile)aClass.getContainingFile()).getPackageName()).add(new DefaultMutableTreeNode(aClass));
-                for(PsiElement Child : aClass.getChildren()){
-                    Child.accept(this);
+                // add a new node the parent node, and traverse the content of the class
+                DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(aClass);
+                parent.add(newChild);
+                DefaultMutableTreeNode grand_parent = parent;
+                parent = newChild;
+                for (PsiField children:
+                        aClass.getFields()) {
+                    children.accept(this);
                 }
+                for (PsiMethod children:
+                        aClass.getMethods()) {
+                    children.accept(this);
+                }
+                parent = grand_parent;
             }
 
             @Override
             public void visitMethod(PsiMethod method) {
-                // TODO: add a new node to the parent node
-                findNode(method.getParent()).add(new DefaultMutableTreeNode(method));
+                // add a new node to the parent node
+                DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(method);
+                parent.add(newChild);
             }
 
             @Override
             public void visitField(PsiField field) {
-                // TODO: add a new node to the parent node
-                findNode(field.getParent()).add(new DefaultMutableTreeNode(field));
-
+                // add a new node to the parent node
+                DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(field);
+                parent.add(newChild);
             }
         };
 
