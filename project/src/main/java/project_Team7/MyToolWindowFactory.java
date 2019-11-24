@@ -7,6 +7,7 @@ import com.intellij.ui.components.JBScrollBar;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
+import org.intellij.plugins.relaxNG.compact.RngCompactLanguage;
 import org.jetbrains.annotations.NotNull;
 
 /**
