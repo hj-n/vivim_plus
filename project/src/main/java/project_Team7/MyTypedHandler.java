@@ -1,10 +1,12 @@
 package project_Team7;
 
 import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
 import com.intellij.openapi.editor.impl.CaretImpl;
 import com.intellij.openapi.editor.impl.EditorImpl;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
@@ -17,6 +19,7 @@ import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.util.messages.impl.Message;
 import com.intellij.util.ui.UIUtil;
+import org.bouncycastle.est.ESTAuth;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -47,30 +50,52 @@ public class MyTypedHandler implements TypedActionHandler {
     public String getCurrentCommand() {
         return currentCommand;
     }
+    private static char storedChar = 'x';
+
+    public void setStoredChar(char c){
+        storedChar = c;
+        return ;
+    }
+    public char getStoredChar(){
+        return storedChar;
+    }
 
     @Override
     public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {
-        mode = new modeEnum(modeEnum.modeType.NORMAL);
-
-        if ((charTyped == ':' || charTyped == '/') && commandPanel == null) {
-            keyStrokeCommandMode(charTyped + " ", editor);
-            mode = new modeEnum(modeEnum.modeType.COMMAND);
-
-
-        }
-        if (charTyped == 'v') {
-            mode = new modeEnum(modeEnum.modeType.VISUAL);
-
-
-        }
-        if (charTyped == 'i') {
+//        System.out.println("storedChar is " + getStoredChar());
+        if(getStoredChar() == 'i'){
             mode = new modeEnum(modeEnum.modeType.INSERT);
-            //i 입력 되었을 때만 editor 가 수정가능하도록 바꿔야 함.
-            //현재는 일단 뭘 입력하든 editor을 수정할 수 없는 normal 모드가 디폴트임.
+//            System.out.println("insert mode ? " + modeEnum.getModeToString());
+            modeViewer(editor);
+            MyInsertModeHandler myInsertModeHandler = new MyInsertModeHandler();
+            myInsertModeHandler.execute(editor, charTyped, dataContext);
         }
-        modeViewer(editor);
-        moveCursor(charTyped, editor);
-        System.out.println(modeEnum.getModeToString());
+        else{
+            if ((charTyped == ':' || charTyped == '/') && commandPanel == null) {
+                keyStrokeCommandMode(charTyped + " ", editor);
+                mode = new modeEnum(modeEnum.modeType.COMMAND);
+                modeViewer(editor);
+            }
+            else if (charTyped == 'v') {
+                mode = new modeEnum(modeEnum.modeType.VISUAL);
+                modeViewer(editor);
+            }
+            else if (charTyped == 'i') {
+                mode = new modeEnum(modeEnum.modeType.INSERT);
+                modeViewer(editor);
+                setStoredChar(charTyped);
+            }
+            else if(charTyped == 27){
+//                System.out.println("in here~~~~~~~~~");
+                storedChar = 'x';
+            }
+            else{
+                mode = new modeEnum(modeEnum.modeType.NORMAL);
+                modeViewer(editor);
+            }
+            moveCursor(charTyped, editor);
+//            System.out.println("current mode is " + modeEnum.getModeToString());
+        }
 
     }
 
@@ -101,11 +126,6 @@ public class MyTypedHandler implements TypedActionHandler {
         catch(Exception e){
 
         }
-
-
-
-
-
     }
 
 
