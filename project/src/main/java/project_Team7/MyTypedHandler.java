@@ -1,8 +1,10 @@
 package project_Team7;
 
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
+import com.intellij.openapi.editor.impl.CaretImpl;
+import com.intellij.openapi.editor.impl.EditorImpl;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
@@ -63,12 +65,46 @@ public class MyTypedHandler implements TypedActionHandler {
         }
         if (charTyped == 'i') {
             mode = new modeEnum(modeEnum.modeType.INSERT);
-
             //i 입력 되었을 때만 editor 가 수정가능하도록 바꿔야 함.
             //현재는 일단 뭘 입력하든 editor을 수정할 수 없는 normal 모드가 디폴트임.
         }
         modeViewer(editor);
+        moveCursor(charTyped, editor);
         System.out.println(modeEnum.getModeToString());
+
+    }
+
+    private void moveCursor(char charTyped, Editor editor){
+        //move under line
+        Caret caret = editor.getCaretModel().getPrimaryCaret();
+        try {
+            if (charTyped == 'j') {
+                VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine() + 1, caret.getVisualPosition().getColumn());
+                caret.moveToVisualPosition(visualPosition);
+            }
+            //move upper line
+            if (charTyped == 'k') {
+                VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine() - 1, caret.getVisualPosition().getColumn());
+                caret.moveToVisualPosition(visualPosition);
+            }
+            //move left
+            if (charTyped == 'h') {
+                VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualPosition().getColumn() - 1);
+                caret.moveToVisualPosition(visualPosition);
+            }
+            //move right
+            if (charTyped == 'l') {
+                VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualPosition().getColumn() + 1);
+                caret.moveToVisualPosition(visualPosition);
+            }
+        }
+        catch(Exception e){
+
+        }
+
+
+
+
 
     }
 
@@ -77,7 +113,7 @@ public class MyTypedHandler implements TypedActionHandler {
         JBPopupFactory jbPopupFactory = JBPopupFactory.getInstance();
         JBPopup mes = jbPopupFactory.createMessage(modeEnum.getModeToString());
         mes.setRequestFocus(false);
-        mes.show(RelativePoint.fromScreen(editor.getComponent().getLocation()));
+        mes.show(RelativePoint.getSouthEastOf(editor.getComponent()));
     }
 
     private void keyStrokeCommandMode(String command, Editor editor) {
