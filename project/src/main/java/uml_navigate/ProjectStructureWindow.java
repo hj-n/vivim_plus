@@ -13,7 +13,7 @@ import java.awt.*;
 /**
  * a Project Structure tool window that contains a scrollable tree view for a java project
  */
-public class ProjectStructureWindow {
+class ProjectStructureWindow {
 
     private final JScrollPane topContainer;
     private final JTree tree;

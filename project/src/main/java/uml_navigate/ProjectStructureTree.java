@@ -13,11 +13,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalIconFactory;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
-import java.util.Optional;
 import java.util.*;
 
 /**
@@ -40,6 +39,7 @@ class ProjectStructureTree extends Tree {
     private HashMap<String, PsiElement> strToClass;
     private HashMap<PsiElement, String> curClassToStr;
     private HashMap<String, PsiElement> curStrToClass;
+
     /**
      * Creates a project structure tree for a given project.
      *
@@ -47,7 +47,7 @@ class ProjectStructureTree extends Tree {
      */
     ProjectStructureTree(@NotNull Project project) {
         setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
-        //TODO: Mapping each class to string instead integer
+
         strToClass = new HashMap<>();
         classToStr = new HashMap<>();
         curStrToClass = new HashMap<>();
@@ -60,40 +60,49 @@ class ProjectStructureTree extends Tree {
             @Override
             public void customizeCellRenderer(@NotNull JTree tree, Object value, boolean selected,
                                               boolean expanded, boolean leaf, int row, boolean hasFocus) {
-                // TODO: implement the renderer behavior here
+                // implement the renderer behavior here
                 // hint: use the setIcon method to assign icons, and the append method to add text
-                Object element = ((DefaultMutableTreeNode)value).getUserObject();
-                if(element instanceof Project) {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
+                Object element = node.getUserObject();
+
+                if(element instanceof Project){
+                    Project p = (Project) element;
                     setIcon(projectIcon);
-                    append(((Project) element).getName());
+                    append(p.getName());
                 }
-                else if(element instanceof PsiPackage) {
-                    setIcon(packageIcon);
-                    append(((PsiPackage) element).getName());
-
-                }
-                else if(element instanceof PsiClass) {
-                    setIcon(classIcon);
-                    append(((PsiClass) element).getName() + " "
-                            + StringUtils.defaultString(curClassToStr.get(element)));
-                }
-                else if(element instanceof PsiMethod) {
-                    setIcon(methodIcon);
-                    append(((PsiMethod) element).getName() + " "
-                            + StringUtils.defaultString(curClassToStr.get(element)));
-
-                }
-                else if(element instanceof PsiField) {
-                    setIcon(fieldIcon);
-                    append(((PsiField) element).getName() + " "
-                            + StringUtils.defaultString(curClassToStr.get(element)));
+                else if(element instanceof PsiElement){
+                    if(element instanceof PsiPackage) {
+                        setIcon(packageIcon);
+                        PsiPackage psiPackage = (PsiPackage) element;
+                        append(psiPackage.getName());
+                    } else if(element instanceof PsiClass) {
+                        setIcon(classIcon);
+                        PsiClass psiClass = (PsiClass) element;
+                        append(psiClass.getName() + " "
+                                + StringUtils.defaultString(curClassToStr.get(element)));
+                    } else if(element instanceof PsiMethod) {
+                        setIcon(methodIcon);
+                        PsiMethod psiMethod = (PsiMethod) element;
+                        append(psiMethod.getName() + " "
+                                + StringUtils.defaultString(curClassToStr.get(element)));
+                    } else if(element instanceof PsiField) {
+                        setIcon(fieldIcon);
+                        PsiField psiField = (PsiField) element;
+                        append(psiField.getName() + " "
+                                + StringUtils.defaultString(curClassToStr.get(element)));
+                    } else {
+                        setIcon(defaultIcon);
+                        append(((PsiElement) element).getText());
+                    }
                 }
                 else {
                     setIcon(defaultIcon);
+                    append(element.toString());
                 }
+
             }
         });
-        //addKeyListener(new MyKeyAdapter(intToClass));
+
         addKeyListener(new MyKeyAdapter(strToClass, classToStr, curStrToClass, curClassToStr, this));
 
         // Set a mouse listener to handle double-click events
@@ -101,16 +110,20 @@ class ProjectStructureTree extends Tree {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    // TODO: implement the double-click behavior here
+                    // implement the double-click behavior here
                     // hint: use the navigate method of the classes PsiMethod and PsiField
-                    PsiElement element = null;
-                    try {
-                        element = (PsiElement) ((DefaultMutableTreeNode) getPathForLocation(e.getX(), e.getY()).getLastPathComponent()).getUserObject();
-                        if(element instanceof PsiMethod || element instanceof PsiField){
-                            ((PsiDocCommentOwner) element).navigate(true);
-                        }
+                    Tree tree = (Tree) e.getSource();
+                    TreePath tp = tree.getPathForLocation(e.getX(), e.getY());
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) tp.getLastPathComponent();
+                    PsiElement element = (PsiElement) node.getUserObject();
+
+                    if(element instanceof PsiMethod){
+                        PsiMethod method = (PsiMethod) element;
+                        method.navigate(true);
                     }
-                    catch(Exception ex) {
+                    else if(element instanceof PsiField){
+                        PsiField field = (PsiField) element;
+                        field.navigate(true);
                     }
                 }
             }
@@ -136,15 +149,6 @@ class ProjectStructureTree extends Tree {
         });
     }
 
-    /**
-     * Updates a tree according to the change in the target element, and shows the corresponding node in the Project
-     * Structure tree. The simplest way is to reset a model of the tree (using setModel) and then to traverse the tree
-     * to find the corresponding node to the target element. Use the methods {@link JTree::setSelectionPath} and
-     * {@link JTree::scrollPathToVisibles} to display the corresponding node in GUI.
-     *
-     * @param project a project
-     * @param target  a target element
-     */
     private void updateTree(@NotNull Project project, @NotNull PsiElement target) {
         setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
         updateClassMap(project);
@@ -152,22 +156,20 @@ class ProjectStructureTree extends Tree {
     }
 
     public void publicUpdateTree(@NotNull PsiElement target) {
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode) getModel().getRoot();
+        TreePath tp = null;
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) (this.getModel().getRoot());
 
-        Enumeration e = root.breadthFirstEnumeration();
-        DefaultMutableTreeNode node;
-        do {
-            node = (DefaultMutableTreeNode) e.nextElement();
-            if(node.getUserObject().equals(target)) {
-                TreePath path = new TreePath(node.getPath());
-
-                setSelectionPath(path);
-                scrollPathToVisible(path);
+        Enumeration<TreeNode> e = root.depthFirstEnumeration();
+        while (e.hasMoreElements()) {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
+            if (node.getUserObject().equals(target)) {
+                tp = new TreePath(node.getPath());
             }
-        } while(e.hasMoreElements());
+        }
+        setSelectionPath(tp);
+        scrollPathToVisible(tp);
 
     }
-
 
 
     /**
@@ -193,7 +195,6 @@ class ProjectStructureTree extends Tree {
         }
         return Optional.empty();
     }
-
 
     public void updateClassMap(Project project) {
         // the root node of the tree
@@ -248,14 +249,6 @@ class ProjectStructureTree extends Tree {
         curStrToClass.putAll(strToClass);
     }
 
-    /**
-     * Returns the root package(s) in the source directory of a project. The default package will not be considered, as
-     * it includes all Java classes. Note that classes in the default package (i.e., having no package statement) will
-     * be ignored for this assignment. To be completed, this case must be separately handled.
-     *
-     * @param project a project
-     * @return a set of root packages
-     */
     private static Set<PsiPackage> getRootPackages(Project project) {
         final Set<PsiPackage> rootPackages = new HashSet<>();
         PsiElementVisitor visitor = new PsiElementVisitor() {
