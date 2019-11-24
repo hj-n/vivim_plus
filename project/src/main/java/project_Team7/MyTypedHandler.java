@@ -52,6 +52,10 @@ public class MyTypedHandler implements TypedActionHandler {
     }
     private static char storedChar = 'x';
 
+    public MyTypedHandler(){
+
+    }
+
     public void setStoredChar(char c){
         storedChar = c;
         return ;
@@ -63,6 +67,7 @@ public class MyTypedHandler implements TypedActionHandler {
     @Override
     public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {
 //        System.out.println("storedChar is " + getStoredChar());
+
         if(getStoredChar() == 'i'){
             mode = new modeEnum(modeEnum.modeType.INSERT);
 //            System.out.println("insert mode ? " + modeEnum.getModeToString());
@@ -94,9 +99,41 @@ public class MyTypedHandler implements TypedActionHandler {
                 modeViewer(editor);
             }
             moveCursor(charTyped, editor);
+            //isTypedESC(editor);
 //            System.out.println("current mode is " + modeEnum.getModeToString());
         }
 
+    }
+
+    public void isTypedESC(Editor editor){
+        editor.getContentComponent().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+                {
+                    System.out.println("typed esc key");
+                    if(mode.equals(modeEnum.modeType.COMMAND)){
+                        mode = new modeEnum(modeEnum.modeType.NORMAL);//code to execute if escape is pressed
+                    }
+                    else if(mode.equals(modeEnum.modeType.INSERT)){
+                        setStoredChar('x');
+                        mode = new modeEnum(modeEnum.modeType.NORMAL);//code to execute if escape is pressed
+                    }
+                    else if(mode.equals(modeEnum.modeType.VISUAL)){
+                        mode = new modeEnum(modeEnum.modeType.NORMAL);//code to execute if escape is pressed
+                    }
+                    modeViewer(editor);
+                }
+            }
+        });
     }
 
     private void moveCursor(char charTyped, Editor editor){

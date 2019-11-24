@@ -16,8 +16,5 @@
     <action id="project_Team7.commandBarAction" class="project_Team7.vimCommandBarAction" text="vim command" description="command bar action for vim plugin">
       <add-to-group group-id="ToolsMenu" anchor="first"/>
     </action>
-    <action id="project_Team7.EditorActions" class="project_Team7.MyEditorActions" text="several editor actions" description="some editor actions for vim plugin">
-      <add-to-group group-id="EditorActions" anchor="first"/>
-    </action>
   </actions>
 </idea-plugin>
