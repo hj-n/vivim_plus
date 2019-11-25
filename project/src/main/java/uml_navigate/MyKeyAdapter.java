@@ -47,14 +47,15 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
                     curClassToStr.replace(key, curClassToStr.get(key).substring(1));
                 }
             }
-            for (String key: curStrToClass.keySet())
+            String firstKey = "";
+            for (String key: curClassToStr.values())
             {
-                projectTree.publicUpdateTree(curStrToClass.get(key));
+                firstKey = key;
+                break;
             }
             if(curClassToStr.isEmpty()) {
                 for (String key : curStrToClass.keySet()) {
                     curClassToStr.put(curStrToClass.get(key), key);
-                    projectTree.publicUpdateTree(curStrToClass.get(key));
                 }
             }
             else {
@@ -62,6 +63,7 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
                 for (PsiElement key : curClassToStr.keySet()) {
                     curStrToClass.put(curClassToStr.get(key), key);
                 }
+                projectTree.publicUpdateTree(curStrToClass.get(firstKey));
             }
 
         }
