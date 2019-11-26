@@ -1,38 +1,20 @@
 package project_Team7;
 
-import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
-import com.intellij.openapi.editor.impl.CaretImpl;
-import com.intellij.openapi.editor.impl.EditorImpl;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.editor.event.DocumentEvent;
+import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.JBPopupListener;
 import com.intellij.openapi.ui.popup.LightweightWindowEvent;
-import com.intellij.ui.Gray;
-import com.intellij.ui.JBColor;
-import com.intellij.ui.JBSplitter;
 import com.intellij.ui.awt.RelativePoint;
-import com.intellij.ui.components.JBLabel;
-import com.intellij.ui.components.JBPanel;
-import com.intellij.util.messages.impl.Message;
-import com.intellij.util.ui.UIUtil;
-import org.bouncycastle.est.ESTAuth;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import javax.swing.plaf.PanelUI;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.ImageObserver;
-import java.text.AttributedCharacterIterator;
-import java.util.ArrayList;
-import java.util.*;
-import java.util.List;
 
 public class MyTypedHandler implements TypedActionHandler {
 
@@ -50,6 +32,31 @@ public class MyTypedHandler implements TypedActionHandler {
     }
     private static char storedChar = 'x';
 
+    private VisualPosition cursorVisualPosition;
+
+    private MyInsertModeHandler myInsertModeHandler = new MyInsertModeHandler();
+
+    private boolean hasDocumentListener = false;
+
+    private String recentTypedString = null;
+    private String recentDeletedString = null;
+
+    public String getRecentTypedString() {
+        return recentTypedString;
+    }
+
+    public String getRecentDeletedString() {
+        return recentDeletedString;
+    }
+
+    public void setRecentTypedString(String s) {
+        recentTypedString = s;
+    }
+    public void setRecentDeletedString(String s) {
+        recentDeletedString = s;
+    }
+
+
 
 
     public void setStoredChar(char c){
@@ -62,33 +69,22 @@ public class MyTypedHandler implements TypedActionHandler {
 
     @Override
     public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {
+        if(hasDocumentListener == false) {
+            editor.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void documentChanged(@NotNull DocumentEvent event) {
+                    setRecentTypedString(event.getNewFragment().toString());
+                    setRecentDeletedString(event.getOldFragment().toString());
+                }
+            });
+            hasDocumentListener = true;
+        }
 
         Caret caret = editor.getCaretModel().getCurrentCaret();
-        editor.getContentComponent().addKeyListener(new KeyListener() {
-
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-                    editor.getSettings().setBlockCursor(true);
-                }
-
-            }
-        });
         if(getStoredChar() == 'i'){
             modeEnum.setMode(modeEnum.modeType.INSERT);
             modeViewer(editor);
-            MyInsertModeHandler myInsertModeHandler = new MyInsertModeHandler();
-            myInsertModeHandler.execute(editor, charTyped, dataContext);
+            myInsertModeHandler.execute(editor, charTyped, dataContext, this);
         }
         else{
             switch(charTyped) {
@@ -121,10 +117,6 @@ public class MyTypedHandler implements TypedActionHandler {
                     modeEnum.setMode(modeEnum.modeType.NORMAL);
                     modeViewer(editor);
                     break;
-                case 't':
-
-
-
                 default:
                     modeEnum.setMode(modeEnum.modeType.NORMAL);
                     modeViewer(editor);
