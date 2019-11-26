@@ -5,6 +5,8 @@
     <location key="com.intellij.ide.util.TipDialog.0.0.2880.1800@192dpi" x="640" y="546" />
     <location key="#Project_Structure.0.0.2880.1800@192dpi" x="640" y="212" />
     <location key="IDE.errors.dialog.0.0.2880.1800@192dpi" x="616" y="274" />
+    <location key="search.everywhere.popup.0.0.2880.1800@192dpi" x="1148" y="344" />
     <size key="IDE.errors.dialog.0.0.2880.1800@192dpi" width="1648" height="1284" />
+    <size key="search.everywhere.popup.0.0.2880.1800@192dpi" width="1340" height="316" />
   </component>
 </application>

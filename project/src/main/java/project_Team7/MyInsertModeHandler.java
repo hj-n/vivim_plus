@@ -16,44 +16,59 @@ import java.awt.event.KeyListener;
 public class MyInsertModeHandler implements TypedActionHandler {
 
     private boolean isESC;
+    private String input = null;
+    VisualPosition visualPosition;
+    private static boolean addedKeyListener = false;
+    private static boolean enteredAfterInsertion = false;
 
     public void execute(@NotNull Editor editor, char c, @NotNull DataContext dataContext) {
         MyTypedHandler myTypedHandler = new MyTypedHandler();
         //myTypedHandler.isTypedESC(editor);
         isESC = false;
-        editor.getContentComponent().addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
+        input = String.valueOf(c);
+        Caret caret = editor.getCaretModel().getPrimaryCaret();
+        final Document document = editor.getDocument();
+        final Project project = editor.getProject();
+        if(addedKeyListener == false) {
+            editor.getContentComponent().addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
 
-            }
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
-                {
-                    System.out.println("typed esc key");
-                    if(myTypedHandler.getStoredChar() != 'x')
-                        changeCaretToNormalMode(editor);
-                    myTypedHandler.setStoredChar('x');
-
-                    isESC = true;
                 }
-            }
-        });
-        if(!isESC){
-            Caret caret = editor.getCaretModel().getPrimaryCaret();
-            VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualPosition().getColumn() + 1);
-            final Document document = editor.getDocument();
-            final Project project = editor.getProject();
 
-            Runnable runnable = () -> document.insertString(caret.getOffset(),String.valueOf(c));
+                @Override
+                public void keyPressed(KeyEvent e) {
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                        //System.out.println("typed esc key");
+                        if (myTypedHandler.getStoredChar() != 'x')
+                            changeCaretToNormalMode(editor);
+                        myTypedHandler.setStoredChar('x');
+                        isESC = true;
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                        if(enteredAfterInsertion) {
+                            visualPosition = new VisualPosition(caret.getVisualPosition().getLine() + 1, caret.getVisualPosition().getColumn());
+                            caret.moveToVisualPosition(visualPosition);
+                            //editor.getDocument().replaceString(caret.getOffset(), caret.getOffset(), "\n");
+                            enteredAfterInsertion = false;
+                        }
+                    }
+                }
+            });
+        }
+        addedKeyListener = true;
+        if(!isESC){
+            visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualPosition().getColumn() + 1);
+            Runnable runnable = () -> document.insertString(caret.getOffset(),input);
             WriteCommandAction.runWriteCommandAction(project, runnable);
             caret.moveToVisualPosition(visualPosition);
-        }
+            enteredAfterInsertion = true;
 
+        }
 
     }
 

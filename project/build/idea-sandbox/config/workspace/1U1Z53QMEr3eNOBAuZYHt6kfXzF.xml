@@ -11,11 +11,6 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/untitled1/.idea/misc.xml">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/untitled1/.idea/modules.xml">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
@@ -28,8 +23,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/untitled1/untitled1.iml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="4" column="7" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="7" />
+            <state relative-caret-position="90">
+              <caret line="5" column="75" selection-start-line="5" selection-start-column="74" selection-end-line="5" selection-end-column="75" />
             </state>
           </provider>
         </entry>
@@ -63,16 +58,17 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1440" />
-    <option name="height" value="900" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="298" />
+    <option name="y" value="23" />
+    <option name="width" value="1223" />
+    <option name="height" value="825" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -127,13 +123,14 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <frame x="298" y="23" width="1223" height="825" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17095852" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.32853514" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info active="true" id="Current mode" order="3" visible="true" weight="0.32851636" />
@@ -159,15 +156,15 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/untitled1/.idea/misc.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/untitled/src/com/company/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
           <caret line="18" selection-start-line="18" selection-end-line="18" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/untitled1/.idea/misc.xml">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/untitled1/.idea/modules.xml">
       <provider selected="true" editor-type-id="text-editor" />
@@ -177,8 +174,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/untitled1/untitled1.iml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="4" column="7" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="7" />
+        <state relative-caret-position="90">
+          <caret line="5" column="75" selection-start-line="5" selection-start-column="74" selection-end-line="5" selection-end-column="75" />
         </state>
       </provider>
     </entry>

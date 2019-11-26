@@ -131,7 +131,6 @@ public class MyTypedHandler implements TypedActionHandler {
                 caret.moveToVisualPosition(visualPosition);
             }
 
-
             if(caret.getVisualLineStart() < caret.getOffset()) {
                 caret.setSelection(caret.getOffset() - 1, caret.getOffset());
                 caret.setVisualAttributes(new CaretVisualAttributes(editor.getColorsScheme().getDefaultBackground(), CaretVisualAttributes.Weight.THIN));
@@ -139,15 +138,12 @@ public class MyTypedHandler implements TypedActionHandler {
             else {
                 caret.setSelection(caret.getOffset(), caret.getOffset());
                 caret.setVisualAttributes(new CaretVisualAttributes(new Color(88, 115, 173), CaretVisualAttributes.Weight.HEAVY));
-
             }
-
         }
         catch(Exception e){
 
         }
     }
-
 
     private void modeViewer(Editor editor){
         JBPopupFactory jbPopupFactory = JBPopupFactory.getInstance();
@@ -162,7 +158,6 @@ public class MyTypedHandler implements TypedActionHandler {
         JTextField textField = new JTextField(command);
 
         textField.setEditable(true);
-
         commandPanel.add(textField);
         JBPopupFactory a = JBPopupFactory.getInstance();
         JBPopup popup = a.createComponentPopupBuilder(commandPanel, textField).createPopup();
@@ -192,7 +187,6 @@ public class MyTypedHandler implements TypedActionHandler {
                 isESC = false;
                 if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
                 {
-                    System.out.println("typed esc key in command mode");
                     setStoredChar('x');
                     mode = new modeEnum(modeEnum.modeType.NORMAL);
                     modeViewer(editor);
@@ -206,14 +200,12 @@ public class MyTypedHandler implements TypedActionHandler {
                             textField.setText(": ");
                         }
                         currentCommand = textField.getText().substring(1);
-                        System.out.println(currentCommand);
                     }
                     else {
                         if(textField.getText().length() <= 2) {
                             textField.setText("/ ");
                         }
                         currentSearchingString = textField.getText().substring(1);
-                        System.out.println(currentSearchingString);
                     }
                 }
             }
@@ -249,7 +241,6 @@ public class MyTypedHandler implements TypedActionHandler {
                 break;
 
         }
-        System.out.println(position);
         Caret caret = editor.getCaretModel().getPrimaryCaret();
         caret.setSelection(position, position);
         caret.moveToOffset(position);
