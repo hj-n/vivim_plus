@@ -26,10 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import javax.swing.plaf.PanelUI;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.ImageObserver;
 import java.text.AttributedCharacterIterator;
 import java.util.ArrayList;
@@ -47,6 +44,7 @@ public class MyTypedHandler implements TypedActionHandler {
 
     private JPanel commandPanel = null;
     private JPanel modePanel = null;
+    private boolean isESC = false;
 
     public String getCurrentCommand() {
         return currentCommand;
@@ -165,6 +163,19 @@ public class MyTypedHandler implements TypedActionHandler {
 
         textField.setEditable(true);
 
+        commandPanel.add(textField);
+        JBPopupFactory a = JBPopupFactory.getInstance();
+        JBPopup popup = a.createComponentPopupBuilder(commandPanel, textField).createPopup();
+        popup.setRequestFocus(true);
+        popup.setSize(new Dimension(editor.getComponent().getWidth(), 10));
+        popup.showUnderneathOf(editor.getComponent());
+        popup.addListener(new JBPopupListener() {
+            @Override
+            public void onClosed(@NotNull LightweightWindowEvent event) {
+                commandPanel = null;
+
+            }
+        });
         textField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -178,36 +189,33 @@ public class MyTypedHandler implements TypedActionHandler {
 
             @Override
             public void keyReleased(KeyEvent e) {
-
-                if(command.equals(": ")) {
-                    if(textField.getText().length() <= 2) {
-                        textField.setText(": ");
-                    }
-                    currentCommand = textField.getText().substring(1);
-                    System.out.println(currentCommand);
+                isESC = false;
+                if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+                {
+                    System.out.println("typed esc key in command mode");
+                    setStoredChar('x');
+                    mode = new modeEnum(modeEnum.modeType.NORMAL);
+                    modeViewer(editor);
+                    popup.closeOk(e);
+                    popup.canClose();
+                    isESC = true;
                 }
-                else {
-                    if(textField.getText().length() <= 2) {
-                        textField.setText("/ ");
+                else{
+                    if(command.equals(": ")) {
+                        if(textField.getText().length() <= 2) {
+                            textField.setText(": ");
+                        }
+                        currentCommand = textField.getText().substring(1);
+                        System.out.println(currentCommand);
                     }
-                    currentSearchingString = textField.getText().substring(1);
-                    System.out.println(currentSearchingString);
+                    else {
+                        if(textField.getText().length() <= 2) {
+                            textField.setText("/ ");
+                        }
+                        currentSearchingString = textField.getText().substring(1);
+                        System.out.println(currentSearchingString);
+                    }
                 }
-
-            }
-        });
-        commandPanel.add(textField);
-
-        JBPopupFactory a = JBPopupFactory.getInstance();
-        JBPopup popup = a.createComponentPopupBuilder(commandPanel, textField).createPopup();
-        popup.setRequestFocus(true);
-        popup.setSize(new Dimension(editor.getComponent().getWidth(), 10));
-        popup.showUnderneathOf(editor.getComponent());
-        popup.addListener(new JBPopupListener() {
-            @Override
-            public void onClosed(@NotNull LightweightWindowEvent event) {
-                commandPanel = null;
-
             }
         });
     }
