@@ -10,7 +10,7 @@
         <entry file="file://$PROJECT_DIR$/test/test.iml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
-              <caret line="10" column="5" selection-start-line="1" selection-start-column="14" selection-end-line="1" selection-end-column="19" />
+              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
             </state>
           </provider>
         </entry>
@@ -25,9 +25,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="615" />
+    <option name="x" value="363" />
     <option name="y" value="27" />
-    <option name="width" value="818" />
+    <option name="width" value="1077" />
     <option name="height" value="830" />
   </component>
   <component name="ProjectView">
@@ -57,15 +57,15 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="ToolWindowManager">
-    <frame x="615" y="27" width="818" height="830" extended-state="0" />
+    <frame x="363" y="27" width="1077" height="830" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.40592784" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.39033815" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -95,7 +95,7 @@
     <entry file="file://$PROJECT_DIR$/test/test.iml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
-          <caret line="10" column="5" selection-start-line="1" selection-start-column="14" selection-end-line="1" selection-end-column="19" />
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
         </state>
       </provider>
     </entry>

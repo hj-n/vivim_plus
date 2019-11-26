@@ -45,6 +45,8 @@ public class MyTypedHandler implements TypedActionHandler {
     private String recentTypedString = null;
     private String recentDeletedString = null;
 
+    private String clipBoard = "";
+
     public String getRecentTypedString() {
         return recentTypedString;
     }
@@ -70,6 +72,7 @@ public class MyTypedHandler implements TypedActionHandler {
         return storedChar;
     }
 
+
     @Override
     public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {
         if(hasDocumentListener == false) {
@@ -84,6 +87,7 @@ public class MyTypedHandler implements TypedActionHandler {
             });
             hasDocumentListener = true;
         }
+
 
 
         Caret caret = editor.getCaretModel().getCurrentCaret();
@@ -132,6 +136,64 @@ public class MyTypedHandler implements TypedActionHandler {
                     moveCursor(charTyped, editor);
                     modeEnum.setMode(modeEnum.modeType.NORMAL);
                     modeViewer(editor);
+                    break;
+
+                case 'd':
+                    if(caret.getSelectedText() != null ) {
+                        clipBoard = caret.getSelectedText();
+                        editor.getDocument().replaceString(caret.getSelectionStart(), caret.getSelectionEnd(), "");
+                    }
+                    else {
+                        if(getStoredChar() == 'd') {
+                            int start = caret.getVisualLineStart();
+                            int end = caret.getVisualLineEnd();
+                            caret.setSelection(start, end);
+                            clipBoard = caret.getSelectedText();
+                            editor.getDocument().replaceString(start, end, "");
+                            setStoredChar('x');
+                        }
+                        else {
+                            setStoredChar('d');
+                        }
+                    }
+                    System.out.println("clipBoard d: " + clipBoard);
+                    break;
+                case 'y':
+                    if(caret.getSelectedText() != null ) {
+                        clipBoard = caret.getSelectedText();
+                        caret.removeSelection();
+                    }
+                    else {
+                        if(getStoredChar() == 'y') {
+                            int start = caret.getVisualLineStart();
+                            int end = caret.getVisualLineEnd();
+                            caret.setSelection(start, end);
+                            clipBoard = caret.getSelectedText();
+                            caret.removeSelection();
+                            setStoredChar('x');
+                        }
+                        else {
+                            setStoredChar('y');
+                        }
+                    }
+                    System.out.println("clipBoard y: " + clipBoard);
+                    break;
+                case 'p':
+                    if(clipBoard != null) {
+                        String original = clipBoard;
+                        if(clipBoard.charAt(clipBoard.length() - 1) != '\n' )
+                            clipBoard = clipBoard + '\n';
+                        if(caret.getVisualLineEnd() == editor.getDocument().getText().length()){
+                            clipBoard = '\n' + clipBoard;
+                        }
+                        editor.getDocument().replaceString(caret.getVisualLineEnd(), caret.getVisualLineEnd(), clipBoard);
+                        clipBoard = original;
+                    }
+                    break;
+                case 'P':
+                    if(clipBoard != null){
+                        editor.getDocument().replaceString(caret.getOffset(), caret.getOffset(), clipBoard);
+                    }
                     break;
                 default:
                     modeEnum.setMode(modeEnum.modeType.NORMAL);
@@ -260,11 +322,6 @@ public class MyTypedHandler implements TypedActionHandler {
             int beginIndex = slicedIndex + (editor.getDocument().getText().length() - text.length());
             searchList.add(beginIndex);
             text = text.substring(slicedIndex + currentSearchingString.length());
-            System.out.println("======================");
-            System.out.println("======================");
-            System.out.println("======================");
-            System.out.println(text);
-
         }
         currentIndex = 0;
         modeEnum.setMode(modeEnum.modeType.NORMAL);
@@ -277,8 +334,6 @@ public class MyTypedHandler implements TypedActionHandler {
         if(searchList.size() > 0) {
             start = searchList.get(currentIndex);
             end = start + currentSearchingString.length();
-            System.out.println("start: " + start);
-            System.out.println("end: " + end);
             editor.getCaretModel().getCurrentCaret().setSelection(start, end);
             if (isSearchingNext) {
                 if (currentIndex == searchList.size() - 1)
