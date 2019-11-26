@@ -9,8 +9,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/test.iml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="16" column="7" lean-forward="true" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
+            <state relative-caret-position="180">
+              <caret line="10" column="5" selection-start-line="1" selection-start-column="14" selection-end-line="1" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -25,17 +25,16 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="503" />
-    <option name="y" value="76" />
-    <option name="width" value="657" />
-    <option name="height" value="777" />
+    <option name="x" value="615" />
+    <option name="y" value="27" />
+    <option name="width" value="818" />
+    <option name="height" value="830" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -59,13 +58,14 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="ToolWindowManager">
-    <frame x="503" y="76" width="657" height="777" extended-state="0" />
+    <frame x="615" y="27" width="818" height="830" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.34146342" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.40592784" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -94,8 +94,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/test.iml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="16" column="7" lean-forward="true" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
+        <state relative-caret-position="180">
+          <caret line="10" column="5" selection-start-line="1" selection-start-column="14" selection-end-line="1" selection-end-column="19" />
         </state>
       </provider>
     </entry>

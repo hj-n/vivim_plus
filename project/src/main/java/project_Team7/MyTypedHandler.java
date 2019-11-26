@@ -10,22 +10,26 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.JBPopupListener;
 import com.intellij.openapi.ui.popup.LightweightWindowEvent;
 import com.intellij.ui.awt.RelativePoint;
+import org.apache.batik.css.dom.CSSOMStoredStyleDeclaration;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class MyTypedHandler implements TypedActionHandler {
 
 
     private String currentCommand = null;
     private String currentSearchingString = null;
+    private boolean isSearch;
+    private ArrayList<Integer> searchList = new ArrayList<Integer>();
+    private int currentIndex;
+    private boolean isESC = false;
 
 
     private JPanel commandPanel = null;
-    private JPanel modePanel = null;
-    private boolean isESC = false;
 
     public String getCurrentCommand() {
         return currentCommand;
@@ -52,17 +56,16 @@ public class MyTypedHandler implements TypedActionHandler {
     public void setRecentTypedString(String s) {
         recentTypedString = s;
     }
+
     public void setRecentDeletedString(String s) {
         recentDeletedString = s;
     }
-
-
-
 
     public void setStoredChar(char c){
         storedChar = c;
         return ;
     }
+
     public char getStoredChar(){
         return storedChar;
     }
@@ -75,10 +78,13 @@ public class MyTypedHandler implements TypedActionHandler {
                 public void documentChanged(@NotNull DocumentEvent event) {
                     setRecentTypedString(event.getNewFragment().toString());
                     setRecentDeletedString(event.getOldFragment().toString());
+                    searchList = new ArrayList<Integer>();
+
                 }
             });
             hasDocumentListener = true;
         }
+
 
         Caret caret = editor.getCaretModel().getCurrentCaret();
         if(getStoredChar() == 'i'){
@@ -93,6 +99,16 @@ public class MyTypedHandler implements TypedActionHandler {
                     modeEnum.setMode(modeEnum.modeType.COMMAND);
                     keyStrokeCommandMode(charTyped + " ", editor);
                     modeViewer(editor);
+                    break;
+                case 'n':
+                    if(modeEnum.getModeToString().equals("NORMAL MODE")) {
+                        focusNextSearchString(editor, true);
+                    }
+                    break;
+                case 'N':
+                    if(modeEnum.getModeToString().equals("NORMAL MODE")) {
+                        focusNextSearchString(editor, false);
+                    }
                     break;
                 case 'v':
                     modeEnum.setMode(modeEnum.modeType.VISUAL);
@@ -208,22 +224,75 @@ public class MyTypedHandler implements TypedActionHandler {
                     popup.canClose();
                     isESC = true;
                 }
+                else if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    searchString(editor);
+                    popup.closeOk(e);
+                    popup.canClose();
+
+                }
                 else{
                     if(command.equals(": ")) {
                         if(textField.getText().length() <= 2) {
                             textField.setText(": ");
+                            isSearch = false;
                         }
-                        currentCommand = textField.getText().substring(1);
+                        currentCommand = textField.getText().substring(2);
                     }
                     else {
                         if(textField.getText().length() <= 2) {
                             textField.setText("/ ");
+                            isSearch = true;
                         }
-                        currentSearchingString = textField.getText().substring(1);
+                        currentSearchingString = textField.getText().substring(2);
                     }
                 }
             }
         });
+    }
+
+
+    private void searchString(Editor editor){
+        String text = editor.getDocument().getText();
+        System.out.println(currentSearchingString);
+        System.out.println(text.contains(currentSearchingString));
+        while(text.contains(currentSearchingString)){
+            int slicedIndex = text.indexOf(currentSearchingString);
+            int beginIndex = slicedIndex + (editor.getDocument().getText().length() - text.length());
+            searchList.add(beginIndex);
+            text = text.substring(slicedIndex + currentSearchingString.length());
+            System.out.println("======================");
+            System.out.println("======================");
+            System.out.println("======================");
+            System.out.println(text);
+
+        }
+        currentIndex = 0;
+        modeEnum.setMode(modeEnum.modeType.NORMAL);
+        focusNextSearchString(editor, true);
+
+    }
+
+    private void focusNextSearchString(Editor editor, boolean isSearchingNext) {
+        int start, end;
+        if(searchList.size() > 0) {
+            start = searchList.get(currentIndex);
+            end = start + currentSearchingString.length();
+            System.out.println("start: " + start);
+            System.out.println("end: " + end);
+            editor.getCaretModel().getCurrentCaret().setSelection(start, end);
+            if (isSearchingNext) {
+                if (currentIndex == searchList.size() - 1)
+                    currentIndex = 0;
+                else
+                    currentIndex++;
+            } else {
+                if (currentIndex == 0)
+                    currentIndex = searchList.size() - 1;
+                else
+                    currentIndex--;
+            }
+        }
+        System.out.println(currentIndex);
     }
 
 
