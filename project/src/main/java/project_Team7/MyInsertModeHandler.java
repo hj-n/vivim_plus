@@ -49,7 +49,7 @@ public class MyInsertModeHandler implements TypedActionHandler {
                         myTypedHandler.setStoredChar('x');
                         isESC = true;
                     }
-                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         if(enteredAfterInsertion) {
                             visualPosition = new VisualPosition(caret.getVisualPosition().getLine() + 1, caret.getVisualPosition().getColumn());
                             caret.moveToVisualPosition(visualPosition);
@@ -71,18 +71,8 @@ public class MyInsertModeHandler implements TypedActionHandler {
         }
 
     }
-
     public void changeCaretToNormalMode(Editor editor) {
-        Caret caret = editor.getCaretModel().getPrimaryCaret();
-        if(caret.getVisualLineStart() < caret.getOffset()) {
-            caret.setSelection(caret.getOffset() - 1, caret.getOffset());
-            caret.setVisualAttributes(new CaretVisualAttributes(editor.getColorsScheme().getDefaultBackground(), CaretVisualAttributes.Weight.THIN));
-        }
-        else {
-            caret.setSelection(caret.getOffset(), caret.getOffset());
-            caret.setVisualAttributes(new CaretVisualAttributes(new Color(88, 115, 173), CaretVisualAttributes.Weight.HEAVY));
-
-        }
+            editor.getSettings().setBlockCursor(true);
     }
 }
 

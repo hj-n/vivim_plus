@@ -11,7 +11,16 @@ public class modeEnum {
     private static modeType mode;
     private static String modeToString;
 
-    modeEnum(modeType type){
+
+    public modeEnum(){
+        setMode(modeType.NORMAL);
+    }
+
+    public static String getModeToString() {
+        return modeToString;
+    }
+
+    public static void setMode(modeType type) {
         mode = type;
         if(type.equals(modeType.VISUAL))
             modeToString = "VISUAL MODE";
@@ -21,12 +30,5 @@ public class modeEnum {
             modeToString = "NORMAL MODE";
         else if(type.equals(modeType.INSERT))
             modeToString = "INSERT MODE";
-
-    }
-
-
-
-    public static String getModeToString() {
-        return modeToString;
     }
 }

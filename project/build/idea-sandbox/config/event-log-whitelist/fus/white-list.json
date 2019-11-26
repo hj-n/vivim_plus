@@ -298,6 +298,26 @@
       }
     }
   }, {
+    "id" : "customization.wizard",
+    "builds" : [ ],
+    "versions" : [ {
+      "from" : "1"
+    } ],
+    "rules" : {
+      "event_id" : [ "{enum#__event_id}" ],
+      "event_data" : {
+        "group" : [ "{enum#__group}" ],
+        "page" : [ "{regexp#integer}" ],
+        "plugin" : [ "{util#plugin}" ],
+        "plugin_type" : [ "{util#plugin_type}" ],
+        "timestamp" : [ "{regexp#integer}" ]
+      },
+      "enums" : {
+        "__event_id" : [ "remaining.pages.skipped", "WizardDisplayed", "UIThemeChanged", "DesktopEntryCreated", "LauncherScriptCreated", "BundledPluginGroupDisabled", "BundledPluginGroupEnabled", "BundledPluginGroupCustomized", "FeaturedPluginInstalled" ],
+        "__group" : [ "Java Frameworks", "Web Development", "Version Controls", "Test Tools", "Application Servers", "Clouds", "Swing", "Android", "Database Tools", "Other Tools", "Plugin Development" ]
+      }
+    }
+  }, {
     "id" : "debugger.breakpoints",
     "builds" : [ {
       "from" : "191.4811"
@@ -2195,15 +2215,22 @@
       "from" : "1"
     } ],
     "rules" : {
-      "event_id" : [ "{enum#_}" ],
+      "event_id" : [ "{enum#_}", "{enum:changelist_changed|changes_committed|node_expanded}" ],
       "event_data" : {
+        "committed_files" : [ "{regexp#hash}" ],
+        "cur_modified_files" : [ "{regexp#hash}" ],
+        "displayed_prediction" : [ "{regexp#hash}" ],
+        "empty_reason" : [ "{enum#__empty_reason}" ],
         "execution.time" : [ "{regexp#integer}" ],
         "execution_time" : [ "{regexp#integer}" ],
+        "prediction_for_files" : [ "{regexp#hash}" ],
+        "prev_modified_files" : [ "{regexp#hash}" ],
         "show.dialog.time" : [ "{regexp#integer}" ],
         "show_dialog_time" : [ "{regexp#integer}" ]
       },
       "enums" : {
-        "_" : [ "handler.registered", "plugin.disabled", "dialog.closed", "committed.anyway", "commit.canceled", "not.showed", "prediction.calculated" ]
+        "_" : [ "handler.registered", "plugin.disabled", "dialog.closed", "committed.anyway", "commit.canceled", "not.showed", "prediction.calculated" ],
+        "__empty_reason" : [ "service_init", "too_many_files", "data_manager_removed", "requirements_not_met", "data_pack_is_not_full", "data_pack_changed", "exception_thrown", "calculation_canceled", "unexpected_reason" ]
       }
     }
   }, {
@@ -2528,5 +2555,5 @@
       "version" : "(\\d+\\.?)*\\d+"
     }
   },
-  "version" : "919"
+  "version" : "925"
 }

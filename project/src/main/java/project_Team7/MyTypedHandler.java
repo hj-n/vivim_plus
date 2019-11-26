@@ -1,5 +1,6 @@
 package project_Team7;
 
+import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.*;
@@ -39,8 +40,6 @@ public class MyTypedHandler implements TypedActionHandler {
     private String currentCommand = null;
     private String currentSearchingString = null;
 
-    private modeEnum mode;
-
 
     private JPanel commandPanel = null;
     private JPanel modePanel = null;
@@ -50,6 +49,8 @@ public class MyTypedHandler implements TypedActionHandler {
         return currentCommand;
     }
     private static char storedChar = 'x';
+
+
 
     public void setStoredChar(char c){
         storedChar = c;
@@ -61,8 +62,30 @@ public class MyTypedHandler implements TypedActionHandler {
 
     @Override
     public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {
+
+        Caret caret = editor.getCaretModel().getCurrentCaret();
+        editor.getContentComponent().addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                    editor.getSettings().setBlockCursor(true);
+                }
+
+            }
+        });
         if(getStoredChar() == 'i'){
-            mode = new modeEnum(modeEnum.modeType.INSERT);
+            modeEnum.setMode(modeEnum.modeType.INSERT);
             modeViewer(editor);
             MyInsertModeHandler myInsertModeHandler = new MyInsertModeHandler();
             myInsertModeHandler.execute(editor, charTyped, dataContext);
@@ -71,12 +94,12 @@ public class MyTypedHandler implements TypedActionHandler {
             switch(charTyped) {
                 case ':':
                 case '/':
+                    modeEnum.setMode(modeEnum.modeType.COMMAND);
                     keyStrokeCommandMode(charTyped + " ", editor);
-                    mode = new modeEnum(modeEnum.modeType.COMMAND);
                     modeViewer(editor);
                     break;
                 case 'v':
-                    mode = new modeEnum(modeEnum.modeType.VISUAL);
+                    modeEnum.setMode(modeEnum.modeType.VISUAL);
                     modeViewer(editor);
                     break;
                 case 'i':
@@ -86,7 +109,7 @@ public class MyTypedHandler implements TypedActionHandler {
                 case 'o':
                 case 'O':
                     changeCaretToInsertionMode(editor, getInsertionTypeFromChar(charTyped));
-                    mode = new modeEnum(modeEnum.modeType.INSERT);
+                    modeEnum.setMode(modeEnum.modeType.INSERT);
                     modeViewer(editor);
                     setStoredChar('i');
                     break;
@@ -95,15 +118,23 @@ public class MyTypedHandler implements TypedActionHandler {
                 case 'k':
                 case 'l':
                     moveCursor(charTyped, editor);
-                    mode = new modeEnum(modeEnum.modeType.NORMAL);
+                    modeEnum.setMode(modeEnum.modeType.NORMAL);
                     modeViewer(editor);
                     break;
+                case 't':
+
 
 
                 default:
-                    mode = new modeEnum(modeEnum.modeType.NORMAL);
+                    modeEnum.setMode(modeEnum.modeType.NORMAL);
                     modeViewer(editor);
             }
+        }
+        if(modeEnum.getModeToString() == "INSERT MODE" ) {
+            editor.getSettings().setBlockCursor(false);
+        }
+        else {
+            editor.getSettings().setBlockCursor(true);
         }
     }
 
@@ -129,15 +160,6 @@ public class MyTypedHandler implements TypedActionHandler {
             if (charTyped == 'l') {
                 VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualPosition().getColumn() + 1);
                 caret.moveToVisualPosition(visualPosition);
-            }
-
-            if(caret.getVisualLineStart() < caret.getOffset()) {
-                caret.setSelection(caret.getOffset() - 1, caret.getOffset());
-                caret.setVisualAttributes(new CaretVisualAttributes(editor.getColorsScheme().getDefaultBackground(), CaretVisualAttributes.Weight.THIN));
-            }
-            else {
-                caret.setSelection(caret.getOffset(), caret.getOffset());
-                caret.setVisualAttributes(new CaretVisualAttributes(new Color(88, 115, 173), CaretVisualAttributes.Weight.HEAVY));
             }
         }
         catch(Exception e){
@@ -188,7 +210,7 @@ public class MyTypedHandler implements TypedActionHandler {
                 if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
                 {
                     setStoredChar('x');
-                    mode = new modeEnum(modeEnum.modeType.NORMAL);
+                    modeEnum.setMode(modeEnum.modeType.NORMAL);
                     modeViewer(editor);
                     popup.closeOk(e);
                     popup.canClose();
@@ -237,14 +259,14 @@ public class MyTypedHandler implements TypedActionHandler {
             case O :
                 Caret caret2 = editor.getCaretModel().getCurrentCaret();
                 editor.getDocument().replaceString(caret2.getVisualLineStart(), caret2.getVisualLineStart(), "\n");
-                position = editor.getCaretModel().getVisualLineStart() - 1;
+                position = editor.getCaretModel().getVisualLineStart();
                 break;
 
         }
         Caret caret = editor.getCaretModel().getPrimaryCaret();
         caret.setSelection(position, position);
         caret.moveToOffset(position);
-        caret.setVisualAttributes(new CaretVisualAttributes(Gray._0, CaretVisualAttributes.Weight.NORMAL));
+        editor.getSettings().setBlockCursor(false);
     }
 
     private enum enterInsertionType {
