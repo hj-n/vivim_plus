@@ -9,6 +9,9 @@ import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.JBPopupListener;
 import com.intellij.openapi.ui.popup.LightweightWindowEvent;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.psi.PsiElement;
 import com.intellij.ui.awt.RelativePoint;
 import org.jetbrains.annotations.NotNull;
 
@@ -359,6 +362,8 @@ public class MyTypedHandler implements TypedActionHandler {
                 else if(e.getKeyCode() == KeyEvent.VK_ENTER){
                     if(textField.getText().substring(0, 1).equals("/"))
                         searchString(editor);
+                    if(textField.getText().substring(0, 1).equals(":"))
+                        handleCommands(editor);
                     popup.closeOk(e);
                     popup.canClose();
 
@@ -381,6 +386,56 @@ public class MyTypedHandler implements TypedActionHandler {
                 }
             }
         });
+    }
+
+    private void handleCommands(Editor editor) {
+        String currentCommandInput = currentCommand;
+        int spaceIndex = currentCommandInput.indexOf(" ");
+        if(spaceIndex > 0) {      // Commands with function & argument (ex) move 9-1)
+            if(currentCommandInput.substring(0, 4).equals("move")) {
+                currentCommandInput = currentCommandInput.substring(5);
+                if(ProjectStructureTree.getIdentifierToElement().containsKey(currentCommandInput)) {
+                    ((PsiDocCommentOwner)ProjectStructureTree.getIdentifierToElement().get(currentCommandInput)).navigate(true);
+                    modeEnum.setMode(modeEnum.modeType.NORMAL);
+                }
+                else {
+                    return;
+                }
+            }
+            else if(currentCommandInput.substring(0, 6).equals("unfold")) {
+                currentCommandInput = currentCommandInput.substring(7);
+                if(ProjectStructureTree.getIdentifierToElement().containsKey(currentCommandInput)) {
+                    PsiElement element = (PsiElement)ProjectStructureTree.getIdentifierToElement().get(currentCommandInput);
+                    System.out.println(element.getChildren().length);
+                    if(element instanceof PsiClass) {
+                        if(((PsiClass) element).getFields().length != 0)
+                            ProjectStructureTree.thisTree.publicUpdateTree(((PsiClass) element).getFields()[0]);
+                        else if((((PsiClass) element).getMethods()).length != 0)
+                            ProjectStructureTree.thisTree.publicUpdateTree(((PsiClass) element).getMethods()[0]);
+                        else
+                            ProjectStructureTree.thisTree.publicUpdateTree(element);
+                    }
+                    else {
+                        ProjectStructureTree.thisTree.publicUpdateTree(element);
+                    }
+                    modeEnum.setMode(modeEnum.modeType.NORMAL);
+                }
+
+            }
+            else if(currentCommandInput.substring(0, 4).equals("fold")) {
+                currentCommandInput = currentCommandInput.substring(5);
+                if(ProjectStructureTree.getIdentifierToElement().containsKey(currentCommandInput)) {
+                    PsiElement element = (PsiElement) ProjectStructureTree.getIdentifierToElement().get(currentCommandInput);
+                    ProjectStructureTree.thisTree.collapseTree(element);
+                    modeEnum.setMode(modeEnum.modeType.NORMAL);
+                }
+
+            }
+
+        }
+        else {      // Commands consists with shortcut
+
+        }
     }
 
     /**

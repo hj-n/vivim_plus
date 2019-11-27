@@ -42,6 +42,14 @@ class ProjectStructureTree extends Tree {
     private static final Icon defaultIcon = MetalIconFactory.getTreeLeafIcon();
 
     private HashMap<Object, String> nodeToChildIndex = new HashMap<>();
+    private static HashMap<String, Object> identifierToElement = new HashMap<>();
+
+    public static HashMap<String, Object> getIdentifierToElement() {
+        return identifierToElement;
+    }
+
+    public static ProjectStructureTree thisTree;
+
     /**
      * Each psiclass, psimethod, psifield  are shown with their keys on the project structure window.
      * By keylistener, this class gets the character that user typed.
@@ -59,6 +67,7 @@ class ProjectStructureTree extends Tree {
      */
     ProjectStructureTree(@NotNull Project project) {
         setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
+        thisTree = this;
 
         strToClass = new HashMap<>();
         classToStr = new HashMap<>();
@@ -86,6 +95,7 @@ class ProjectStructureTree extends Tree {
                     identifier = parentIndexString + "-" + index.toString();
                 }
                 nodeToChildIndex.put(value, index.toString());
+                identifierToElement.put(identifier, element);
 
 
                 if(element instanceof Project) {
@@ -186,6 +196,21 @@ class ProjectStructureTree extends Tree {
         }
         setSelectionPath(tp);
         scrollPathToVisible(tp);
+    }
+
+    public void collapseTree(@NotNull PsiElement target) {
+        TreePath tp = null;
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) (this.getModel().getRoot());
+
+        Enumeration<TreeNode> e = root.depthFirstEnumeration();
+        while (e.hasMoreElements()) {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
+            if (node.getUserObject().equals(target)) {
+                tp = new TreePath(node.getPath());
+            }
+        }
+        setSelectionPath(tp);
+        collapsePath(tp);
     }
 
 
