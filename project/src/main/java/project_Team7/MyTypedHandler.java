@@ -35,6 +35,7 @@ public class MyTypedHandler implements TypedActionHandler {
     private String clipBoard = "";
 
 
+
     /** Getter, setter methods */
 
     public String getRecentTypedString() {
@@ -206,10 +207,34 @@ public class MyTypedHandler implements TypedActionHandler {
                         editor.getDocument().replaceString(caret.getOffset(), caret.getOffset(), clipBoard);
                     }
                     break;
-                case 'f':
+                case 'f':      // should change to uml window
                     Component component = MyToolWindowFactory.getToolWindow().getComponent();
                     component.transferFocus();
-
+                    modeEnum.setMode(modeEnum.modeType.NORMAL);
+                    modeViewer(editor);
+                    break;
+                case 't':
+                    try {
+                        if (!MyToolWindowFactory.getToolWindow().isVisible()) {
+                            MyToolWindowFactory.getToolWindow().show(new Runnable() {
+                                @Override
+                                public void run() {
+                                }
+                            });
+                        } else {
+                            MyToolWindowFactory.getToolWindow().hide(new Runnable() {
+                                @Override
+                                public void run() {
+                                }
+                            });
+                        }
+                    }
+                    catch(NullPointerException e) {
+                        System.out.println("YOU SHOULD OPEN TREE AT LEAST ONCE BY MOUSE");
+                    }
+                    modeEnum.setMode(modeEnum.modeType.NORMAL);
+                    modeViewer(editor);
+                    break;
                 default:
                     modeEnum.setMode(modeEnum.modeType.NORMAL);
                     modeViewer(editor);
