@@ -388,53 +388,86 @@ public class MyTypedHandler implements TypedActionHandler {
         });
     }
 
+
+    /**
+     * This method is called when the user types ENTER key in the COMMAND MODE.
+     * It parse the input string, and calls corresponding sub-handling function
+     * for each input command
+     * @param editor Opened editor
+     */
     private void handleCommands(Editor editor) {
         String currentCommandInput = currentCommand;
         int spaceIndex = currentCommandInput.indexOf(" ");
         if(spaceIndex > 0) {      // Commands with function & argument (ex) move 9-1)
             if(currentCommandInput.substring(0, 4).equals("move")) {
-                currentCommandInput = currentCommandInput.substring(5);
-                if(ProjectStructureTree.getIdentifierToElement().containsKey(currentCommandInput)) {
-                    ((PsiDocCommentOwner)ProjectStructureTree.getIdentifierToElement().get(currentCommandInput)).navigate(true);
-                    modeEnum.setMode(modeEnum.modeType.NORMAL);
-                }
-                else {
-                    return;
-                }
+               handleMoveByTree(currentCommandInput);
             }
             else if(currentCommandInput.substring(0, 6).equals("unfold")) {
-                currentCommandInput = currentCommandInput.substring(7);
-                if(ProjectStructureTree.getIdentifierToElement().containsKey(currentCommandInput)) {
-                    PsiElement element = (PsiElement)ProjectStructureTree.getIdentifierToElement().get(currentCommandInput);
-                    System.out.println(element.getChildren().length);
-                    if(element instanceof PsiClass) {
-                        if(((PsiClass) element).getFields().length != 0)
-                            ProjectStructureTree.thisTree.publicUpdateTree(((PsiClass) element).getFields()[0]);
-                        else if((((PsiClass) element).getMethods()).length != 0)
-                            ProjectStructureTree.thisTree.publicUpdateTree(((PsiClass) element).getMethods()[0]);
-                        else
-                            ProjectStructureTree.thisTree.publicUpdateTree(element);
-                    }
-                    else {
-                        ProjectStructureTree.thisTree.publicUpdateTree(element);
-                    }
-                    modeEnum.setMode(modeEnum.modeType.NORMAL);
-                }
-
+                handleUnfoldByTree(currentCommandInput);
             }
             else if(currentCommandInput.substring(0, 4).equals("fold")) {
-                currentCommandInput = currentCommandInput.substring(5);
-                if(ProjectStructureTree.getIdentifierToElement().containsKey(currentCommandInput)) {
-                    PsiElement element = (PsiElement) ProjectStructureTree.getIdentifierToElement().get(currentCommandInput);
-                    ProjectStructureTree.thisTree.collapseTree(element);
-                    modeEnum.setMode(modeEnum.modeType.NORMAL);
-                }
-
+                handleFoldByTree(currentCommandInput);
             }
-
         }
-        else {      // Commands consists with shortcut
+        else {      // Commands consists with shortcut, not yet implemented
+        }
+    }
 
+    /**
+     * When the user types "move" function command in the COMMAND MODE, it parses
+     * the command and find the node that the argument given is representing. And then,
+     * it navigates the editor to the location that the code corresponding
+     * to the node is placed in.
+     * For example, if class A corresponds to identifier 9, the user can move to it
+     * by typing "move 9".
+     * @param currentCommandInput the input command from the command mode
+     */
+    private void handleMoveByTree(String currentCommandInput) {
+        currentCommandInput = currentCommandInput.substring(5);
+        if(ProjectStructureTree.getIdentifierToElement().containsKey(currentCommandInput)) {
+            ((PsiDocCommentOwner)ProjectStructureTree.getIdentifierToElement().get(currentCommandInput)).navigate(true);
+            modeEnum.setMode(modeEnum.modeType.NORMAL);
+        }
+    }
+
+    /**
+     * When the user types "unfold" function command in the COMMAND MODE, it parses
+     * the command and find the node that the argument given is representing. And then,
+     * if unfolds the node in the tree structure.
+     * @param currentCommandInput the input command from the command mode
+     */
+    private void handleUnfoldByTree(String currentCommandInput) {
+        currentCommandInput = currentCommandInput.substring(7);
+        if(ProjectStructureTree.getIdentifierToElement().containsKey(currentCommandInput)) {
+            PsiElement element = (PsiElement)ProjectStructureTree.getIdentifierToElement().get(currentCommandInput);
+            System.out.println(element.getChildren().length);
+            if(element instanceof PsiClass) {
+                if(((PsiClass) element).getFields().length != 0)
+                    ProjectStructureTree.thisTree.publicUpdateTree(((PsiClass) element).getFields()[0]);
+                else if((((PsiClass) element).getMethods()).length != 0)
+                    ProjectStructureTree.thisTree.publicUpdateTree(((PsiClass) element).getMethods()[0]);
+                else
+                    ProjectStructureTree.thisTree.publicUpdateTree(element);
+            }
+            else {
+                ProjectStructureTree.thisTree.publicUpdateTree(element);
+            }
+            modeEnum.setMode(modeEnum.modeType.NORMAL);
+        }
+    }
+
+    /**
+     * When the user types "fold" function command in the COMMAND MODE, it parses
+     * the command and find the node that the argument given is representing. And then,
+     * it collapses the node if the node's child nodes are unfolded.
+     * @param currentCommandInput the input command from the command mode
+     */
+    private void handleFoldByTree(String currentCommandInput) {
+        currentCommandInput = currentCommandInput.substring(5);
+        if(ProjectStructureTree.getIdentifierToElement().containsKey(currentCommandInput)) {
+            PsiElement element = (PsiElement) ProjectStructureTree.getIdentifierToElement().get(currentCommandInput);
+            ProjectStructureTree.thisTree.collapseTree(element);
+            modeEnum.setMode(modeEnum.modeType.NORMAL);
         }
     }
 
@@ -528,7 +561,11 @@ public class MyTypedHandler implements TypedActionHandler {
     }
 
 
-    /** Helpers for the function changeCaretTtInsertionMode() */
+    /**
+     * Helpers for the insertionType:
+     * There are 6 ways to enter the INSERT MODE from the NORMAL mode.
+     * The code differentiate them by using these enum type
+     */
 
     private enum enterInsertionType {
         o, O, i, I, a, A

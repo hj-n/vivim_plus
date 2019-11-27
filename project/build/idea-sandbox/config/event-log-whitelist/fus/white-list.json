@@ -1084,7 +1084,7 @@
       "from" : "1"
     } ],
     "rules" : {
-      "event_id" : [ "{enum:Completion}" ],
+      "event_id" : [ "{enum:Completion|AddValToDataClassParameters}" ],
       "event_data" : {
         "choice_at_position" : [ "{regexp#integer}" ],
         "completion_event" : [ "{enum:chosen|not_chosen}" ],
@@ -1092,6 +1092,10 @@
         "file_type" : [ "{enum:KT|GRADLEKTS|KTS}" ],
         "finish_reason" : [ "{enum:DONE|CANCELLED|HIDDEN|INTERRUPTED}" ],
         "invocation_count" : [ "{regexp#integer}" ],
+        "is_before_typing" : [ "{enum#boolean}" ],
+        "is_val_added" : [ "{enum#boolean}" ],
+        "lagging" : [ "{regexp#integer}" ],
+        "on_symbol" : [ "{enum:comma|bracket|unknown}" ],
         "plugin_version" : [ "{regexp#kotlin_version}" ],
         "window_appearance_time" : [ "{regexp#integer}" ],
         "window_population_time" : [ "{regexp#integer}" ]
@@ -2505,5 +2509,5 @@
       "version" : "(\\d+\\.?)*\\d+"
     }
   },
-  "version" : "934"
+  "version" : "935"
 }

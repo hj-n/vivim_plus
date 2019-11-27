@@ -74,10 +74,8 @@ public class MyInsertModeHandler {
                                 caret.moveToVisualPosition(visualPosition);
                             } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 
-                                if (parentHandler.getRecentTypedString().length() == (caret.getOffset() - caret.getVisualLineStart() + 1)) {
-                                    Runnable runnable = () -> document.replaceString(caret.getOffset() - parentHandler.getRecentTypedString().length(), caret.getOffset(), "");
-                                    WriteCommandAction.runWriteCommandAction(project, runnable);
-                                }
+                                Runnable runnable = () -> document.replaceString(caret.getVisualLineStart() - 1, caret.getOffset(), "");
+                                WriteCommandAction.runWriteCommandAction(project, runnable);
                             }
                         }
                     } catch (Exception ex) {
