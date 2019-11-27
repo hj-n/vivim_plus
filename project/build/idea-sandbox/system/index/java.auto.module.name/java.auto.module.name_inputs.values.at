@@ -1,24 +1,0 @@
-/Header Record For PersistentHashMapValueStorageaapt.proto.jarjar"org.jetbrains.annotations-java5asm
-asm.allasm.analysis	ideaIC	automatonasm.treebaksmali
-batik.animbatik.awt.utilbatik.bridgebatik.constants	batik.dom	batik.css	batik.ext	batik.gvtbatik.parserbatik.svg.dombatik.svggenbatik.transcoder
-batik.util	batik.xml	bootstrapbuilt.in.servercglib.nodep
-cli.parsercommon.image	common.iocommon.langorg.apache.commons.codeccommons.collectionsorg.apache.commons.compresscommons.imagingcommons.httpclientorg.apache.commons.iocommons.langcommons.loggingconfiguration.store.implcredential.storecommons.netcucumber.coredelight.rhino.sandboxcucumber.java
-dexlib2eddsaerror.prone.annotations
-extensionsexternal.system.rt.+org.apache.httpcomponents.httpclient.fluentformsexception.analyzer.apiforms.rt
-gherkin
-groovy.allcom.google.commonhamcrest.coregson'$org.apache.httpcomponents.httpclient%"org.apache.httpcomponents.httpcore%"org.apache.httpcomponents.httpmimeiconsidea
-idea.rtimageio.coreimageio.metadata	imagesimgscalr.libini4jimageio.tiffintellij.coverage.agentintellij.dvcsintellij.xmlcom.amazon.ion intellij.test.discovery.agentisorelaxjackson.annotationscom.fasterxml.jackson.corejava.compatibility	javac2!com.fasterxml.jackson.databind	javassistjava.activationjava.annotationjaxen
-jbcryptjcip.annotationsjdkAnnotationsjdomjediterm.ptyjetCheckcom.sun.jna.platformjingcom.sun.jna	jps.modeljschjshell.frontendjson	org.jsoup	jsr305junitkotlin.reflectkotlin.stdlibjunitkotlin.stdlib.jdk7kotlin.stdlib.commonkotlin.stdlib.jdk8kotlinx.coroutines.corekotlinx.coroutines.jdk8kotlin.test.commonlog4jkotlin.testorg.lz4.javamarkdownj.core	layoutlib
-microbamiglayout.coremiglayout.swing
-nanoxmlnekohtmlio.netty.bufferio.netty.codec.httpio.netty.codecio.netty.codec.socksio.netty.codec.http2io.netty.commonio.netty.handlerio.netty.handler.proxyio.netty.resolverio.netty.transport
-openapiorg.objenesisorg.eclipse.xtend.liborg.eclipse.xtend.lib.macroorg.eclipse.xtext.xbase.liboroplatform.apipicocontainerplatform.concurrencyplatform.core.uiplatform.ide.util.ioplatform.impl(%platform.objectSerializer.annotationsplatform.objectSerializerplatform.util.explatform.util.uiplexus.utilsprotobuf.java
-proxy.volepty4jpurejavacommrandomForestRegressor
-rd.corerd.swingorg.reactivestreams	resourcesresources.enrhinorngom.20051226.patchedio.reactivex.rxjava2
-sa.jdwpserviceMessages	slf4j.apislf4j.log4j12org.yaml.snakeyamlspellcheckersqlite.jdbcstax.apione.util.streamexswingx.core
-trang.core!trilead.ssh2.build.217.jenkins
-trove4jutilutilvelocitywinp
-xercesImplxml.apis.extxml.resolverxmlbeansxmlgraphics.commons
-xmlpull	xmlrpcxpp3.min
-xstreamorg.tukaani.xzaether.implplexus.interpolationmaven.modelplexus.utilsdebugger.memory.agentjshell.protocolmaven.model.builderresources.enjps.launcher	javac2
-aether.spimaven.builder.supportaether.transport.filejdkAnnotationsaether.connector.basicjps.builders	java.impl	resourcesjava.resources.enecjaether.dependency.resolver
-aether.apijava.apijps.buildersplexus.component.annotationsmaven.repository.metadataaether.transport.httpjgoodies.commoncommons.lang3	wadl.coreaether.utilorg.jetbrains.annotationsmaven.artifactmaven.aether.providerorg.jetbrains.annotations
