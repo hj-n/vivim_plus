@@ -141,8 +141,7 @@ class ProjectStructureTree extends Tree {
                             ((PsiDocCommentOwner) element).navigate(true);
                         }
                     }
-                    catch(Exception ex) {
-                    }
+                    catch(Exception ex) {}
                 }
             }
         });
@@ -183,22 +182,22 @@ class ProjectStructureTree extends Tree {
         publicUpdateTree(target);
     }
 
-    public void publicUpdateTree(@NotNull PsiElement target) {
-        TreePath tp = null;
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode) (this.getModel().getRoot());
 
-        Enumeration<TreeNode> e = root.depthFirstEnumeration();
-        while (e.hasMoreElements()) {
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
-            if (node.getUserObject().equals(target)) {
-                tp = new TreePath(node.getPath());
-            }
-        }
+
+
+    public void publicUpdateTree(@NotNull PsiElement target) {
+        TreePath tp = findTreePath(target);
         setSelectionPath(tp);
         scrollPathToVisible(tp);
     }
 
     public void collapseTree(@NotNull PsiElement target) {
+        TreePath tp = findTreePath(target);
+        setSelectionPath(tp);
+        collapsePath(tp);
+    }
+
+    private TreePath findTreePath(@NotNull PsiElement target) {
         TreePath tp = null;
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) (this.getModel().getRoot());
 
@@ -209,10 +208,8 @@ class ProjectStructureTree extends Tree {
                 tp = new TreePath(node.getPath());
             }
         }
-        setSelectionPath(tp);
-        collapsePath(tp);
+        return tp;
     }
-
 
     /**
      * Returns an instance of PsiField, PsiMethod, PsiClass, or PsiPackage that is related to a change event

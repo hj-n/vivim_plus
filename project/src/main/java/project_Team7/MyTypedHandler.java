@@ -237,6 +237,7 @@ public class MyTypedHandler implements TypedActionHandler {
                     }
                     modeEnum.setMode(modeEnum.modeType.NORMAL);
                     modeViewer(editor);
+                    setProperCursorShape(editor);
                     break;
                 default:
                     modeEnum.setMode(modeEnum.modeType.NORMAL);
@@ -411,6 +412,7 @@ public class MyTypedHandler implements TypedActionHandler {
         }
         else {      // Commands consists with shortcut, not yet implemented
         }
+        setProperCursorShape(editor);
     }
 
     /**
