@@ -23,6 +23,12 @@ public class MyInsertModeHandler {
         MyInsertModeHandler.enteredAfterInsertion = enteredAfterInsertion;
     }
 
+
+    /**
+     * Add key listener for the input of ENTER, BACKSPACE, and ESC.
+     * @param editor Opened editor
+     * @param parentHandler main handler. The class (object) which called this function
+     */
     public void addKeyListener(@NotNull Editor editor, MyTypedHandler parentHandler) {
         if (!addedKeyListener) {
             Caret caret = editor.getCaretModel().getPrimaryCaret();
@@ -40,7 +46,7 @@ public class MyInsertModeHandler {
                 @Override
                 public void keyReleased(KeyEvent e) {
                     try {
-                        if (modeEnum.getModeToString() == "INSERT MODE") {
+                        if (modeEnum.getModeToString() == "INSERT MODE") {    // When INSERT MODE
                             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                                 if (parentHandler.getStoredChar() != 'x')
                                     changeCaretToNormalMode(editor);
@@ -59,7 +65,7 @@ public class MyInsertModeHandler {
                                     }
                                 }
                             }
-                        } else {
+                        } else {   // COMMAND MODE
                             if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
                                 visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualPosition().getColumn() + 1);
                                 Runnable runnable = () -> document.insertString(caret.getOffset(), parentHandler.getRecentDeletedString());
@@ -82,6 +88,14 @@ public class MyInsertModeHandler {
         }
     }
 
+
+    /**
+     * called by the main handler. Especially handles the case of INSERT MODE.
+     * When the current mode is the INSERT MODE, this function will be called and
+     * write typed character on the editor.
+     * @param editor Opened editor
+     * @param c input char (typed char)
+     */
     public void execute(@NotNull Editor editor, char c) {
         isESC = false;
         input = String.valueOf(c);

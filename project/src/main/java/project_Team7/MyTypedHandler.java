@@ -65,36 +65,47 @@ public class MyTypedHandler implements TypedActionHandler {
     /** End of getter, setters */
 
 
+    /**
+     *  Execute for the every keyboard input, except the input of
+     *  special keys like ESC, BACKSPACE, AND ENTER
+     */
     @Override
     public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {
-        if(!hasDocumentListener) {
+        if(!hasDocumentListener) {    // prevent more than one listeners to be added
             editor.getDocument().addDocumentListener(new DocumentListener() {
                 @Override
                 public void documentChanged(@NotNull DocumentEvent event) {
                     setRecentTypedString(event.getNewFragment().toString());
                     setRecentDeletedString(event.getOldFragment().toString());
                     searchList = new ArrayList<Integer>();
-
                 }
             });
             hasDocumentListener = true;
         }
+        /** add listener to detect ESC, BACKSPACE, and ENTER input */
         myInsertModeHandler.addKeyListener(editor, this);
 
         Caret caret = editor.getCaretModel().getCurrentCaret();
-        if(getStoredChar() == 'i'){
+        if(getStoredChar() == 'i'){     /** INSERT MODE */
             modeEnum.setMode(modeEnum.modeType.INSERT);
             modeViewer(editor);
             myInsertModeHandler.execute(editor, charTyped);
         }
-        else{
-            normalModeCommandControl(editor, charTyped, caret);
+        else{   /** NORMAL MODE */
+            normalModeControl(editor, charTyped, caret);
         }
-
+        /** Set correct cursor shape for each mode */
         setProperCursorShape(editor);
     }
 
-    private void normalModeCommandControl(Editor editor, char charTyped, Caret caret) {
+    /**
+     * Main Function of controlling normal mode. performs matching functionality
+     * for input shortcut, which is given by the argument 'charTyped'.
+     * @param editor Opened editor
+     * @param charTyped the argument which denotes the shortcuts for command mode
+     * @param caret The Caret of the opened editor
+     */
+    private void normalModeControl(Editor editor, char charTyped, Caret caret) {
 
             switch(charTyped) {
                 case ':':
@@ -196,6 +207,14 @@ public class MyTypedHandler implements TypedActionHandler {
             }
     }
 
+
+    /**
+     * In modern vim plugin, there exists a convention which represents cursor
+     * with single line in the INSERT MODE, and represents by block in the
+     * NORMAL MODE. This method sets proper cursor types depending on the current
+     * MODE.
+     * @param editor Opened editor
+     */
     private void setProperCursorShape(Editor editor) {
         if(modeEnum.getModeToString() == "INSERT MODE" ) {
             editor.getSettings().setBlockCursor(false);
@@ -205,10 +224,17 @@ public class MyTypedHandler implements TypedActionHandler {
         }
     }
 
+
+    /**
+     * There are several moving-control shortcuts in the NORMAL MODE of vim. For example,
+     * 'h, j, k, l,...'. This method moves cursor depending on the current input shortcut.
+     * @param charTyped the argument which denotes the shortcuts for moving cursor in the NORMAL MODE
+     * @param editor Opened editor
+     */
     private void moveCursor(char charTyped, Editor editor){
-        //move under line
         Caret caret = editor.getCaretModel().getPrimaryCaret();
         try {
+            //move under line
             if (charTyped == 'j') {
                 VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine() + 1, caret.getVisualPosition().getColumn());
                 caret.moveToVisualPosition(visualPosition);
@@ -234,6 +260,11 @@ public class MyTypedHandler implements TypedActionHandler {
         }
     }
 
+
+    /**
+     * This method continuously make popup to show user the current MODE.
+     * @param editor Opened editor
+     */
     private void modeViewer(Editor editor){
         JBPopupFactory jbPopupFactory = JBPopupFactory.getInstance();
         JBPopup mes = jbPopupFactory.createMessage(modeEnum.getModeToString());
@@ -241,6 +272,13 @@ public class MyTypedHandler implements TypedActionHandler {
         mes.show(RelativePoint.getSouthEastOf(editor.getComponent()));
     }
 
+
+    /**
+     * This methods performs the functionality of the COMMAND MODE. It shows popup
+     * and prepare for the upcoming command input.
+     * @param command ':' or '/', denotes the type of the COMMAND MODE
+     * @param editor Opened editor
+     */
     private void keyStrokeCommandMode(String command, Editor editor) {
 
         commandPanel = new JPanel(new BorderLayout());
@@ -253,6 +291,8 @@ public class MyTypedHandler implements TypedActionHandler {
         popup.setRequestFocus(true);
         popup.setSize(new Dimension(editor.getComponent().getWidth(), 10));
         popup.showUnderneathOf(editor.getComponent());
+        // As our vim plugin creates new popup each time the user enters COMMAND MODE,
+        // it also defines new listeners every time.
         popup.addListener(new JBPopupListener() {
             @Override
             public void onClosed(@NotNull LightweightWindowEvent event) {
@@ -308,6 +348,12 @@ public class MyTypedHandler implements TypedActionHandler {
         });
     }
 
+    /**
+     * When the user use '/' COMMAND MODE and search some string, search all instances
+     * of the string and store it in array. And then go to the first entry of the List using
+     * 'focusNextSearchString' method.
+     * @param editor Opened editor
+     */
     private void searchString(Editor editor){
         String text = editor.getDocument().getText();
         while(text.contains(currentSearchingString)){
@@ -322,6 +368,13 @@ public class MyTypedHandler implements TypedActionHandler {
 
     }
 
+
+    /**
+     * When the user searches something, he or she can easily access to the searched
+     * strings by pressing 'n' and 'N' command. This method implements those functionality.
+     * @param editor Opened Editor
+     * @param isSearchingNext if true, searches forward. Else, searches backward.
+     */
     private void focusNextSearchString(Editor editor, boolean isSearchingNext) {
         int start, end;
         if(searchList.size() > 0) {
@@ -343,6 +396,14 @@ public class MyTypedHandler implements TypedActionHandler {
         }
     }
 
+
+    /**
+     * There exists various ways to enter the insertion mode. This function make our vim
+     * plugin to enter insertion mode, with slightly different functionality among
+     * different shortcuts.
+     * @param editor Opened Editor
+     * @param type type of the way entering the Insertion mode
+     */
     private void changeCaretToInsertionMode(Editor editor, enterInsertionType type) {
         int position = 0;
         switch(type) {
@@ -376,6 +437,9 @@ public class MyTypedHandler implements TypedActionHandler {
         editor.getSettings().setBlockCursor(false);
     }
 
+
+    /** Helpers for the function changeCaretTtInsertionMode() */
+
     private enum enterInsertionType {
         o, O, i, I, a, A
     }
@@ -397,5 +461,7 @@ public class MyTypedHandler implements TypedActionHandler {
         }
         return null;
     }
+
+    /** end of helpers */
 
 }

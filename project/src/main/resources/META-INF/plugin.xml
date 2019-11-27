@@ -24,10 +24,7 @@
     <actions>
 
         <!-- Add your actions here -->
-        <action id="project_Team7.commandBarAction" class="project_Team7.vimCommandBarAction" text="vim command"
-                description="command bar action for vim plugin">
-            <add-to-group group-id="ToolsMenu" anchor="first"/>
-        </action>
+
 
     </actions>
 </idea-plugin>
