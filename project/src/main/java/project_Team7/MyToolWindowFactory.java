@@ -1,4 +1,4 @@
-package uml_navigate;
+package project_Team7;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;

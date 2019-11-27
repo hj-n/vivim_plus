@@ -1,4 +1,4 @@
-package uml_navigate;
+package project_Team7;
 
 import com.intellij.psi.*;
 import com.intellij.ui.KeyStrokeAdapter;

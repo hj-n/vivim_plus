@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>project Team7</id>
+    <id>project_Team7</id>
     <name>simpleIdeaVim</name>
     <vendor email="youremail@postech.ac.kr" url="http://csed332.postech.ac.kr">POSTECH CSED332</vendor>
 
@@ -16,7 +16,8 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <toolWindow id="Project Structure" anchor="right" factoryClass="uml_navigate.MyToolWindowFactory"/>
+        <toolWindow id="Project Structure" anchor="right" factoryClass="project_Team7.MyToolWindowFactory"/>
+
     </extensions>
 
     <actions>

@@ -1,4 +1,4 @@
-package skeleton;
+package project_Team7;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.wm.WindowManager;

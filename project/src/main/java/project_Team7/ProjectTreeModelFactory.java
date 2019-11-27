@@ -1,4 +1,4 @@
-package skeleton;
+package project_Team7;
 
 import com.intellij.ide.projectView.impl.nodes.PackageUtil;
 import com.intellij.openapi.project.Project;

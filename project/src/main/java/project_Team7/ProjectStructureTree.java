@@ -1,18 +1,21 @@
-package skeleton;
+package project_Team7;
 
 import com.intellij.ide.projectView.impl.nodes.PackageUtil;
 import com.intellij.ide.util.treeView.PresentableNodeDescriptor;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.openapi.project.Project;
 import com.thaiopensource.xml.dtd.om.Def;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalIconFactory;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -40,15 +43,25 @@ class ProjectStructureTree extends Tree {
 
     private HashMap<Object, String> nodeToChildIndex = new HashMap<>();
 
+    private HashMap<PsiElement, String> classToStr;
+    private HashMap<String, PsiElement> strToClass;
+    private HashMap<PsiElement, String> curClassToStr;
+    private HashMap<String, PsiElement> curStrToClass;
+
     /**
      * Creates a project structure tree for a given project.
      *
      * @param project a project
      */
     ProjectStructureTree(@NotNull Project project) {
-
-
         setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
+
+        strToClass = new HashMap<>();
+        classToStr = new HashMap<>();
+        curStrToClass = new HashMap<>();
+        curClassToStr = new HashMap<>();
+
+        updateClassMap(project);
 
         // Set a cell renderer to display the name and icon of each node
         setCellRenderer(new ColoredTreeCellRenderer() {
@@ -57,6 +70,7 @@ class ProjectStructureTree extends Tree {
                                               boolean expanded, boolean leaf, int row, boolean hasFocus) {
                 // TODO: implement the renderer behavior here
                 // hint: use the setIcon method to assign icons, and the append method to add text
+
                 Object element = ((DefaultMutableTreeNode)value).getUserObject();
                 Integer index = tree.getModel().getIndexOfChild(((DefaultMutableTreeNode) value).getParent(), value);
                 String parentIndexString;
@@ -70,6 +84,8 @@ class ProjectStructureTree extends Tree {
                     identifier = parentIndexString + "-" + index.toString();
                 }
                 nodeToChildIndex.put(value, index.toString());
+
+
                 if(element instanceof Project) {
                     setIcon(projectIcon);
                     append(((Project) element).getName());
@@ -82,24 +98,28 @@ class ProjectStructureTree extends Tree {
                 else if(element instanceof PsiClass) {
                     setIcon(classIcon);
                     //append(((PsiClass) element).getTextOffset() +" " + ((PsiClass) element).getName());
-                    append(identifier +" " + ((PsiClass) element).getName());
+                    append(identifier +" : " + ((PsiClass) element).getName() + " " +StringUtils.defaultString(curClassToStr.get(element)));
                 }
                 else if(element instanceof PsiMethod) {
                     setIcon(methodIcon);
                     //append(((PsiMethod) element).getTextOffset() +" " + ((PsiMethod) element).getName());
-                    append(identifier +" " + ((PsiMethod) element).getName());
+                    append(identifier +" : " + ((PsiMethod) element).getName() + " " +StringUtils.defaultString(curClassToStr.get(element)));
 
                 }
                 else if(element instanceof PsiField) {
                     setIcon(fieldIcon);
                     //append(((PsiField) element).getTextOffset() +" " + ((PsiField) element).getName());
-                    append(identifier +" " + ((PsiField) element).getName());
+                    append(identifier +" : " + ((PsiField) element).getName() + " " +StringUtils.defaultString(curClassToStr.get(element)));
                 }
                 else {
                     setIcon(defaultIcon);
+                    append(((PsiElement) element).getText());
                 }
             }
         });
+
+
+        addKeyListener(new MyKeyAdapter(strToClass, classToStr, curStrToClass, curClassToStr, this));
 
         // Set a mouse listener to handle double-click events
         addMouseListener(new MouseAdapter() {
@@ -172,19 +192,23 @@ class ProjectStructureTree extends Tree {
     private void updateTree(@NotNull Project project, @NotNull PsiElement target) {
         // TODO: implement this method
         setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode) getModel().getRoot();
+        updateClassMap(project);
+        publicUpdateTree(target);
+    }
 
-        Enumeration e = root.breadthFirstEnumeration();
-        DefaultMutableTreeNode node;
-        do {
-            node = (DefaultMutableTreeNode) e.nextElement();
-            if(node.getUserObject().equals(target)) {
-                TreePath path = new TreePath(node.getPath());
+    public void publicUpdateTree(@NotNull PsiElement target) {
+        TreePath tp = null;
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) (this.getModel().getRoot());
 
-                setSelectionPath(path);
-                scrollPathToVisible(path);
+        Enumeration<TreeNode> e = root.depthFirstEnumeration();
+        while (e.hasMoreElements()) {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
+            if (node.getUserObject().equals(target)) {
+                tp = new TreePath(node.getPath());
             }
-        } while(e.hasMoreElements());
+        }
+        setSelectionPath(tp);
+        scrollPathToVisible(tp);
     }
 
 
@@ -210,5 +234,82 @@ class ProjectStructureTree extends Tree {
             }
         }
         return Optional.empty();
+    }
+
+
+    public void updateClassMap(Project project) {
+        // the root node of the tree
+        final Integer[] count = {0};
+        KeyIterator it = new KeyIterator();
+        strToClass.clear();
+        classToStr.clear();
+        curClassToStr.clear();
+        curStrToClass.clear();
+
+
+        // The visitor to traverse the Java hierarchy and to construct the tree
+        final JavaElementVisitor visitor = new JavaElementVisitor() {
+
+            @Override
+            public void visitPackage(PsiPackage pack) {
+                for(PsiClass Class : pack.getClasses()) {
+                    Class.accept(this);
+                }
+                for(PsiPackage Package : pack.getSubPackages()) {
+                    Package.accept(this);
+                }
+            }
+
+            @Override
+            public void visitClass(PsiClass aClass) {
+                String s = it.next();
+                classToStr.put(aClass, s);
+                strToClass.put(s, aClass);
+                for(PsiElement Child : aClass.getChildren()){
+                    Child.accept(this);
+                }
+            }
+            @Override
+            public void visitMethod(PsiMethod method) {
+                String s = it.next();
+                classToStr.put(method, s);
+                strToClass.put(s, method);
+            }
+
+            @Override
+            public void visitField(PsiField field) {
+                String s = it.next();
+                classToStr.put(field, s);
+                strToClass.put(s, field);
+            }
+        };
+
+        // apply the visitor for each root package in the source directory
+        getRootPackages(project).forEach(aPackage -> aPackage.accept(visitor));
+        curClassToStr.putAll(classToStr);
+        curStrToClass.putAll(strToClass);
+    }
+
+    private static Set<PsiPackage> getRootPackages(Project project) {
+        final Set<PsiPackage> rootPackages = new HashSet<>();
+        PsiElementVisitor visitor = new PsiElementVisitor() {
+            @Override
+            public void visitDirectory(PsiDirectory dir) {
+                final PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(dir);
+                if (psiPackage != null && !PackageUtil.isPackageDefault(psiPackage))
+                    rootPackages.add(psiPackage);
+                else
+                    Arrays.stream(dir.getSubdirectories()).forEach(sd -> sd.accept(this));
+            }
+        };
+
+        ProjectRootManager rootManager = ProjectRootManager.getInstance(project);
+        PsiManager psiManager = PsiManager.getInstance(project);
+        Arrays.stream(rootManager.getContentSourceRoots())
+                .map(psiManager::findDirectory)
+                .filter(Objects::nonNull)
+                .forEach(dir -> dir.accept(visitor));
+
+        return rootPackages;
     }
 }
