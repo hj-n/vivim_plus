@@ -17,11 +17,14 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <toolWindow id="Project Structure" anchor="right" factoryClass="project_Team7.MyToolWindowFactory"/>
-
+        <editorTypedHandler id="vim command" implementationClass="project_Team7.MyTypedHandler"/>
     </extensions>
 
     <actions>
+
         <!-- Add your actions here -->
+
+
     </actions>
 </idea-plugin>
 
