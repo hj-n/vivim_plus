@@ -10,7 +10,6 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.JBPopupListener;
 import com.intellij.openapi.ui.popup.LightweightWindowEvent;
 import com.intellij.ui.awt.RelativePoint;
-import org.apache.batik.css.dom.CSSOMStoredStyleDeclaration;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -24,28 +23,19 @@ public class MyTypedHandler implements TypedActionHandler {
     private String currentCommand = null;
     private String currentSearchingString = null;
     private boolean isSearch;
-    private ArrayList<Integer> searchList = new ArrayList<Integer>();
+    private ArrayList<Integer> searchList = new ArrayList<>();
     private int currentIndex;
     private boolean isESC = false;
-
-
     private JPanel commandPanel = null;
-
-    public String getCurrentCommand() {
-        return currentCommand;
-    }
     private static char storedChar = 'x';
-
-    private VisualPosition cursorVisualPosition;
-
     private MyInsertModeHandler myInsertModeHandler = new MyInsertModeHandler();
-
     private boolean hasDocumentListener = false;
-
     private String recentTypedString = null;
     private String recentDeletedString = null;
-
     private String clipBoard = "";
+
+
+    /** Getter, setter methods */
 
     public String getRecentTypedString() {
         return recentTypedString;
@@ -72,10 +62,12 @@ public class MyTypedHandler implements TypedActionHandler {
         return storedChar;
     }
 
+    /** End of getter, setters */
+
 
     @Override
     public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {
-        if(hasDocumentListener == false) {
+        if(!hasDocumentListener) {
             editor.getDocument().addDocumentListener(new DocumentListener() {
                 @Override
                 public void documentChanged(@NotNull DocumentEvent event) {
@@ -87,16 +79,23 @@ public class MyTypedHandler implements TypedActionHandler {
             });
             hasDocumentListener = true;
         }
-
-
+        myInsertModeHandler.addKeyListener(editor, this);
 
         Caret caret = editor.getCaretModel().getCurrentCaret();
         if(getStoredChar() == 'i'){
             modeEnum.setMode(modeEnum.modeType.INSERT);
             modeViewer(editor);
-            myInsertModeHandler.execute(editor, charTyped, dataContext, this);
+            myInsertModeHandler.execute(editor, charTyped);
         }
         else{
+            normalModeCommandControl(editor, charTyped, caret);
+        }
+
+        setProperCursorShape(editor);
+    }
+
+    private void normalModeCommandControl(Editor editor, char charTyped, Caret caret) {
+
             switch(charTyped) {
                 case ':':
                 case '/':
@@ -105,12 +104,12 @@ public class MyTypedHandler implements TypedActionHandler {
                     modeViewer(editor);
                     break;
                 case 'n':
-                    if(modeEnum.getModeToString().equals("NORMAL MODE")) {
+                    if (modeEnum.getModeToString().equals("NORMAL MODE")) {
                         focusNextSearchString(editor, true);
                     }
                     break;
                 case 'N':
-                    if(modeEnum.getModeToString().equals("NORMAL MODE")) {
+                    if (modeEnum.getModeToString().equals("NORMAL MODE")) {
                         focusNextSearchString(editor, false);
                     }
                     break;
@@ -127,6 +126,7 @@ public class MyTypedHandler implements TypedActionHandler {
                     changeCaretToInsertionMode(editor, getInsertionTypeFromChar(charTyped));
                     modeEnum.setMode(modeEnum.modeType.INSERT);
                     modeViewer(editor);
+                    myInsertModeHandler.setEnteredAfterInsertion(true);
                     setStoredChar('i');
                     break;
                 case 'h':
@@ -139,57 +139,54 @@ public class MyTypedHandler implements TypedActionHandler {
                     break;
 
                 case 'd':
-                    if(caret.getSelectedText() != null ) {
+                    if (caret.getSelectedText() != null) {
                         clipBoard = caret.getSelectedText();
                         editor.getDocument().replaceString(caret.getSelectionStart(), caret.getSelectionEnd(), "");
-                    }
-                    else {
-                        if(getStoredChar() == 'd') {
+                    } else {
+                        if (getStoredChar() == 'd') {
                             int start = caret.getVisualLineStart();
                             int end = caret.getVisualLineEnd();
                             caret.setSelection(start, end);
                             clipBoard = caret.getSelectedText();
                             editor.getDocument().replaceString(start, end, "");
                             setStoredChar('x');
-                        }
-                        else {
+                        } else {
                             setStoredChar('d');
                         }
                     }
                     break;
                 case 'y':
-                    if(caret.getSelectedText() != null ) {
+                    if (caret.getSelectedText() != null) {
                         clipBoard = caret.getSelectedText();
                         caret.removeSelection();
-                    }
-                    else {
-                        if(getStoredChar() == 'y') {
+                    } else {
+                        if (getStoredChar() == 'y') {
                             int start = caret.getVisualLineStart();
                             int end = caret.getVisualLineEnd();
                             caret.setSelection(start, end);
                             clipBoard = caret.getSelectedText();
                             caret.removeSelection();
                             setStoredChar('x');
-                        }
-                        else {
+                        } else {
                             setStoredChar('y');
                         }
                     }
                     break;
                 case 'p':
-                    if(clipBoard != null) {
+                    if (clipBoard != null) {
                         String original = clipBoard;
-                        if(clipBoard.charAt(clipBoard.length() - 1) != '\n' )
+                        if (clipBoard.charAt(clipBoard.length() - 1) != '\n')
                             clipBoard = clipBoard + '\n';
-                        if(caret.getVisualLineEnd() == editor.getDocument().getText().length()){
+                        if (caret.getVisualLineEnd() == editor.getDocument().getText().length()) {
                             clipBoard = '\n' + clipBoard;
                         }
                         editor.getDocument().replaceString(caret.getVisualLineEnd(), caret.getVisualLineEnd(), clipBoard);
                         clipBoard = original;
+                        caret.moveToOffset(caret.getVisualLineEnd());
                     }
                     break;
                 case 'P':
-                    if(clipBoard != null){
+                    if (clipBoard != null) {
                         editor.getDocument().replaceString(caret.getOffset(), caret.getOffset(), clipBoard);
                     }
                     break;
@@ -197,7 +194,9 @@ public class MyTypedHandler implements TypedActionHandler {
                     modeEnum.setMode(modeEnum.modeType.NORMAL);
                     modeViewer(editor);
             }
-        }
+    }
+
+    private void setProperCursorShape(Editor editor) {
         if(modeEnum.getModeToString() == "INSERT MODE" ) {
             editor.getSettings().setBlockCursor(false);
         }
@@ -264,12 +263,10 @@ public class MyTypedHandler implements TypedActionHandler {
         textField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
-
             }
 
             @Override
@@ -311,7 +308,6 @@ public class MyTypedHandler implements TypedActionHandler {
         });
     }
 
-
     private void searchString(Editor editor){
         String text = editor.getDocument().getText();
         while(text.contains(currentSearchingString)){
@@ -320,7 +316,7 @@ public class MyTypedHandler implements TypedActionHandler {
             searchList.add(beginIndex);
             text = text.substring(slicedIndex + currentSearchingString.length());
         }
-        currentIndex = 0;
+        currentIndex = searchList.size() - 1;
         modeEnum.setMode(modeEnum.modeType.NORMAL);
         focusNextSearchString(editor, true);
 
@@ -346,8 +342,6 @@ public class MyTypedHandler implements TypedActionHandler {
             editor.getCaretModel().getCurrentCaret().moveToOffset(start);
         }
     }
-
-
 
     private void changeCaretToInsertionMode(Editor editor, enterInsertionType type) {
         int position = 0;
@@ -403,7 +397,5 @@ public class MyTypedHandler implements TypedActionHandler {
         }
         return null;
     }
-
-
 
 }

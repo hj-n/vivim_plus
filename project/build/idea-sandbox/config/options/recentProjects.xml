@@ -5,6 +5,12 @@
         <option value="$USER_HOME$/IdeaProjects" />
       </list>
     </option>
+    <option name="openPaths">
+      <list>
+        <option value="$USER_HOME$/IdeaProjects" />
+      </list>
+    </option>
+    <option name="lastPath" value="$USER_HOME$/IdeaProjects" />
     <option name="pid" value="" />
     <option name="additionalInfo">
       <map>
@@ -14,8 +20,8 @@
               <option name="build" value="IC-192.6262.58" />
               <option name="productionCode" value="IC" />
               <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1574812887705" />
-              <option name="buildTimestamp" value="1566310281295" />
+              <option name="projectOpenTimestamp" value="1574816565999" />
+              <option name="buildTimestamp" value="1566310301452" />
             </RecentProjectMetaInfo>
           </value>
         </entry>
