@@ -21,4 +21,4 @@ xercesImplxml.apis.extxml.resolverxmlbeansxmlgraphics.commons
 xmlpull	xmlrpcxpp3.min
 xstreamorg.tukaani.xzaether.implplexus.interpolationmaven.modelplexus.utilsdebugger.memory.agentjshell.protocolmaven.model.builderresources.enjps.launcher	javac2
 aether.spimaven.builder.supportaether.transport.filejdkAnnotationsaether.connector.basicjps.builders	java.impl	resourcesjava.resources.enecjaether.dependency.resolver
-aether.apijava.apijps.buildersplexus.component.annotationsmaven.repository.metadataaether.transport.httpjgoodies.commoncommons.lang3	wadl.coreaether.utilorg.jetbrains.annotationsmaven.artifactmaven.aether.provider
+aether.apijava.apijps.buildersplexus.component.annotationsmaven.repository.metadataaether.transport.httpjgoodies.commoncommons.lang3	wadl.coreaether.utilorg.jetbrains.annotationsmaven.artifactmaven.aether.providerorg.jetbrains.annotations

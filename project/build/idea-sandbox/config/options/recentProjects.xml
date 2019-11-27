@@ -2,6 +2,7 @@
   <component name="RecentProjectsManager">
     <option name="recentPaths">
       <list>
+        <option value="$USER_HOME$/Desktop/Software_Design_Methods/homework/hw3/homework3" />
         <option value="E:/POSTECH/softwareDesign/hw0" />
         <option value="E:/POSTECH/softwareDesign/hw5/homework5" />
         <option value="E:/POSTECH/softwareDesign/team7_project/project" />
@@ -13,13 +14,24 @@
     </option>
     <option name="openPaths">
       <list>
-        <option value="E:/POSTECH/softwareDesign/hw0" />
+        <option value="$USER_HOME$/Desktop/Software_Design_Methods/homework/hw3/homework3" />
       </list>
     </option>
-    <option name="lastPath" value="E:/POSTECH/softwareDesign/hw0" />
+    <option name="lastPath" value="$USER_HOME$/Desktop/Software_Design_Methods/homework/hw3/homework3" />
     <option name="pid" value="" />
     <option name="additionalInfo">
       <map>
+        <entry key="$USER_HOME$/Desktop/Software_Design_Methods/homework/hw3/homework3">
+          <value>
+            <RecentProjectMetaInfo>
+              <option name="build" value="IC-192.6262.58" />
+              <option name="productionCode" value="IC" />
+              <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
+              <option name="projectOpenTimestamp" value="1574870179160" />
+              <option name="buildTimestamp" value="1566310274487" />
+            </RecentProjectMetaInfo>
+          </value>
+        </entry>
         <entry key="E:/POSTECH/softwareDesign/hw0">
           <value>
             <RecentProjectMetaInfo>

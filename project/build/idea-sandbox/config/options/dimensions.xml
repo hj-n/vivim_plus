@@ -5,6 +5,8 @@
     <location key="com.intellij.ide.util.TipDialog.0.0.1366.768" x="322" y="190" />
     <location key="IDE.errors.dialog.0.0.1366.768" x="263" y="57" />
     <location key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog.0.0.1366.768" x="534" y="254" />
+    <location key="WELCOME_SCREEN.0.0.2880.1800@192dpi" x="1438" y="774" />
+    <location key="com.intellij.ide.util.TipDialog.0.0.2880.1800@192dpi" x="566" y="402" />
     <size key="IDE.errors.dialog.0.0.1366.768" width="840" height="648" />
   </component>
 </application>

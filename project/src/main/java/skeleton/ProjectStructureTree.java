@@ -38,12 +38,16 @@ class ProjectStructureTree extends Tree {
     private static final Icon fieldIcon = MetalIconFactory.getVerticalSliderThumbIcon();
     private static final Icon defaultIcon = MetalIconFactory.getTreeLeafIcon();
 
+    private HashMap<Object, String> nodeToChildIndex = new HashMap<>();
+
     /**
      * Creates a project structure tree for a given project.
      *
      * @param project a project
      */
     ProjectStructureTree(@NotNull Project project) {
+
+
         setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
 
         // Set a cell renderer to display the name and icon of each node
@@ -53,29 +57,43 @@ class ProjectStructureTree extends Tree {
                                               boolean expanded, boolean leaf, int row, boolean hasFocus) {
                 // TODO: implement the renderer behavior here
                 // hint: use the setIcon method to assign icons, and the append method to add text
-
                 Object element = ((DefaultMutableTreeNode)value).getUserObject();
+                Integer index = tree.getModel().getIndexOfChild(((DefaultMutableTreeNode) value).getParent(), value);
+                String parentIndexString;
+                String identifier = null;
+                if(element instanceof PsiClass) {
+                    identifier = index.toString();
+                    nodeToChildIndex.put(value, identifier);
+                }
+                else if(element instanceof PsiField || element instanceof  PsiMethod) {
+                    parentIndexString = nodeToChildIndex.get(((DefaultMutableTreeNode) value).getParent());
+                    identifier = parentIndexString + "-" + index.toString();
+                }
+                nodeToChildIndex.put(value, index.toString());
                 if(element instanceof Project) {
                     setIcon(projectIcon);
                     append(((Project) element).getName());
                 }
-
                 else if(element instanceof PsiPackage) {
                     setIcon(packageIcon);
-                    append(((PsiPackage) element).getTextOffset() +" " + ((PsiPackage) element).getName());
+                    //append(((PsiPackage) element).getTextOffset() +" " + ((PsiPackage) element).getName());
+                    append(((PsiPackage) element).getName());
                 }
                 else if(element instanceof PsiClass) {
                     setIcon(classIcon);
-                    append(((PsiClass) element).getTextOffset() +" " + ((PsiClass) element).getName());
+                    //append(((PsiClass) element).getTextOffset() +" " + ((PsiClass) element).getName());
+                    append(identifier +" " + ((PsiClass) element).getName());
                 }
                 else if(element instanceof PsiMethod) {
                     setIcon(methodIcon);
-                    append(((PsiMethod) element).getTextOffset() +" " + ((PsiMethod) element).getName());
+                    //append(((PsiMethod) element).getTextOffset() +" " + ((PsiMethod) element).getName());
+                    append(identifier +" " + ((PsiMethod) element).getName());
 
                 }
                 else if(element instanceof PsiField) {
                     setIcon(fieldIcon);
-                    append(((PsiField) element).getTextOffset() +" " + ((PsiField) element).getName());
+                    //append(((PsiField) element).getTextOffset() +" " + ((PsiField) element).getName());
+                    append(identifier +" " + ((PsiField) element).getName());
                 }
                 else {
                     setIcon(defaultIcon);
