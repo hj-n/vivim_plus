@@ -4,11 +4,12 @@ package project_Team7;
 import java.util.*;
 
 /**
- *Iterate string from "N" and the set all of strings is prefix free.
+ * This class is for generating keys for key-mapping.
+ * Iterate string from "N" and the set all of strings is prefix free.
  * So, the last character can be "N" to "Z", others are "A" to "M".
  * */
 public class KeyIterator implements Iterator<String> {
-    private LinkedList<Character> charArray = new LinkedList<Character>(Arrays.asList('N'));
+    private LinkedList<Character> nextKey = new LinkedList<Character>(Arrays.asList('N'));
 
     @Override
     public boolean hasNext() {
@@ -18,30 +19,30 @@ public class KeyIterator implements Iterator<String> {
     @Override
     public String next() {
         StringBuilder builder = new StringBuilder();
-        for(Character c:charArray)
+        for(Character c:nextKey)
             builder.append(c);
-        if(charArray.getLast() != 'Z')
-            charArray.set(charArray.size()-1, (char) (charArray.getLast()+1));
+        if(nextKey.getLast() != 'Z')
+            nextKey.set(nextKey.size()-1, (char) (nextKey.getLast()+1));
         else
         {
-            charArray.set(charArray.size()-1,'N');
+            nextKey.set(nextKey.size()-1,'N');
             boolean carry = false;
-            for(int i=charArray.size()-2;i >= 0;i--)
+            for(int i=nextKey.size()-2;i >= 0;i--)
             {
-                if(charArray.get(i) != 'M')
+                if(nextKey.get(i) != 'M')
                 {
                     carry = true;
-                    charArray.set(i, (char) (charArray.get(i)+1));
+                    nextKey.set(i, (char) (nextKey.get(i)+1));
                     break;
                 }
                 else
                 {
-                    charArray.set(i, 'A');
+                    nextKey.set(i, 'A');
                 }
             }
             if(!carry)
             {
-                charArray.addFirst('A');
+                nextKey.addFirst('A');
             }
         }
         return builder.toString();

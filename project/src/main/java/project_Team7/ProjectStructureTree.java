@@ -42,11 +42,15 @@ class ProjectStructureTree extends Tree {
     private static final Icon defaultIcon = MetalIconFactory.getTreeLeafIcon();
 
     private HashMap<Object, String> nodeToChildIndex = new HashMap<>();
-
+    /**
+     * Each psiclass, psimethod, psifield  are shown with their keys on the project structure window.
+     * By keylistener, this class gets the character that user typed.
+     * First letter of key are erased if it is same as a charater that user typed. If not, the whole key is erased.
+     **/
     private HashMap<PsiElement, String> classToStr;
     private HashMap<String, PsiElement> strToClass;
-    private HashMap<PsiElement, String> curClassToStr;
-    private HashMap<String, PsiElement> curStrToClass;
+    private HashMap<PsiElement, String> currentClassToStr;
+    private HashMap<String, PsiElement> currentStrToClass;
 
     /**
      * Creates a project structure tree for a given project.
@@ -58,8 +62,8 @@ class ProjectStructureTree extends Tree {
 
         strToClass = new HashMap<>();
         classToStr = new HashMap<>();
-        curStrToClass = new HashMap<>();
-        curClassToStr = new HashMap<>();
+        currentStrToClass = new HashMap<>();
+        currentClassToStr = new HashMap<>();
 
         updateClassMap(project);
 
@@ -68,8 +72,6 @@ class ProjectStructureTree extends Tree {
             @Override
             public void customizeCellRenderer(@NotNull JTree tree, Object value, boolean selected,
                                               boolean expanded, boolean leaf, int row, boolean hasFocus) {
-                // TODO: implement the renderer behavior here
-                // hint: use the setIcon method to assign icons, and the append method to add text
 
                 Object element = ((DefaultMutableTreeNode)value).getUserObject();
                 Integer index = tree.getModel().getIndexOfChild(((DefaultMutableTreeNode) value).getParent(), value);
@@ -92,24 +94,20 @@ class ProjectStructureTree extends Tree {
                 }
                 else if(element instanceof PsiPackage) {
                     setIcon(packageIcon);
-                    //append(((PsiPackage) element).getTextOffset() +" " + ((PsiPackage) element).getName());
                     append(((PsiPackage) element).getName());
                 }
                 else if(element instanceof PsiClass) {
                     setIcon(classIcon);
-                    //append(((PsiClass) element).getTextOffset() +" " + ((PsiClass) element).getName());
-                    append(identifier +" : " + ((PsiClass) element).getName() + " " +StringUtils.defaultString(curClassToStr.get(element)));
+                    append(identifier +" : " + ((PsiClass) element).getName() + " " +StringUtils.defaultString(currentClassToStr.get(element)));
                 }
                 else if(element instanceof PsiMethod) {
                     setIcon(methodIcon);
-                    //append(((PsiMethod) element).getTextOffset() +" " + ((PsiMethod) element).getName());
-                    append(identifier +" : " + ((PsiMethod) element).getName() + " " +StringUtils.defaultString(curClassToStr.get(element)));
+                    append(identifier +" : " + ((PsiMethod) element).getName() + " " +StringUtils.defaultString(currentClassToStr.get(element)));
 
                 }
                 else if(element instanceof PsiField) {
                     setIcon(fieldIcon);
-                    //append(((PsiField) element).getTextOffset() +" " + ((PsiField) element).getName());
-                    append(identifier +" : " + ((PsiField) element).getName() + " " +StringUtils.defaultString(curClassToStr.get(element)));
+                    append(identifier +" : " + ((PsiField) element).getName() + " " +StringUtils.defaultString(currentClassToStr.get(element)));
                 }
                 else {
                     setIcon(defaultIcon);
@@ -118,47 +116,26 @@ class ProjectStructureTree extends Tree {
             }
         });
 
-
-        addKeyListener(new MyKeyAdapter(strToClass, classToStr, curStrToClass, curClassToStr, this));
+        // Set key listener to get the character that user typed and navigate to the psielement.
+        addKeyListener(new MyKeyAdapter(strToClass, classToStr, currentStrToClass, currentClassToStr, this));
 
         // Set a mouse listener to handle double-click events
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                /*
                 if (e.getClickCount() == 2) {
-                    // TODO: implement the double-click behavior here
-                    // hint: use the navigate method of the classes PsiMethod and PsiField*/
-                    if (e.getClickCount() == 2) {
-                        // TODO: implement the double-click behavior here
-                        // hint: use the navigate method of the classes PsiMethod and PsiField
-                        PsiElement element = null;
-                        try {
-                            element = (PsiElement) ((DefaultMutableTreeNode) getPathForLocation(e.getX(), e.getY()).getLastPathComponent()).getUserObject();
-                            if(element instanceof PsiMethod || element instanceof PsiField){
-                                ((PsiDocCommentOwner) element).navigate(true);
-                            }
-                        }
-                        catch(Exception ex) {
+                    PsiElement element = null;
+                    try {
+                        element = (PsiElement) ((DefaultMutableTreeNode) getPathForLocation(e.getX(), e.getY()).getLastPathComponent()).getUserObject();
+                        if(element instanceof PsiMethod || element instanceof PsiField){
+                            ((PsiDocCommentOwner) element).navigate(true);
                         }
                     }
-                }
-          //  }
-        });
-
-
-      /*  // Set a keyboard listener to handle open files/close files events
-        //problem: how to identify which file to open/close? if we open all the files, how to get these elements to open
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                super.keyPressed(e);
-                char keyInput = e.getKeyChar();
-                if(keyInput == 'o'){
-
+                    catch(Exception ex) {
+                    }
                 }
             }
-        });*/
+        });
 
         // Set a Psi tree change listener to handle changes in the project. We provide code for obtaining an instance
         // of PsiField, PsiMethod, PsiClass, or PsiPackage. Implement the updateTree method below.
@@ -243,8 +220,8 @@ class ProjectStructureTree extends Tree {
         KeyIterator it = new KeyIterator();
         strToClass.clear();
         classToStr.clear();
-        curClassToStr.clear();
-        curStrToClass.clear();
+        currentClassToStr.clear();
+        currentStrToClass.clear();
 
 
         // The visitor to traverse the Java hierarchy and to construct the tree
@@ -286,8 +263,8 @@ class ProjectStructureTree extends Tree {
 
         // apply the visitor for each root package in the source directory
         getRootPackages(project).forEach(aPackage -> aPackage.accept(visitor));
-        curClassToStr.putAll(classToStr);
-        curStrToClass.putAll(strToClass);
+        currentClassToStr.putAll(classToStr);
+        currentStrToClass.putAll(strToClass);
     }
 
     private static Set<PsiPackage> getRootPackages(Project project) {
