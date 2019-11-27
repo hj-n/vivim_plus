@@ -72,7 +72,10 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
             PsiElement element = curStrToClass.get(Character.toString((char) keyCode));
             if(element != null)
             {
+
                 ((PsiDocCommentOwner) element).navigate(true);
+                modeEnum.setMode(modeEnum.modeType.NORMAL);
+
                 curStrToClass.clear();
                 curClassToStr.clear();
                 curStrToClass.putAll(strToClass);

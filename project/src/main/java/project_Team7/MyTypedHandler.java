@@ -206,6 +206,10 @@ public class MyTypedHandler implements TypedActionHandler {
                         editor.getDocument().replaceString(caret.getOffset(), caret.getOffset(), clipBoard);
                     }
                     break;
+                case 'f':
+                    Component component = MyToolWindowFactory.getToolWindow().getComponent();
+                    component.transferFocus();
+
                 default:
                     modeEnum.setMode(modeEnum.modeType.NORMAL);
                     modeViewer(editor);
