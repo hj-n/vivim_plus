@@ -12,9 +12,5 @@
     <toolWindow id="Project Structure" anchor="right" factoryClass="project_Team7.MyToolWindowFactory"/>
     <editorTypedHandler id="vim command" implementationClass="project_Team7.MyTypedHandler"/>
   </extensions>
-  <actions>
-    <action id="project_Team7.commandBarAction" class="project_Team7.vimCommandBarAction" text="vim command" description="command bar action for vim plugin">
-      <add-to-group group-id="ToolsMenu" anchor="first"/>
-    </action>
-  </actions>
+  <actions/>
 </idea-plugin>

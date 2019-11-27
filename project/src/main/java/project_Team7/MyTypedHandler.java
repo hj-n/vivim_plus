@@ -138,6 +138,7 @@ public class MyTypedHandler implements TypedActionHandler {
                     modeEnum.setMode(modeEnum.modeType.INSERT);
                     modeViewer(editor);
                     myInsertModeHandler.setEnteredAfterInsertion(true);
+                    /** Store 'i' for detecting current mode is INSERT MODE */
                     setStoredChar('i');
                     break;
                 case 'h':
@@ -160,8 +161,10 @@ public class MyTypedHandler implements TypedActionHandler {
                             caret.setSelection(start, end);
                             clipBoard = caret.getSelectedText();
                             editor.getDocument().replaceString(start, end, "");
+                            /** Store arbitrary charecter 'x' for recovering initial condition */
                             setStoredChar('x');
                         } else {
+                            /** Store 'd' for detecting 'dd' vim instrcution */
                             setStoredChar('d');
                         }
                     }
@@ -177,8 +180,10 @@ public class MyTypedHandler implements TypedActionHandler {
                             caret.setSelection(start, end);
                             clipBoard = caret.getSelectedText();
                             caret.removeSelection();
+                            /** Store arbitrary charecter 'x' for recovering initial condition */
                             setStoredChar('x');
                         } else {
+                            /** Store 'y' for detecting 'yy' vim instrcution */
                             setStoredChar('y');
                         }
                     }
@@ -314,6 +319,7 @@ public class MyTypedHandler implements TypedActionHandler {
                 isESC = false;
                 if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
                 {
+                    /** Store arbitrary charecter 'x' for recovering initial condition */
                     setStoredChar('x');
                     modeEnum.setMode(modeEnum.modeType.NORMAL);
                     modeViewer(editor);

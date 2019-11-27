@@ -50,6 +50,7 @@ public class MyInsertModeHandler {
                             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                                 if (parentHandler.getStoredChar() != 'x')
                                     changeCaretToNormalMode(editor);
+                                /** Store arbitrary charecter 'x' for recovering initial condition */
                                 parentHandler.setStoredChar('x');
                                 isESC = true;
                                 modeEnum.setMode(modeEnum.modeType.NORMAL);
