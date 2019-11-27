@@ -39,7 +39,6 @@ public class MyInsertModeHandler {
         final Document document = editor.getDocument();
         final Project project = editor.getProject();
         if(addedKeyListener == false) {
-            System.out.println("Listener allocation completed!!");
             editor.getContentComponent().addKeyListener(new KeyListener() {
                 @Override
                 public void keyTyped(KeyEvent e) {
@@ -58,6 +57,7 @@ public class MyInsertModeHandler {
                                 changeCaretToNormalMode(editor);
                             myTypedHandler.setStoredChar('x');
                             isESC = true;
+                            modeEnum.setMode(modeEnum.modeType.NORMAL);
                         } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                             if (enteredAfterInsertion) {
                                 Runnable runnable = () -> document.insertString(caret.getOffset(), "\n");
@@ -76,8 +76,9 @@ public class MyInsertModeHandler {
                             caret.moveToVisualPosition(visualPosition);
                         }
                        else if(e.getKeyCode() == KeyEvent.VK_ENTER){
-                            if(parentHandler.getRecentTypedString().equals("\n")) {
-                                Runnable runnable = () -> document.replaceString(caret.getOffset() - 1, caret.getOffset(), "");
+
+                            if(parentHandler.getRecentTypedString().length() == (caret.getOffset()-caret.getVisualLineStart() + 1)) {
+                                Runnable runnable = () -> document.replaceString(caret.getOffset() - parentHandler.getRecentTypedString().length(), caret.getOffset(), "");
                                 WriteCommandAction.runWriteCommandAction(project, runnable);
                             }
                             /*visualPosition = new VisualPosition(caret.getVisualPosition().getLine() - 1, caret.getVisualPosition().getColumn());

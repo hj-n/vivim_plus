@@ -156,7 +156,6 @@ public class MyTypedHandler implements TypedActionHandler {
                             setStoredChar('d');
                         }
                     }
-                    System.out.println("clipBoard d: " + clipBoard);
                     break;
                 case 'y':
                     if(caret.getSelectedText() != null ) {
@@ -176,7 +175,6 @@ public class MyTypedHandler implements TypedActionHandler {
                             setStoredChar('y');
                         }
                     }
-                    System.out.println("clipBoard y: " + clipBoard);
                     break;
                 case 'p':
                     if(clipBoard != null) {
@@ -287,7 +285,8 @@ public class MyTypedHandler implements TypedActionHandler {
                     isESC = true;
                 }
                 else if(e.getKeyCode() == KeyEvent.VK_ENTER){
-                    searchString(editor);
+                    if(textField.getText().substring(0, 1).equals("/"))
+                        searchString(editor);
                     popup.closeOk(e);
                     popup.canClose();
 
@@ -315,8 +314,6 @@ public class MyTypedHandler implements TypedActionHandler {
 
     private void searchString(Editor editor){
         String text = editor.getDocument().getText();
-        System.out.println(currentSearchingString);
-        System.out.println(text.contains(currentSearchingString));
         while(text.contains(currentSearchingString)){
             int slicedIndex = text.indexOf(currentSearchingString);
             int beginIndex = slicedIndex + (editor.getDocument().getText().length() - text.length());
@@ -332,9 +329,6 @@ public class MyTypedHandler implements TypedActionHandler {
     private void focusNextSearchString(Editor editor, boolean isSearchingNext) {
         int start, end;
         if(searchList.size() > 0) {
-            start = searchList.get(currentIndex);
-            end = start + currentSearchingString.length();
-            editor.getCaretModel().getCurrentCaret().setSelection(start, end);
             if (isSearchingNext) {
                 if (currentIndex == searchList.size() - 1)
                     currentIndex = 0;
@@ -346,8 +340,11 @@ public class MyTypedHandler implements TypedActionHandler {
                 else
                     currentIndex--;
             }
+            start = searchList.get(currentIndex);
+            end = start + currentSearchingString.length();
+            editor.getCaretModel().getCurrentCaret().setSelection(start, end);
+            editor.getCaretModel().getCurrentCaret().moveToOffset(start);
         }
-        System.out.println(currentIndex);
     }
 
 
