@@ -72,8 +72,8 @@ class ProjectStructureTree extends Tree {
      */
     ProjectStructureTree(@NotNull Project project) {
         setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
-        thisTree = this;
 
+        thisTree = this;
         strToClass = new HashMap<>();
         classToStr = new HashMap<>();
         currentStrToClass = new HashMap<>();
@@ -81,7 +81,7 @@ class ProjectStructureTree extends Tree {
 
         updateClassMap(project);
 
-        // Set a cell renderer to display the name and icon of each node
+        /** Set a cell renderer to display the name and icon of each node */
         setCellRenderer(new ColoredTreeCellRenderer() {
             @Override
             public void customizeCellRenderer(@NotNull JTree tree, Object value, boolean selected,
@@ -131,10 +131,10 @@ class ProjectStructureTree extends Tree {
             }
         });
 
-        // Set key listener to get the character that user typed and navigate to the psielement.
+        /** Set key listener to get the character that user typed and navigate to the psielement. */
         addKeyListener(new MyKeyAdapter(strToClass, classToStr, currentStrToClass, currentClassToStr, this));
 
-        // Set a mouse listener to handle double-click events
+        /** Set a mouse listener to handle double-click events */
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -151,8 +151,10 @@ class ProjectStructureTree extends Tree {
             }
         });
 
-        // Set a Psi tree change listener to handle changes in the project. We provide code for obtaining an instance
-        // of PsiField, PsiMethod, PsiClass, or PsiPackage. Implement the updateTree method below.
+        /** Set a Psi tree change listener to handle changes in the project. We provide code for obtaining an instance
+         * of PsiField, PsiMethod, PsiClass, or PsiPackage. Implement the updateTree method below.
+         */
+
         PsiManager.getInstance(project).addPsiTreeChangeListener(new PsiTreeChangeAdapter() {
             @Override
             public void childAdded(@NotNull PsiTreeChangeEvent event) {
@@ -186,7 +188,6 @@ class ProjectStructureTree extends Tree {
         updateClassMap(project);
         publicUpdateTree(target);
     }
-
 
     public void publicUpdateTree(@NotNull PsiElement target) {
         TreePath tp = findTreePath(target);
@@ -240,7 +241,7 @@ class ProjectStructureTree extends Tree {
 
 
     public void updateClassMap(Project project) {
-        // the root node of the tree
+        /** Clean the map before reconstruct map */
         final Integer[] count = {0};
         KeyIterator it = new KeyIterator();
         strToClass.clear();
@@ -249,7 +250,7 @@ class ProjectStructureTree extends Tree {
         currentStrToClass.clear();
 
 
-        // The visitor to traverse the Java hierarchy and to construct the tree
+        /** The visitor to traverse the Java hierarchy and to construct the map */
         final JavaElementVisitor visitor = new JavaElementVisitor() {
 
             @Override
@@ -286,12 +287,22 @@ class ProjectStructureTree extends Tree {
             }
         };
 
-        // apply the visitor for each root package in the source directory
+        /** Apply the visitor for each root package in the source directory
+         *  and update remain shortcut maps from the maps already construct.
+         */
         getRootPackages(project).forEach(aPackage -> aPackage.accept(visitor));
         currentClassToStr.putAll(classToStr);
         currentStrToClass.putAll(strToClass);
     }
 
+    /**
+     * Returns the root package(s) in the source directory of a project. The default package will not be considered, as
+     * it includes all Java classes. Note that classes in the default package (i.e., having no package statement) will
+     * be ignored for this assignment. To be completed, this case must be separately handled.
+     *
+     * @param project a project
+     * @return a set of root packages
+     */
     private static Set<PsiPackage> getRootPackages(Project project) {
         final Set<PsiPackage> rootPackages = new HashSet<>();
         PsiElementVisitor visitor = new PsiElementVisitor() {

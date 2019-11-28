@@ -18,7 +18,7 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
     private HashMap<PsiElement, String> currentClassToStr;
     private ProjectStructureTree projectTree;
 
-
+    /** Construct MyKeyAdapter by reference maps of shortcuts and project tree of ProjectStructureTree.java */
     MyKeyAdapter(HashMap <String, PsiElement> strMap,  HashMap <PsiElement, String> classMap,
                  HashMap <String, PsiElement> curStrMap,  HashMap <PsiElement, String> curClassMap,
                  ProjectStructureTree tree) {
@@ -49,22 +49,26 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
                     currentClassToStr.replace(key, currentClassToStr.get(key).substring(1));
                 }
             }
+            /** This part get first string of the map for render the tree */
             String firstKey = "";
             for (String key: currentClassToStr.values())
             {
                 firstKey = key;
                 break;
             }
+            /** This part recover currentClassToStr if all shortcuts are erased */
             if(currentClassToStr.isEmpty()) {
                 for (String key : currentStrToClass.keySet()) {
                     currentClassToStr.put(currentStrToClass.get(key), key);
                 }
             }
+            /** This part update currentStrToClass if shortcuts are remained */
             else {
                 currentStrToClass.clear();
                 for (PsiElement key : currentClassToStr.keySet()) {
                     currentStrToClass.put(currentClassToStr.get(key), key);
                 }
+                /** Call updatetree to render the tree */
                 projectTree.publicUpdateTree(currentStrToClass.get(firstKey));
             }
 
