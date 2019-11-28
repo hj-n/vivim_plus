@@ -81,6 +81,7 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
             if(element != null)
             {
                 ((PsiDocCommentOwner) element).navigate(true);
+                EditorTypedHandler.setStoredChar('x');
                 VIMMode.setMode(VIMMode.modeType.NORMAL);
 
                 currentStrToClass.clear();

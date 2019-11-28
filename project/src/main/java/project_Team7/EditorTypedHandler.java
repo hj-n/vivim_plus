@@ -57,7 +57,7 @@ public class EditorTypedHandler implements TypedActionHandler {
         recentDeletedString = s;
     }
 
-    public void setStoredChar(char c){
+    public static void setStoredChar(char c){
         storedChar = c;
         return ;
     }
