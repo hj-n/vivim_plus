@@ -18,7 +18,7 @@ public class KeyIterator implements Iterator<String> {
 
     /**
      * Generates prefix-free key. The sequence will be like"
-     * N, M, O, P, .... , X, Y, Z, AN, AM, AO, .... , AZ, BN, BM ...
+     * N, O, P, .... , X, Y, Z, AN, AO, .... , AZ, BN, BO ...
      * @return generated next prefix-free key in the sequence
      */
     @Override

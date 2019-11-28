@@ -298,7 +298,6 @@ public class EditorTypedHandler implements TypedActionHandler {
         }
     }
 
-
     /**
      * This method continuously make popup to show user the current MODE.
      * @param editor Opened editor
