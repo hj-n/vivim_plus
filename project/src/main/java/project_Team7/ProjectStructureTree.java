@@ -239,7 +239,10 @@ class ProjectStructureTree extends Tree {
         return Optional.empty();
     }
 
-
+    /**
+     * Update shortcut maps if files are added, deleted or renamed.
+     * @param project
+     */
     public void updateClassMap(Project project) {
         /** Clean the map before reconstruct map */
         final Integer[] count = {0};
