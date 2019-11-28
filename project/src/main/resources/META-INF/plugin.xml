@@ -1,0 +1,27 @@
+<idea-plugin>
+    <id>project_Team7</id>
+    <name>simpleIdeaVim</name>
+    <vendor email="youremail@postech.ac.kr" url="http://csed332.postech.ac.kr">POSTECH CSED332</vendor>
+
+    <description><![CDATA[
+    CESD332 Project<br>
+    <em>simpleIdeaVim</em> is simple vim emulator with functions of some vim plugins.
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <toolWindow id="Project Structure" anchor="right" factoryClass="project_Team7.TreeWindowFactory"/>
+        <editorTypedHandler id="vim command" implementationClass="project_Team7.EditorTypedHandler"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>
+
