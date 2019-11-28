@@ -9,8 +9,8 @@
     &lt;em&gt;simpleIdeaVim&lt;/em&gt; is simple vim emulator with functions of some vim plugins.
     </description>
   <extensions defaultExtensionNs="com.intellij">
-    <toolWindow id="Project Structure" anchor="right" factoryClass="project_Team7.MyToolWindowFactory"/>
-    <editorTypedHandler id="vim command" implementationClass="project_Team7.MyTypedHandler"/>
+    <toolWindow id="Project Structure" anchor="right" factoryClass="project_Team7.TreeWindowFactory"/>
+    <editorTypedHandler id="vim command" implementationClass="project_Team7.EditorTypedHandler"/>
   </extensions>
   <actions/>
 </idea-plugin>

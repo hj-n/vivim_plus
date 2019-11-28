@@ -48,6 +48,11 @@ class ProjectStructureTree extends Tree {
         return identifierToElement;
     }
 
+
+    /**
+     * This public variable stores the reference of this Object. By using this "tricky"
+     * implementation, we can access this tree structure in other objects.
+     */
     public static ProjectStructureTree thisTree;
 
     /**
@@ -181,8 +186,6 @@ class ProjectStructureTree extends Tree {
         updateClassMap(project);
         publicUpdateTree(target);
     }
-
-
 
 
     public void publicUpdateTree(@NotNull PsiElement target) {

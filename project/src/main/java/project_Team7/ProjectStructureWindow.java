@@ -9,6 +9,10 @@ import javax.swing.*;
 import javax.swing.tree.TreeModel;
 import java.awt.*;
 
+/** ***********************
+ * CODE FROM THE HOMEWORK5
+ * ************************ */
+
 /**
  * a Project Structure tool window that contains a scrollable tree view for a java project
  */

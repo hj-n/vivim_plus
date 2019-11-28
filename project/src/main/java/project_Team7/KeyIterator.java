@@ -16,6 +16,11 @@ public class KeyIterator implements Iterator<String> {
         return true;
     }
 
+    /**
+     * Generates prefix-free key. The sequence will be like"
+     * N, M, O, P, .... , X, Y, Z, AN, AM, AO, .... , AZ, BN, BM ...
+     * @return generated next prefix-free key in the sequence
+     */
     @Override
     public String next() {
         StringBuilder builder = new StringBuilder();

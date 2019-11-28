@@ -8,7 +8,8 @@ import java.util.*;
 
 /**
  * This class has methods that overrides methods of KeyStrokeAdapter.
- * We implemented the keyPressed function to get the character that user typed and navigate to the psielement.
+ * We implemented the keyPressed function to get the character that
+ * user typed and navigate to the PsiElement.
  * */
 public class MyKeyAdapter extends KeyStrokeAdapter {
     private HashMap<String, PsiElement> strToClass;
@@ -32,14 +33,13 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
     @Override
     public void keyTyped(KeyEvent e) {
         super.keyTyped(e);
-
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
-        // This part is for erasing first character of the key if it is same as keyCode
+        /** This part is for erasing first character of the key if it is same as keyCode */
         if(keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_M)
         {
             char input = (char) keyCode;
@@ -70,15 +70,14 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
 
         }
 
-        // This part is for navigating to the psielement
+        /** This part is for navigating to the PsiElement */
         else if(keyCode >= KeyEvent.VK_N && keyCode <= KeyEvent.VK_Z)
         {
             PsiElement element = currentStrToClass.get(Character.toString((char) keyCode));
             if(element != null)
             {
-
                 ((PsiDocCommentOwner) element).navigate(true);
-                modeEnum.setMode(modeEnum.modeType.NORMAL);
+                VIMMode.setMode(VIMMode.modeType.NORMAL);
 
                 currentStrToClass.clear();
                 currentClassToStr.clear();
@@ -87,7 +86,7 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
             }
         }
 
-        // This part if for returning back to the initial state
+        /** This part if for returning back to the initial state */
         else if(keyCode == KeyEvent.VK_ESCAPE)
         {
             currentStrToClass.clear();

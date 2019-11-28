@@ -10,6 +10,10 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import java.util.*;
 
+/** ***********************
+ * CODE FROM THE HOMEWORK5
+ * ************************ */
+
 class ProjectTreeModelFactory {
 
     /**
@@ -22,13 +26,12 @@ class ProjectTreeModelFactory {
      * @return a tree model to describe the structure of project
      */
     public static TreeModel createProjectTreeModel(Project project) {
-        // the root node of the tree
+        /** the root node of the tree */
         final DefaultMutableTreeNode root = new DefaultMutableTreeNode(project);
 
 
-        // The visitor to traverse the Java hierarchy and to construct the tree
+        /** The visitor to traverse the Java hierarchy and to construct the tree */
         final JavaElementVisitor visitor = new JavaElementVisitor() {
-            // TODO: add member variables if necessary
 
             private DefaultMutableTreeNode findNode(PsiElement elem) {
                 Enumeration e = root.breadthFirstEnumeration();
@@ -58,12 +61,6 @@ class ProjectTreeModelFactory {
 
             @Override
             public void visitPackage(PsiPackage pack) {
-                // TODO: add a new node to the parent node, and traverse the content of the package
-               /* if(pack.getParentPackage().getName() == null)
-                    root.add(new DefaultMutableTreeNode(pack));
-                else
-                    findNode(pack.getParentPackage()).add(new DefaultMutableTreeNode(pack));
-*/
                 if(pack.getParentPackage().getName() != null)
                     findNode(pack.getParentPackage()).add(new DefaultMutableTreeNode(pack));
                 else
@@ -79,7 +76,6 @@ class ProjectTreeModelFactory {
 
             @Override
             public void visitClass(PsiClass aClass) {
-                // TODO: add a new node the parent node, and traverse the content of the class
                 if(aClass.getParent() instanceof PsiClass)
                     findNode(aClass.getParent()).add(new DefaultMutableTreeNode(aClass));
                 else
@@ -91,20 +87,15 @@ class ProjectTreeModelFactory {
 
             @Override
             public void visitMethod(PsiMethod method) {
-                // TODO: add a new node to the parent node
                 findNode(method.getParent()).add(new DefaultMutableTreeNode(method));
             }
 
             @Override
             public void visitField(PsiField field) {
-                // TODO: add a new node to the parent node
                 findNode(field.getParent()).add(new DefaultMutableTreeNode(field));
-
             }
         };
-
-
-        // apply the visitor for each root package in the source directory
+        /** apply the visitor for each root package in the source directory */
         getRootPackages(project).forEach(aPackage -> aPackage.accept(visitor));
         return new DefaultTreeModel(root);
     }
