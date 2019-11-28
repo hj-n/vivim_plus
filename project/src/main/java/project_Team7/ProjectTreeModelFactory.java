@@ -1,5 +1,6 @@
 package project_Team7;
 
+
 import com.intellij.ide.projectView.impl.nodes.PackageUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
@@ -8,11 +9,10 @@ import com.intellij.psi.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
-import java.util.*;
-
-/** ***********************
- * CODE FROM THE HOMEWORK5
- * ************************ */
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 class ProjectTreeModelFactory {
 
@@ -29,72 +29,59 @@ class ProjectTreeModelFactory {
         /** the root node of the tree */
         final DefaultMutableTreeNode root = new DefaultMutableTreeNode(project);
 
-
         /** The visitor to traverse the Java hierarchy and to construct the tree */
         final JavaElementVisitor visitor = new JavaElementVisitor() {
-
-            private DefaultMutableTreeNode findNode(PsiElement elem) {
-                Enumeration e = root.breadthFirstEnumeration();
-                DefaultMutableTreeNode node;
-                while(e.hasMoreElements()){
-                    node = (DefaultMutableTreeNode) e.nextElement();
-                    if(node.getUserObject().equals(elem)) {
-                        return node;
-                    }
-                }
-                return null;
-            }
-
-            private DefaultMutableTreeNode findPackageNodeByString(String s) {
-                Enumeration e = root.breadthFirstEnumeration();
-                DefaultMutableTreeNode node;
-                while(e.hasMoreElements()){
-                    node = (DefaultMutableTreeNode) e.nextElement();
-                    if(node.getUserObject() instanceof PsiPackage) {
-                        if (node.getUserObject().toString().substring(11).equals(s))
-                            return node;
-                    }
-
-                }
-                return null;
-            }
+            // add member variables if necessary
+            DefaultMutableTreeNode parent = root;
 
             @Override
             public void visitPackage(PsiPackage pack) {
-                if(pack.getParentPackage().getName() != null)
-                    findNode(pack.getParentPackage()).add(new DefaultMutableTreeNode(pack));
-                else
-                    root.add(new DefaultMutableTreeNode(pack));
 
-                for(PsiClass Class : pack.getClasses()) {
-                    Class.accept(this);
+                DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(pack);
+                parent.add(newChild);
+                DefaultMutableTreeNode grand_parent = parent;
+                parent = newChild;
+                for (PsiPackage children:
+                        pack.getSubPackages()) {
+                    children.accept(this);
                 }
-                for(PsiPackage Package : pack.getSubPackages()) {
-                    Package.accept(this);
+                for (PsiClass children:
+                        pack.getClasses()) {
+                    children.accept(this);
                 }
+                parent = grand_parent;
             }
 
             @Override
             public void visitClass(PsiClass aClass) {
-                if(aClass.getParent() instanceof PsiClass)
-                    findNode(aClass.getParent()).add(new DefaultMutableTreeNode(aClass));
-                else
-                    findPackageNodeByString(((PsiJavaFile)aClass.getContainingFile()).getPackageName()).add(new DefaultMutableTreeNode(aClass));
-                for(PsiElement Child : aClass.getChildren()){
-                    Child.accept(this);
+                DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(aClass);
+                parent.add(newChild);
+                DefaultMutableTreeNode grand_parent = parent;
+                parent = newChild;
+                for (PsiField children:
+                        aClass.getFields()) {
+                    children.accept(this);
                 }
+                for (PsiMethod children:
+                        aClass.getMethods()) {
+                    children.accept(this);
+                }
+                parent = grand_parent;
             }
 
             @Override
             public void visitMethod(PsiMethod method) {
-                findNode(method.getParent()).add(new DefaultMutableTreeNode(method));
+                DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(method);
+                parent.add(newChild);
             }
 
             @Override
             public void visitField(PsiField field) {
-                findNode(field.getParent()).add(new DefaultMutableTreeNode(field));
+                DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(field);
+                parent.add(newChild);
             }
         };
+
         /** apply the visitor for each root package in the source directory */
         getRootPackages(project).forEach(aPackage -> aPackage.accept(visitor));
         return new DefaultTreeModel(root);
@@ -131,4 +118,3 @@ class ProjectTreeModelFactory {
         return rootPackages;
     }
 }
-
