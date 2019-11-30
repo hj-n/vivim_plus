@@ -424,9 +424,26 @@ public class EditorTypedHandler implements TypedActionHandler {
             else if(currentCommandInput.equals("wq")){
                 handleSaveCloseFile(currentCommandInput, editor);
             }
+            else if(isNatural(currentCommandInput)){
+                handleMoveLine((int) Integer.parseInt(currentCommandInput), editor);
+            }
         }
 
         setProperCursorShape(editor);
+    }
+
+    private boolean isNatural(String strNum){
+        if(strNum == null){
+            return false;
+        }
+        try{
+            Integer integer = Integer.parseInt(strNum);
+            if(integer <= 0)
+                return false;
+        }catch(NumberFormatException e){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -491,13 +508,8 @@ public class EditorTypedHandler implements TypedActionHandler {
         FileEditorManager fileEditorManager = FileEditorManager.getInstance(editor.getProject());
         VirtualFile files[] = fileEditorManager.getSelectedFiles();
         PsiFile file = PsiManager.getInstance(editor.getProject()).findFile(files[0]);
-        /*if(FileDocumentManager.getInstance().isDocumentUnsaved(PsiDocumentManager.getInstance(editor.getProject()).getDocument(file)))
-            System.out.println("aaa");*/
         FileDocumentManager.getInstance().saveDocument(PsiDocumentManager.getInstance(editor.getProject()).getDocument(file));
-        /*if(FileDocumentManager.getInstance().isDocumentUnsaved(PsiDocumentManager.getInstance(editor.getProject()).getDocument(file)))
-            System.out.println("Sss");*/
         VIMMode.setMode(VIMMode.modeType.NORMAL);
-
     }
 
     private void handleCloseFile(String currentCommandInput, Editor editor){
@@ -533,6 +545,14 @@ public class EditorTypedHandler implements TypedActionHandler {
         FileDocumentManager.getInstance().saveDocument(PsiDocumentManager.getInstance(editor.getProject()).getDocument(file));
         fileEditorManager.closeFile(files[0]);
         VIMMode.setMode(VIMMode.modeType.NORMAL);
+    }
+
+    private void handleMoveLine(int rowNum, Editor editor){
+        Caret caret = editor.getCaretModel().getCurrentCaret();
+        caret.moveToOffset(rowNum);
+        caret.moveToVisualPosition(new VisualPosition(rowNum - 1, 0));
+        editor.getScrollingModel().scrollToCaret(ScrollType.CENTER_UP);
+        System.out.println("rowNum is " + rowNum);
     }
 
     /**
