@@ -212,6 +212,7 @@ class ProjectStructureTree extends Tree {
                 tp = new TreePath(node.getPath());
             }
         }
+
         return tp;
     }
 

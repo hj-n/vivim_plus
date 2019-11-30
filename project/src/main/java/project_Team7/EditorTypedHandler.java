@@ -5,15 +5,17 @@ import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.JBPopupListener;
 import com.intellij.openapi.ui.popup.LightweightWindowEvent;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDocCommentOwner;
-import com.intellij.psi.PsiElement;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.*;
 import com.intellij.ui.awt.RelativePoint;
 import org.jetbrains.annotations.NotNull;
+import com.intellij.openapi.ui.Messages;
 
 import javax.swing.*;
 import java.awt.*;
@@ -409,8 +411,21 @@ public class EditorTypedHandler implements TypedActionHandler {
                 handleFoldByTree(currentCommandInput);
             }
         }
-        else {      // Commands consists with shortcut, not yet implemented
+        else { // Commands consists with shortcut, not yet implemented
+            if(currentCommandInput.equals("w")){
+                handleSaveFile(currentCommandInput, editor);
+            }
+            else if(currentCommandInput.equals("q")){
+                handleCloseFile(currentCommandInput, editor);
+            }
+            else if(currentCommandInput.equals("q!")){
+                handleForceCloseFile(currentCommandInput, editor);
+            }
+            else if(currentCommandInput.equals("wq")){
+                handleSaveCloseFile(currentCommandInput, editor);
+            }
         }
+
         setProperCursorShape(editor);
     }
 
@@ -470,6 +485,54 @@ public class EditorTypedHandler implements TypedActionHandler {
             ProjectStructureTree.thisTree.collapseTree(element);
             VIMMode.setMode(VIMMode.modeType.NORMAL);
         }
+    }
+
+    private void handleSaveFile(String currentCommandInput, Editor editor){
+        FileEditorManager fileEditorManager = FileEditorManager.getInstance(editor.getProject());
+        VirtualFile files[] = fileEditorManager.getSelectedFiles();
+        PsiFile file = PsiManager.getInstance(editor.getProject()).findFile(files[0]);
+        /*if(FileDocumentManager.getInstance().isDocumentUnsaved(PsiDocumentManager.getInstance(editor.getProject()).getDocument(file)))
+            System.out.println("aaa");*/
+        FileDocumentManager.getInstance().saveDocument(PsiDocumentManager.getInstance(editor.getProject()).getDocument(file));
+        /*if(FileDocumentManager.getInstance().isDocumentUnsaved(PsiDocumentManager.getInstance(editor.getProject()).getDocument(file)))
+            System.out.println("Sss");*/
+        VIMMode.setMode(VIMMode.modeType.NORMAL);
+
+    }
+
+    private void handleCloseFile(String currentCommandInput, Editor editor){
+
+        FileEditorManager fileEditorManager = FileEditorManager.getInstance(editor.getProject());
+        VirtualFile files[] = fileEditorManager.getSelectedFiles();
+        PsiFile file = PsiManager.getInstance(editor.getProject()).findFile(files[0]);
+        if(FileDocumentManager.getInstance().isDocumentUnsaved(PsiDocumentManager.getInstance(editor.getProject()).getDocument(file))) {
+            String array[] = new String[1];
+            array[0] = "OK";
+            Messages.showDialog("file unsaved", "NOTIFICATION", array, 0, Messages.getWarningIcon());
+        }
+        else {
+            fileEditorManager.closeFile(files[0]);
+        }
+        VIMMode.setMode(VIMMode.modeType.NORMAL);
+    }
+
+    private void handleForceCloseFile(String currentCommandInput, Editor editor){
+
+        FileEditorManager fileEditorManager = FileEditorManager.getInstance(editor.getProject());
+        VirtualFile files[] = fileEditorManager.getSelectedFiles();
+        PsiFile file = PsiManager.getInstance(editor.getProject()).findFile(files[0]);
+        fileEditorManager.closeFile(files[0]);
+        VIMMode.setMode(VIMMode.modeType.NORMAL);
+    }
+
+    private void handleSaveCloseFile(String currentCommandInput, Editor editor){
+
+        FileEditorManager fileEditorManager = FileEditorManager.getInstance(editor.getProject());
+        VirtualFile files[] = fileEditorManager.getSelectedFiles();
+        PsiFile file = PsiManager.getInstance(editor.getProject()).findFile(files[0]);
+        FileDocumentManager.getInstance().saveDocument(PsiDocumentManager.getInstance(editor.getProject()).getDocument(file));
+        fileEditorManager.closeFile(files[0]);
+        VIMMode.setMode(VIMMode.modeType.NORMAL);
     }
 
     /**
