@@ -654,6 +654,7 @@ public class EditorTypedHandler implements TypedActionHandler {
      */
     private void searchString(Editor editor){
         String text = editor.getDocument().getText();
+        searchList.clear();
         while(text.contains(currentSearchingString)){
             int slicedIndex = text.indexOf(currentSearchingString);
             int beginIndex = slicedIndex + (editor.getDocument().getText().length() - text.length());
@@ -675,23 +676,30 @@ public class EditorTypedHandler implements TypedActionHandler {
      */
     private void focusNextSearchString(Editor editor, boolean isSearchingNext) {
         int start, end;
-        if(searchList.size() > 0) {
-            if (isSearchingNext) {
-                if (currentIndex == searchList.size() - 1)
-                    currentIndex = 0;
-                else
-                    currentIndex++;
-            } else {
-                if (currentIndex == 0)
-                    currentIndex = searchList.size() - 1;
-                else
-                    currentIndex--;
+        int exeNum = 0;
+        if(multiExecute == 0) exeNum = 1;
+        else exeNum = multiExecute;
+        for(int i = 0; i < exeNum; i++) {
+
+            if (searchList.size() > 0) {
+                if (isSearchingNext) {
+                    if (currentIndex == searchList.size() - 1)
+                        currentIndex = 0;
+                    else
+                        currentIndex++;
+                } else {
+                    if (currentIndex == 0)
+                        currentIndex = searchList.size() - 1;
+                    else
+                        currentIndex--;
+                }
+                start = searchList.get(currentIndex);
+                end = start + currentSearchingString.length();
+                editor.getCaretModel().getCurrentCaret().setSelection(start, end);
+                editor.getCaretModel().getCurrentCaret().moveToOffset(start);
             }
-            start = searchList.get(currentIndex);
-            end = start + currentSearchingString.length();
-            editor.getCaretModel().getCurrentCaret().setSelection(start, end);
-            editor.getCaretModel().getCurrentCaret().moveToOffset(start);
         }
+        multiExecute = 0;
     }
 
 
