@@ -6,10 +6,8 @@ import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
-import com.intellij.openapi.fileEditor.impl.EditorWindow;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.JBPopupListener;
@@ -24,7 +22,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class EditorTypedHandler implements TypedActionHandler {
 
@@ -42,6 +39,7 @@ public class EditorTypedHandler implements TypedActionHandler {
     private String recentTypedString = null;
     private String recentDeletedString = null;
     private String clipBoard = "";
+    private Integer multiExecute = 0;
 
 
 
@@ -256,6 +254,14 @@ public class EditorTypedHandler implements TypedActionHandler {
                     setProperCursorShape(editor);
                     break;
                 default:
+                    if(isNatural(charTyped+"")){
+                        if(multiExecute != 0){
+                            multiExecute = multiExecute * 10 + Integer.parseInt(charTyped + "");
+                        }
+                        else{
+                            multiExecute = Integer.parseInt(charTyped+"");
+                        }
+                    }
                     VIMMode.setMode(VIMMode.modeType.NORMAL);
                     modeViewer(editor);
             }
@@ -319,31 +325,38 @@ public class EditorTypedHandler implements TypedActionHandler {
      * @param editor Opened editor
      */
     private void moveCursor(char charTyped, Editor editor){
-        Caret caret = editor.getCaretModel().getPrimaryCaret();
-        try {
-            //move under line
-            if (charTyped == 'j') {
-                VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine() + 1, caret.getVisualPosition().getColumn());
-                caret.moveToVisualPosition(visualPosition);
+        int exeNum;
+        if(multiExecute == 0) exeNum = 1;
+        else exeNum = multiExecute;
+        System.out.println("exeNum is " + exeNum);
+        for(int i = 0; i < exeNum; i++ ) {
+            Caret caret = editor.getCaretModel().getPrimaryCaret();
+            try {
+                //move under line
+                multiExecute = 0;
+                if (charTyped == 'j') {
+                    VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine() + 1, caret.getVisualPosition().getColumn());
+                    caret.moveToVisualPosition(visualPosition);
+                }
+                //move upper line
+                if (charTyped == 'k') {
+                    VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine() - 1, caret.getVisualPosition().getColumn());
+                    caret.moveToVisualPosition(visualPosition);
+                }
+                //move left
+                if (charTyped == 'h') {
+                    VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualPosition().getColumn() - 1);
+                    caret.moveToVisualPosition(visualPosition);
+                }
+                //move right
+                if (charTyped == 'l') {
+                    VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualPosition().getColumn() + 1);
+                    caret.moveToVisualPosition(visualPosition);
+                }
             }
-            //move upper line
-            if (charTyped == 'k') {
-                VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine() - 1, caret.getVisualPosition().getColumn());
-                caret.moveToVisualPosition(visualPosition);
-            }
-            //move left
-            if (charTyped == 'h') {
-                VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualPosition().getColumn() - 1);
-                caret.moveToVisualPosition(visualPosition);
-            }
-            //move right
-            if (charTyped == 'l') {
-                VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualPosition().getColumn() + 1);
-                caret.moveToVisualPosition(visualPosition);
-            }
-        }
         catch(Exception e){
 
+        }
         }
     }
 
