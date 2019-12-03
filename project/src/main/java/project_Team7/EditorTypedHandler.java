@@ -164,13 +164,20 @@ public class EditorTypedHandler implements TypedActionHandler {
                         editor.getDocument().replaceString(caret.getSelectionStart(), caret.getSelectionEnd(), "");
                     } else {
                         if (getStoredChar() == 'd') {
-                            int start = caret.getVisualLineStart();
-                            int end = caret.getVisualLineEnd();
-                            caret.setSelection(start, end);
-                            clipBoard = caret.getSelectedText();
-                            editor.getDocument().replaceString(start, end, "");
+                            clipBoard = "";
+                            int exeNum;
+                            if(multiExecute == 0) exeNum = 1;
+                            else exeNum = multiExecute;
+                            for(int i = 0; i < exeNum; i++) {
+                                int start = caret.getVisualLineStart();
+                                int end = caret.getVisualLineEnd();
+                                caret.setSelection(start, end);
+                                clipBoard += caret.getSelectedText();
+                                editor.getDocument().replaceString(start, end, "");
+                            }
                             /** Store arbitrary charecter 'x' for recovering initial condition */
                             setStoredChar('x');
+                            multiExecute = 0;
                         } else {
                             /** Store 'd' for detecting 'dd' vim instrcution */
                             setStoredChar('d');

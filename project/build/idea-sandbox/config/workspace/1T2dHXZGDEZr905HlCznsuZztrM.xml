@@ -31,13 +31,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/postech/csed332/homework5/Board.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="377">
-              <caret line="95" selection-start-line="95" selection-end-line="95" />
+            <state relative-caret-position="220">
+              <caret line="65" selection-start-line="65" selection-end-line="65" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="docComment;class#Board#0" />
-                <element signature="e#2056#2164#0" />
-                <element signature="e#2170#2323#0" />
               </folding>
             </state>
           </provider>
@@ -93,6 +91,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -139,7 +138,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -147,7 +145,7 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.41201717" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.4234621" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -195,13 +193,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/postech/csed332/homework5/Board.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="95" selection-start-line="95" selection-end-line="95" />
+        <state relative-caret-position="220">
+          <caret line="65" selection-start-line="65" selection-end-line="65" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="docComment;class#Board#0" />
-            <element signature="e#2056#2164#0" />
-            <element signature="e#2170#2323#0" />
           </folding>
         </state>
       </provider>
