@@ -314,7 +314,7 @@
       },
       "enums" : {
         "__event_id" : [ "remaining.pages.skipped", "WizardDisplayed", "UIThemeChanged", "DesktopEntryCreated", "LauncherScriptCreated", "BundledPluginGroupDisabled", "BundledPluginGroupEnabled", "BundledPluginGroupCustomized", "FeaturedPluginInstalled" ],
-        "__group" : [ "Java_Frameworks", "Web_Development", "Version_Controls", "Test_Tools", "Application_Servers", "Clouds", "Swing", "Android", "Database_Tools", "Other_Tools", "Plugin_Development" ]
+        "__group" : [ "Java_Frameworks", "Web_Development", "Version_Controls", "Test_Tools", "Application_Servers", "Clouds", "Swing", "Android", "Database_Tools", "Other_Tools", "Plugin_Development", "Build_Tools" ]
       }
     }
   }, {
@@ -2525,5 +2525,5 @@
       "version" : "(\\d+\\.?)*\\d+"
     }
   },
-  "version" : "942"
+  "version" : "943"
 }

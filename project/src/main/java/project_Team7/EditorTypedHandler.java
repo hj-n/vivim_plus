@@ -6,7 +6,10 @@ import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
+import com.intellij.openapi.fileEditor.impl.EditorWindow;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.JBPopupListener;
@@ -21,6 +24,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EditorTypedHandler implements TypedActionHandler {
 
@@ -241,10 +245,49 @@ public class EditorTypedHandler implements TypedActionHandler {
                     modeViewer(editor);
                     setProperCursorShape(editor);
                     break;
+                case 'J':
+                case 'K':
+                    if(charTyped == 'J')
+                        moveOpenedTab(true, editor);     // move to left tab
+                    else
+                        moveOpenedTab(false, editor);     // move to right tab
+                    VIMMode.setMode(VIMMode.modeType.NORMAL);
+                    modeViewer(editor);
+                    setProperCursorShape(editor);
+                    break;
                 default:
                     VIMMode.setMode(VIMMode.modeType.NORMAL);
                     modeViewer(editor);
             }
+    }
+
+    private void moveOpenedTab(boolean b, Editor editor) {
+         FileEditorManagerEx manager = FileEditorManagerEx.getInstanceEx(editor.getProject());
+
+         VirtualFile[] files = manager.getWindows()[0].getFiles();
+         VirtualFile currentFile = manager.getCurrentFile();
+         int currentIndex = -1;
+         int tabNum = files.length;
+         for(int i = 0; i < tabNum; i++) {
+             if(currentFile.getName().equals(files[i].getName())) {
+                 currentIndex = i;
+                 break;
+             }
+         }
+         if(b) {
+             if(currentIndex == 0)
+                 manager.openFile(files[tabNum - 1], true);
+             else
+                 manager.openFile(files[currentIndex - 1], true);
+         }
+         else {
+             if(currentIndex == tabNum - 1) {
+                 manager.openFile(files[0], true);
+             }
+             else {
+                 manager.openFile(files[currentIndex + 1], true);
+             }
+         }
     }
 
 

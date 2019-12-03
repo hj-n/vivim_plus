@@ -29,7 +29,7 @@ class ProjectTreeModelFactory {
         /** the root node of the tree */
         final DefaultMutableTreeNode root = new DefaultMutableTreeNode(project);
 
-        /** The visitor to traverse the Java hierarchy and to construct the tree */
+    /** The visitor to traverse the Java hierarchy and to construct the tree */
         final JavaElementVisitor visitor = new JavaElementVisitor() {
             // add member variables if necessary
             DefaultMutableTreeNode parent = root;
