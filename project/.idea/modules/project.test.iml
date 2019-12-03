@@ -11,9 +11,6 @@
     <orderEntry type="module" module-name="project.main" />
     <orderEntry type="module-library">
       <library name="Gradle: com.jetbrains:ideaIC:2019.2.1">
-        <ANNOTATIONS>
-          <root url="jar://$MAVEN_REPOSITORY$/com/jetbrains/intellij/idea/ideaIU/2019.3/ideaIU-2019.3-annotations.zip!/" />
-        </ANNOTATIONS>
         <CLASSES>
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2019.2.1/301f1c6520e1bee7f89a8b129cd983fe524b4ba5/ideaIC-2019.2.1/lib/FastInfoset-1.2.15.jar!/" />
           <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2019.2.1/301f1c6520e1bee7f89a8b129cd983fe524b4ba5/ideaIC-2019.2.1/lib/aapt-proto-jarjar.jar!/" />

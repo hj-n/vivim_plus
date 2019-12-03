@@ -251,8 +251,8 @@ public class EditorTypedHandler implements TypedActionHandler {
                         moveOpenedTab(true, editor);     // move to left tab
                     else
                         moveOpenedTab(false, editor);     // move to right tab
-                    VIMMode.setMode(VIMMode.modeType.NORMAL);
-                    modeViewer(editor);
+                    //VIMMode.setMode(VIMMode.modeType.NORMAL);
+                    //modeViewer(editor);
                     setProperCursorShape(editor);
                     break;
                 default:
@@ -288,6 +288,8 @@ public class EditorTypedHandler implements TypedActionHandler {
                  manager.openFile(files[currentIndex + 1], true);
              }
          }
+         VIMMode.setMode(VIMMode.modeType.NORMAL);
+         modeViewer(manager.getSelectedTextEditor());
     }
 
 
@@ -351,7 +353,7 @@ public class EditorTypedHandler implements TypedActionHandler {
         JBPopupFactory jbPopupFactory = JBPopupFactory.getInstance();
         JBPopup mes = jbPopupFactory.createMessage(VIMMode.getModeToString());
         mes.setRequestFocus(false);
-        mes.show(RelativePoint.getSouthEastOf(editor.getComponent()));
+        mes.show(RelativePoint.getSouthEastOf(editor.getContentComponent()));
     }
 
 
