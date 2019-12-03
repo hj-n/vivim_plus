@@ -293,6 +293,7 @@ public class EditorTypedHandler implements TypedActionHandler {
     }
 
 
+
     /**
      * In modern vim plugin, there exists a convention which represents cursor
      * with single line in the INSERT MODE, and represents by block in the
@@ -300,6 +301,7 @@ public class EditorTypedHandler implements TypedActionHandler {
      * MODE.
      * @param editor Opened editor
      */
+
     private void setProperCursorShape(Editor editor) {
         if(VIMMode.getModeToString() == "INSERT MODE" ) {
             editor.getSettings().setBlockCursor(false);
@@ -455,6 +457,13 @@ public class EditorTypedHandler implements TypedActionHandler {
             else if(currentCommandInput.substring(0, 4).equals("fold")) {
                 handleFoldByTree(currentCommandInput);
             }
+            else if(currentCommandInput.substring(0, 4).equals("show")) {
+                handleCodeSegment(currentCommandInput,true, editor);
+            }
+            else if(currentCommandInput.substring(0, 4).equals("hide")) {
+                handleCodeSegment(currentCommandInput, false, editor);
+            }
+
         }
         else { // Commands consists with shortcut, not yet implemented
             if(currentCommandInput.equals("w")){
@@ -548,6 +557,27 @@ public class EditorTypedHandler implements TypedActionHandler {
             VIMMode.setMode(VIMMode.modeType.NORMAL);
         }
     }
+    private void handleCodeSegment(String currentCommandInput, boolean isShowing, Editor editor){
+        currentCommandInput = currentCommandInput.substring(5);
+        int rowNum;
+        if(isNatural(currentCommandInput)) {
+            rowNum = Integer.parseInt(currentCommandInput);
+            for (FoldRegion f : editor.getFoldingModel().getAllFoldRegions()) {
+                if (editor.getDocument().getLineNumber(f.getStartOffset()) + 1 == rowNum && f.isExpanded() == !isShowing) {
+                    editor.getFoldingModel().runBatchFoldingOperation(new Runnable() {
+                        @Override
+                        public void run() {
+                            f.setExpanded(isShowing);
+                        }
+                    });
+                    editor.getCaretModel().getCurrentCaret().moveToOffset(f.getStartOffset());
+                    editor.getScrollingModel().scrollToCaret(ScrollType.CENTER_UP);
+                }
+            }
+        }
+
+    }
+
 
     private void handleSaveFile(String currentCommandInput, Editor editor){
         FileEditorManager fileEditorManager = FileEditorManager.getInstance(editor.getProject());
