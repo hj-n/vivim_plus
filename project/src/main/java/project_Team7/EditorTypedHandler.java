@@ -190,11 +190,21 @@ public class EditorTypedHandler implements TypedActionHandler {
                         caret.removeSelection();
                     } else {
                         if (getStoredChar() == 'y') {
-                            int start = caret.getVisualLineStart();
-                            int end = caret.getVisualLineEnd();
-                            caret.setSelection(start, end);
-                            clipBoard = caret.getSelectedText();
-                            caret.removeSelection();
+                            clipBoard = "";
+                            int originalCaretOffset = caret.getOffset();
+                            int exeNum;
+                            if(multiExecute == 0) exeNum = 1;
+                            else exeNum = multiExecute;
+                            for(int i = 0; i < exeNum; i++) {
+                                int start = caret.getVisualLineStart();
+                                int end = caret.getVisualLineEnd();
+                                caret.setSelection(start, end);
+                                clipBoard += caret.getSelectedText();
+                                caret.moveToOffset(caret.getVisualLineEnd() + 1);
+                                caret.removeSelection();
+                            }
+                            multiExecute = 0;
+                            caret.moveToOffset(originalCaretOffset);
                             /** Store arbitrary charecter 'x' for recovering initial condition */
                             setStoredChar('x');
                         } else {
@@ -285,6 +295,7 @@ public class EditorTypedHandler implements TypedActionHandler {
                             multiExecute = Integer.parseInt(charTyped+"");
                         }
                     }
+
                     VIMMode.setMode(VIMMode.modeType.NORMAL);
                     modeViewer(editor);
             }
