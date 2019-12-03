@@ -204,14 +204,30 @@ public class EditorTypedHandler implements TypedActionHandler {
                         if (caret.getVisualLineEnd() == editor.getDocument().getText().length()) {
                             clipBoard = '\n' + clipBoard;
                         }
-                        editor.getDocument().replaceString(caret.getVisualLineEnd(), caret.getVisualLineEnd(), clipBoard);
+                        int exeNum;
+                        if(multiExecute == 0) exeNum = 1;
+                        else exeNum = multiExecute;
+                        for(int i = 0; i < exeNum; i++) {
+                            editor.getDocument().replaceString(caret.getVisualLineEnd(), caret.getVisualLineEnd(), clipBoard);
+                            caret.moveToOffset(caret.getVisualLineEnd());
+                            System.out.println(exeNum);
+                        }
+                        multiExecute = 0;
                         clipBoard = original;
-                        caret.moveToOffset(caret.getVisualLineEnd());
                     }
                     break;
                 case 'P':
                     if (clipBoard != null) {
-                        editor.getDocument().replaceString(caret.getOffset(), caret.getOffset(), clipBoard);
+                        if(clipBoard.charAt(clipBoard.length() - 1) != '\n')
+                            clipBoard = clipBoard + '\n';
+                        int exeNum;
+                        if(multiExecute == 0) exeNum = 1;
+                        else exeNum = multiExecute;
+                        for(int i = 0; i < exeNum; i++) {
+                            editor.getDocument().replaceString(caret.getOffset()+ 1, caret.getOffset() + 1, clipBoard);
+                            caret.moveToOffset(caret.getOffset() + clipBoard.length() - 1);
+                        }
+                        multiExecute = 0;
                     }
                     break;
                 case 'f':      // should change to uml window
@@ -254,7 +270,7 @@ public class EditorTypedHandler implements TypedActionHandler {
                     setProperCursorShape(editor);
                     break;
                 default:
-                    if(isNatural(charTyped+"")){
+                    if(isNatural(charTyped+"") || Integer.parseInt(charTyped + "") == 0){
                         if(multiExecute != 0){
                             multiExecute = multiExecute * 10 + Integer.parseInt(charTyped + "");
                         }
