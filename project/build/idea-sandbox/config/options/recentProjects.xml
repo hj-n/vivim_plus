@@ -5,6 +5,12 @@
         <option value="$USER_HOME$/Desktop/problem1" />
       </list>
     </option>
+    <option name="openPaths">
+      <list>
+        <option value="$USER_HOME$/Desktop/problem1" />
+      </list>
+    </option>
+    <option name="lastPath" value="$USER_HOME$/Desktop/problem1" />
     <option name="pid" value="" />
     <option name="additionalInfo">
       <map>
@@ -14,8 +20,8 @@
               <option name="build" value="IC-192.6262.58" />
               <option name="productionCode" value="IC" />
               <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
-              <option name="projectOpenTimestamp" value="1575374154365" />
-              <option name="buildTimestamp" value="1566310310128" />
+              <option name="projectOpenTimestamp" value="1575374785609" />
+              <option name="buildTimestamp" value="1566310274450" />
             </RecentProjectMetaInfo>
           </value>
         </entry>

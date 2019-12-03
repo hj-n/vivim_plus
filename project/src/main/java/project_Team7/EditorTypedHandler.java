@@ -268,37 +268,41 @@ public class EditorTypedHandler implements TypedActionHandler {
     }
 
     private void moveOpenedTab(boolean b, Editor editor) {
-         FileEditorManagerEx manager = FileEditorManagerEx.getInstanceEx(editor.getProject());
+        int exeNum = 0;
+        if (multiExecute == 0) exeNum = 1;
+        else exeNum = multiExecute;
 
-         VirtualFile[] files = manager.getWindows()[0].getFiles();
-         VirtualFile currentFile = manager.getCurrentFile();
-         int currentIndex = -1;
-         int tabNum = files.length;
-         for(int i = 0; i < tabNum; i++) {
-             if(currentFile.getName().equals(files[i].getName())) {
-                 currentIndex = i;
-                 break;
-             }
-         }
-         if(b) {
-             if(currentIndex == 0)
-                 manager.openFile(files[tabNum - 1], true);
-             else
-                 manager.openFile(files[currentIndex - 1], true);
-         }
-         else {
-             if(currentIndex == tabNum - 1) {
-                 manager.openFile(files[0], true);
-             }
-             else {
-                 manager.openFile(files[currentIndex + 1], true);
-             }
-         }
-         VIMMode.setMode(VIMMode.modeType.NORMAL);
-         modeViewer(manager.getSelectedTextEditor());
+        for (int j = 0; j < exeNum; j++) {
+
+            FileEditorManagerEx manager = FileEditorManagerEx.getInstanceEx(editor.getProject());
+            VirtualFile[] files = manager.getWindows()[0].getFiles();
+            VirtualFile currentFile = manager.getCurrentFile();
+
+            int currentIndex = -1;
+            int tabNum = files.length;
+            for (int i = 0; i < tabNum; i++) {
+                if (currentFile.getName().equals(files[i].getName())) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+            if (b) {
+                if (currentIndex == 0)
+                    manager.openFile(files[tabNum - 1], true);
+                else
+                    manager.openFile(files[currentIndex - 1], true);
+            } else {
+                if (currentIndex == tabNum - 1) {
+                    manager.openFile(files[0], true);
+                } else {
+                    manager.openFile(files[currentIndex + 1], true);
+                }
+            }
+            VIMMode.setMode(VIMMode.modeType.NORMAL);
+            modeViewer(manager.getSelectedTextEditor());
+        }
+        multiExecute = 0;
     }
-
-
 
     /**
      * In modern vim plugin, there exists a convention which represents cursor
@@ -328,7 +332,6 @@ public class EditorTypedHandler implements TypedActionHandler {
         int exeNum;
         if(multiExecute == 0) exeNum = 1;
         else exeNum = multiExecute;
-        System.out.println("exeNum is " + exeNum);
         for(int i = 0; i < exeNum; i++ ) {
             Caret caret = editor.getCaretModel().getPrimaryCaret();
             try {
