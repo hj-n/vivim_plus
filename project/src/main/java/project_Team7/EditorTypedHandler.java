@@ -41,6 +41,7 @@ public class EditorTypedHandler implements TypedActionHandler {
     private String recentDeletedString = null;
     private String clipBoard = "";
     private Integer multiExecute = 0;
+    private int initialVisualOffset = 0;
 
 
     /** Getter, setter methods */
@@ -133,8 +134,17 @@ public class EditorTypedHandler implements TypedActionHandler {
                     }
                     break;
                 case 'v':
+                    setStoredChar('v');
                     VIMMode.setMode(VIMMode.modeType.VISUAL);
                     modeViewer(editor);
+                    initialVisualOffset = caret.getOffset();
+                    break;
+                case 'V':
+                    setStoredChar('V');
+                    VIMMode.setMode(VIMMode.modeType.VISUAL);
+                    modeViewer(editor);
+                    initialVisualOffset = caret.getVisualLineStart();
+                    editor.getSelectionModel().setSelection(initialVisualOffset, caret.getVisualLineEnd());
                     break;
                 case 'i':
                 case 'I':
@@ -157,8 +167,13 @@ public class EditorTypedHandler implements TypedActionHandler {
                 case 'w':
                 case 'b':
                     moveCursor(charTyped, editor);
-                    VIMMode.setMode(VIMMode.modeType.NORMAL);
                     modeViewer(editor);
+                    if(getStoredChar() == 'v'){
+                        editor.getSelectionModel().setSelection(initialVisualOffset, caret.getOffset());
+                    }
+                    else if(getStoredChar() == 'V'){
+                        editor.getSelectionModel().setSelection(initialVisualOffset, caret.getVisualLineEnd());
+                    }
                     break;
                 case 'd':
                     if (caret.getSelectedText() != null) {
@@ -185,6 +200,8 @@ public class EditorTypedHandler implements TypedActionHandler {
                             setStoredChar('d');
                         }
                     }
+                    VIMMode.setMode(VIMMode.modeType.NORMAL);
+                    modeViewer(editor);
                     break;
                 case 'y':
                     if (caret.getSelectedText() != null) {
@@ -214,6 +231,9 @@ public class EditorTypedHandler implements TypedActionHandler {
                             setStoredChar('y');
                         }
                     }
+                    VIMMode.setMode(VIMMode.modeType.NORMAL);
+                    modeViewer(editor);
+                    editor.getSelectionModel().removeSelection();
                     break;
                 case 'p':
                     if (clipBoard != null) {
@@ -234,6 +254,8 @@ public class EditorTypedHandler implements TypedActionHandler {
                         multiExecute = 0;
                         clipBoard = original;
                     }
+                    VIMMode.setMode(VIMMode.modeType.NORMAL);
+                    modeViewer(editor);
                     break;
                 case 'P':
                     if (clipBoard != null) {
@@ -248,6 +270,8 @@ public class EditorTypedHandler implements TypedActionHandler {
                         }
                         multiExecute = 0;
                     }
+                    VIMMode.setMode(VIMMode.modeType.NORMAL);
+                    modeViewer(editor);
                     break;
                 case 'f':      // should change to uml window
                     Component component = TreeWindowFactory.getToolWindow().getComponent();

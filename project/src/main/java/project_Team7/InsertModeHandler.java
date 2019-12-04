@@ -46,7 +46,15 @@ public class InsertModeHandler {
                 @Override
                 public void keyReleased(KeyEvent e) {
                     try {
-                        if (VIMMode.getModeToString() == "INSERT MODE") {    /** When INSERT MODE */
+                        if(VIMMode.getModeToString() == "VISUAL MODE"){
+                            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                                /** Store arbitrary charecter 'x' for recovering initial condition */
+                                parentHandler.setStoredChar('x');
+                                VIMMode.setMode(VIMMode.modeType.NORMAL);
+                                editor.getSelectionModel().removeSelection();
+                            }
+                        }
+                        else if (VIMMode.getModeToString() == "INSERT MODE") {    /** When INSERT MODE */
                             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                                 if (parentHandler.getStoredChar() != 'x')
                                     editor.getSettings().setBlockCursor(true);
