@@ -396,8 +396,10 @@ public class EditorTypedHandler implements TypedActionHandler {
                 }
                 //move line end
                 if(charTyped == '$'){
-                    VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualLineEnd());
-                    caret.moveToVisualPosition(visualPosition);
+                    caret.moveToOffset(caret.getVisualLineEnd() - 1);
+                    if(caret.getVisualLineStart() != caret.getOffset()){
+                        caret.moveToOffset(caret.getOffset() - 1);
+                    }
                 }
                 //move forwardly by one word
                 if(charTyped == 'w'){
