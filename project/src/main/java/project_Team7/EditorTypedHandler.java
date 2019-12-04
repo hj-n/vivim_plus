@@ -390,8 +390,11 @@ public class EditorTypedHandler implements TypedActionHandler {
                     VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualPosition().getColumn() + 1);
                     caret.moveToVisualPosition(visualPosition);
                 }
+
+                //editor.getCaretModel().getCurrentCaret().moveToOffset(.getStartOffset());
+                editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
             }
-        catch(Exception e){
+            catch(Exception e){
 
         }
         }
