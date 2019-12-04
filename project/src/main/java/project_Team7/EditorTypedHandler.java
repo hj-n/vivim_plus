@@ -1,5 +1,6 @@
 package project_Team7;
 
+import android.os.SystemPropertiesProto;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
@@ -40,7 +41,6 @@ public class EditorTypedHandler implements TypedActionHandler {
     private String recentDeletedString = null;
     private String clipBoard = "";
     private Integer multiExecute = 0;
-
 
 
     /** Getter, setter methods */
@@ -153,11 +153,13 @@ public class EditorTypedHandler implements TypedActionHandler {
                 case 'j':
                 case 'k':
                 case 'l':
+                case '$':
+                case 'w':
+                case 'b':
                     moveCursor(charTyped, editor);
                     VIMMode.setMode(VIMMode.modeType.NORMAL);
                     modeViewer(editor);
                     break;
-
                 case 'd':
                     if (caret.getSelectedText() != null) {
                         clipBoard = caret.getSelectedText();
@@ -364,6 +366,7 @@ public class EditorTypedHandler implements TypedActionHandler {
      */
     private void moveCursor(char charTyped, Editor editor){
         int exeNum;
+        String text = editor.getDocument().getText();
         if(multiExecute == 0) exeNum = 1;
         else exeNum = multiExecute;
         for(int i = 0; i < exeNum; i++ ) {
@@ -371,6 +374,7 @@ public class EditorTypedHandler implements TypedActionHandler {
             try {
                 //move under line
                 multiExecute = 0;
+                boolean seperate = false;
                 if (charTyped == 'j') {
                     VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine() + 1, caret.getVisualPosition().getColumn());
                     caret.moveToVisualPosition(visualPosition);
@@ -390,7 +394,44 @@ public class EditorTypedHandler implements TypedActionHandler {
                     VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualPosition().getColumn() + 1);
                     caret.moveToVisualPosition(visualPosition);
                 }
-
+                //move line end
+                if(charTyped == '$'){
+                    VisualPosition visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualLineEnd());
+                    caret.moveToVisualPosition(visualPosition);
+                }
+                //move forwardly by one word
+                if(charTyped == 'w'){
+                    char tempChar = text.charAt(caret.getOffset());
+                    int j = caret.getOffset() + 1;
+                    for(; j < text.length(); j ++){
+                        if(Character.isLetterOrDigit(text.charAt(j)) ^ Character.isLetterOrDigit(tempChar)) {
+                            break;
+                        }
+                        else{
+                            tempChar = text.charAt(j);
+                        }
+                    }
+                    caret.moveToOffset(j);
+                }
+                //move backwardly by one word
+                if(charTyped == 'b'){
+                    char tempChar = text.charAt(caret.getOffset());
+                    int j = caret.getOffset() - 1;
+                    Boolean check = false;
+                    for(; j > 0; j --){
+                        if(Character.isLetterOrDigit(text.charAt(j)) ^ Character.isLetterOrDigit(tempChar) && check) {
+                            break;
+                        }
+                        else if(Character.isLetterOrDigit(text.charAt(j)) ^ Character.isLetterOrDigit(tempChar)) {
+                            check = true;
+                            tempChar = text.charAt(j);
+                        }
+                        else{
+                            tempChar = text.charAt(j);
+                        }
+                    }
+                    caret.moveToOffset(j + 1);
+                }
                 //editor.getCaretModel().getCurrentCaret().moveToOffset(.getStartOffset());
                 editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
             }
@@ -601,6 +642,7 @@ public class EditorTypedHandler implements TypedActionHandler {
      * the command and find the node that the argument given is representing. And then,
      * it collapses the node if the node's child nodes are unfolded.
      * @param currentCommandInput the input command from the command mode
+     *
      */
     private void handleFoldByTree(String currentCommandInput) {
         currentCommandInput = currentCommandInput.substring(5);
