@@ -41,7 +41,8 @@ public class EditorTypedHandler implements TypedActionHandler {
     private String recentDeletedString = null;
     private String clipBoard = "";
     private Integer multiExecute = 0;
-    private int initialVisualOffset = 0;
+    private int initialVisualOffsetStart = 0;
+    private int initialVisualOffsetEnd = 0;
 
 
     /** Getter, setter methods */
@@ -137,14 +138,15 @@ public class EditorTypedHandler implements TypedActionHandler {
                     setStoredChar('v');
                     VIMMode.setMode(VIMMode.modeType.VISUAL);
                     modeViewer(editor);
-                    initialVisualOffset = caret.getOffset();
+                    initialVisualOffsetStart = caret.getOffset();
                     break;
                 case 'V':
                     setStoredChar('V');
                     VIMMode.setMode(VIMMode.modeType.VISUAL);
                     modeViewer(editor);
-                    initialVisualOffset = caret.getVisualLineStart();
-                    editor.getSelectionModel().setSelection(initialVisualOffset, caret.getVisualLineEnd());
+                    initialVisualOffsetStart = caret.getVisualLineStart();
+                    initialVisualOffsetEnd = caret.getVisualLineEnd();
+                    editor.getSelectionModel().setSelection(initialVisualOffsetStart, initialVisualOffsetEnd);
                     break;
                 case 'i':
                 case 'I':
@@ -169,10 +171,13 @@ public class EditorTypedHandler implements TypedActionHandler {
                     moveCursor(charTyped, editor);
                     modeViewer(editor);
                     if(getStoredChar() == 'v'){
-                        editor.getSelectionModel().setSelection(initialVisualOffset, caret.getOffset());
+                        editor.getSelectionModel().setSelection(initialVisualOffsetStart, caret.getOffset());
                     }
                     else if(getStoredChar() == 'V'){
-                        editor.getSelectionModel().setSelection(initialVisualOffset, caret.getVisualLineEnd());
+                        if(initialVisualOffsetStart < caret.getVisualLineEnd())
+                            editor.getSelectionModel().setSelection(initialVisualOffsetStart, caret.getVisualLineEnd());
+                        else
+                            editor.getSelectionModel().setSelection(caret.getVisualLineStart(), initialVisualOffsetEnd);
                     }
                     break;
                 case 'd':
