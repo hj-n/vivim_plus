@@ -32,7 +32,7 @@ import java.util.*;
  * mouse events for Method and Field nodes, and shows the corresponding methods or fields in the editor. Finally,
  * whenever the underlying project changes, the corresponding node of the tree GUI is automatically chosen.
  */
-class ProjectStructureTree extends Tree {
+public class ProjectStructureTree extends Tree {
 
     private static final Icon projectIcon = MetalIconFactory.getTreeHardDriveIcon();
     private static final Icon packageIcon = MetalIconFactory.getTreeFolderIcon();
