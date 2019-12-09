@@ -2,17 +2,12 @@ package project_Team7.TypedHandler;
 
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.*;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.JBPopupListener;
 import com.intellij.openapi.ui.popup.LightweightWindowEvent;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
-import project_Team7.ProjectStructureTree;
+import project_Team7.HandlerMap.CommandHandlerMap;
 import project_Team7.VIMMode;
 
 import javax.swing.*;
@@ -20,6 +15,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Map;
 
 import static project_Team7.EditorTypedHandler.*;
 
@@ -31,6 +27,8 @@ public class CommandMapHandler implements TypedHandler {
     private ArrayList<Integer> searchList = new ArrayList<>();
     private int currentIndex;
     private JPanel commandPanel = null;
+    private Map<String, CommandHandler> handlerMap = CommandHandlerMap.getMap();
+    private boolean isSearch = false;
 
     @Override
     public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {
@@ -74,8 +72,9 @@ public class CommandMapHandler implements TypedHandler {
         popup.setRequestFocus(true);
         popup.setSize(new Dimension(editor.getComponent().getWidth(), 10));
         popup.showUnderneathOf(editor.getComponent());
-        // As our vim plugin creates new popup each time the user enters COMMAND MODE,
-        // it also defines new listeners every time.
+        /** As our vim plugin creates new popup each time the user enters COMMAND MODE,
+         *it also defines new listeners every time.
+         */
         popup.addListener(new JBPopupListener() {
             @Override
             public void onClosed(@NotNull LightweightWindowEvent event) {
@@ -140,42 +139,22 @@ public class CommandMapHandler implements TypedHandler {
     private void handleCommands(Editor editor) {
         String currentCommandInput = currentCommand;
         int spaceIndex = currentCommandInput.indexOf(" ");
-        if(spaceIndex > 0) {      // Commands with function & argument (ex) move 9-1)
-            if(currentCommandInput.substring(0, 4).equals("move")) {
-                handleMoveByTree(currentCommandInput);
-            }
-            else if(currentCommandInput.substring(0, 6).equals("unfold")) {
-                handleUnfoldByTree(currentCommandInput);
-            }
-            else if(currentCommandInput.substring(0, 4).equals("fold")) {
-                handleFoldByTree(currentCommandInput);
-            }
-            else if(currentCommandInput.substring(0, 4).equals("show")) {
-                handleCodeSegment(currentCommandInput,true, editor);
-            }
-            else if(currentCommandInput.substring(0, 4).equals("hide")) {
-                handleCodeSegment(currentCommandInput, false, editor);
-            }
-
+        System.out.println(spaceIndex); //debugging
+        String key;
+        if(isSearch) {
+            key = "/";
         }
-        else { // Commands consists with shortcut, not yet implemented
-            if(currentCommandInput.equals("w")){
-                handleSaveFile(currentCommandInput, editor);
-            }
-            else if(currentCommandInput.equals("q")){
-                handleCloseFile(currentCommandInput, editor);
-            }
-            else if(currentCommandInput.equals("q!")){
-                handleForceCloseFile(currentCommandInput, editor);
-            }
-            else if(currentCommandInput.equals("wq")){
-                handleSaveCloseFile(currentCommandInput, editor);
-            }
-            else if(isNatural(currentCommandInput)){
-                handleMoveLine((int) Integer.parseInt(currentCommandInput), editor);
-            }
+        else if(spaceIndex > 0) {      // Commands with function & argument (ex) move 9-1)
+            key = currentCommandInput.substring(0, spaceIndex);
         }
-
+        else {
+            key = currentCommandInput;
+        }
+        if(handlerMap.containsKey(key))
+            handlerMap.get(key).executeCommand(currentCommandInput, editor);
+        else if(isNatural(currentCommandInput)){
+            handleMoveLine(Integer.parseInt(currentCommandInput), editor);
+        }
         setProperCursorShape(editor);
     }
 
@@ -191,124 +170,6 @@ public class CommandMapHandler implements TypedHandler {
             return false;
         }
         return true;
-    }
-
-    /**
-     * When the user types "move" function command in the COMMAND MODE, it parses
-     * the command and find the node that the argument given is representing. And then,
-     * it navigates the editor to the location that the code corresponding
-     * to the node is placed in.
-     * For example, if class A corresponds to identifier 9, the user can move to it
-     * by typing "move 9".
-     * @param currentCommandInput the input command from the command mode
-     */
-    private void handleMoveByTree(String currentCommandInput) {
-        currentCommandInput = currentCommandInput.substring(5);
-        if(ProjectStructureTree.getIdentifierToElement().containsKey(currentCommandInput)) {
-            ((PsiDocCommentOwner) ProjectStructureTree.getIdentifierToElement().get(currentCommandInput)).navigate(true);
-            VIMMode.setMode(VIMMode.modeType.NORMAL);
-        }
-    }
-
-    /**
-     * When the user types "unfold" function command in the COMMAND MODE, it parses
-     * the command and find the node that the argument given is representing. And then,
-     * if unfolds the node in the tree structure.
-     * @param currentCommandInput the input command from the command mode
-     */
-    private void handleUnfoldByTree(String currentCommandInput) {
-        currentCommandInput = currentCommandInput.substring(7);
-        if(ProjectStructureTree.getIdentifierToElement().containsKey(currentCommandInput)) {
-            PsiElement element = (PsiElement) ProjectStructureTree.getIdentifierToElement().get(currentCommandInput);
-            System.out.println(element.getChildren().length);
-            if(element instanceof PsiClass) {
-                if(((PsiClass) element).getFields().length != 0)
-                    ProjectStructureTree.thisTree.publicUpdateTree(((PsiClass) element).getFields()[0]);
-                else if((((PsiClass) element).getMethods()).length != 0)
-                    ProjectStructureTree.thisTree.publicUpdateTree(((PsiClass) element).getMethods()[0]);
-                else
-                    ProjectStructureTree.thisTree.publicUpdateTree(element);
-            }
-            else {
-                ProjectStructureTree.thisTree.publicUpdateTree(element);
-            }
-            VIMMode.setMode(VIMMode.modeType.NORMAL);
-        }
-    }
-
-    /**
-     * When the user types "fold" function command in the COMMAND MODE, it parses
-     * the command and find the node that the argument given is representing. And then,
-     * it collapses the node if the node's child nodes are unfolded.
-     * @param currentCommandInput the input command from the command mode
-     *
-     */
-    private void handleFoldByTree(String currentCommandInput) {
-        currentCommandInput = currentCommandInput.substring(5);
-        if(ProjectStructureTree.getIdentifierToElement().containsKey(currentCommandInput)) {
-            PsiElement element = (PsiElement) ProjectStructureTree.getIdentifierToElement().get(currentCommandInput);
-            ProjectStructureTree.thisTree.collapseTree(element);
-            VIMMode.setMode(VIMMode.modeType.NORMAL);
-        }
-    }
-    private void handleCodeSegment(String currentCommandInput, boolean isShowing, Editor editor){
-        currentCommandInput = currentCommandInput.substring(5);
-        int rowNum;
-        if(isNatural(currentCommandInput)) {
-            rowNum = Integer.parseInt(currentCommandInput);
-            for (FoldRegion f : editor.getFoldingModel().getAllFoldRegions()) {
-                if (editor.getDocument().getLineNumber(f.getStartOffset()) + 1 == rowNum && f.isExpanded() == !isShowing) {
-                    editor.getFoldingModel().runBatchFoldingOperation(() -> f.setExpanded(isShowing));
-                    editor.getCaretModel().getCurrentCaret().moveToOffset(f.getStartOffset());
-                    editor.getScrollingModel().scrollToCaret(ScrollType.CENTER_UP);
-                }
-            }
-        }
-
-    }
-
-
-    private void handleSaveFile(String currentCommandInput, Editor editor){
-        FileEditorManager fileEditorManager = FileEditorManager.getInstance(editor.getProject());
-        VirtualFile files[] = fileEditorManager.getSelectedFiles();
-        PsiFile file = PsiManager.getInstance(editor.getProject()).findFile(files[0]);
-        FileDocumentManager.getInstance().saveDocument(PsiDocumentManager.getInstance(editor.getProject()).getDocument(file));
-        VIMMode.setMode(VIMMode.modeType.NORMAL);
-    }
-
-    private void handleCloseFile(String currentCommandInput, Editor editor){
-
-        FileEditorManager fileEditorManager = FileEditorManager.getInstance(editor.getProject());
-        VirtualFile files[] = fileEditorManager.getSelectedFiles();
-        PsiFile file = PsiManager.getInstance(editor.getProject()).findFile(files[0]);
-        if(FileDocumentManager.getInstance().isDocumentUnsaved(PsiDocumentManager.getInstance(editor.getProject()).getDocument(file))) {
-            String array[] = new String[1];
-            array[0] = "OK";
-            Messages.showDialog("file unsaved", "NOTIFICATION", array, 0, Messages.getWarningIcon());
-        }
-        else {
-            fileEditorManager.closeFile(files[0]);
-        }
-        VIMMode.setMode(VIMMode.modeType.NORMAL);
-    }
-
-    private void handleForceCloseFile(String currentCommandInput, Editor editor){
-
-        FileEditorManager fileEditorManager = FileEditorManager.getInstance(editor.getProject());
-        VirtualFile files[] = fileEditorManager.getSelectedFiles();
-        PsiFile file = PsiManager.getInstance(editor.getProject()).findFile(files[0]);
-        fileEditorManager.closeFile(files[0]);
-        VIMMode.setMode(VIMMode.modeType.NORMAL);
-    }
-
-    private void handleSaveCloseFile(String currentCommandInput, Editor editor){
-
-        FileEditorManager fileEditorManager = FileEditorManager.getInstance(editor.getProject());
-        VirtualFile files[] = fileEditorManager.getSelectedFiles();
-        PsiFile file = PsiManager.getInstance(editor.getProject()).findFile(files[0]);
-        FileDocumentManager.getInstance().saveDocument(PsiDocumentManager.getInstance(editor.getProject()).getDocument(file));
-        fileEditorManager.closeFile(files[0]);
-        VIMMode.setMode(VIMMode.modeType.NORMAL);
     }
 
     private void handleMoveLine(int rowNum, Editor editor){
@@ -337,7 +198,6 @@ public class CommandMapHandler implements TypedHandler {
         currentIndex = searchList.size() - 1;
         VIMMode.setMode(VIMMode.modeType.NORMAL);
         focusNextSearchString(editor, true);
-
     }
 
 

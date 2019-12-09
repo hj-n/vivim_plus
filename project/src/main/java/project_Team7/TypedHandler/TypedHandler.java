@@ -6,7 +6,6 @@ import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.ui.awt.RelativePoint;
 import org.jetbrains.annotations.NotNull;
-import project_Team7.EditorTypedHandler;
 import project_Team7.VIMMode;
 
 public interface TypedHandler {

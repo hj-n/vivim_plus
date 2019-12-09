@@ -13,6 +13,7 @@ import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 
+import project_Team7.HandlerMap.TypedHandlerMap;
 import project_Team7.TypedHandler.TypedHandler;
 
 import java.awt.*;
@@ -27,7 +28,7 @@ public class EditorTypedHandler implements TypedActionHandler {
     private String recentDeletedString = null;
     private static Integer multiExecute = 0;
 
-    private Map<Pair<String, Character>, TypedHandler> handlers = HandlerMapCreator.createHandlerMap();
+    private Map<Pair<String, Character>, TypedHandler> handlerMap = TypedHandlerMap.getMap();
 
     public EditorTypedHandler() {
     }
@@ -92,8 +93,8 @@ public class EditorTypedHandler implements TypedActionHandler {
             normalModeControl(editor, charTyped, caret);
         }
         //added
-        if(handlers.containsKey(new Pair<>(VIMMode.getModeToString(),charTyped)))
-            handlers.get(new Pair<>(VIMMode.getModeToString(),charTyped)).execute(editor, charTyped, dataContext); //I will use this
+        if(handlerMap.containsKey(new Pair<>(VIMMode.getModeToString(),charTyped)))
+            handlerMap.get(new Pair<>(VIMMode.getModeToString(),charTyped)).execute(editor, charTyped, dataContext); //I will use this
 
         /** Set correct cursor shape for each mode */
         setProperCursorShape(editor);
