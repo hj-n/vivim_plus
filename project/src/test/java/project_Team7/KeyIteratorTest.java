@@ -3,7 +3,11 @@ package project_Team7;
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 
-import org.testng.annotations.Test;
+// for widnow
+// import org.testng.annotations.Test;
+
+// for linux
+import org.junit.jupiter.api.Test;
 
 
 
