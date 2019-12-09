@@ -118,18 +118,7 @@ public class EditorTypedHandler implements TypedActionHandler {
                 multiExecute = Integer.parseInt(charTyped+"");
             }
         }
-
-//        VIMMode.setMode(VIMMode.modeType.NORMAL);
         modeViewer(editor);
-        switch(charTyped) {
-
-            case 'f':      // should change to uml window
-                Component component = TreeWindowFactory.getToolWindow().getComponent();
-                component.transferFocus();
-                VIMMode.setMode(VIMMode.modeType.NORMAL);
-                modeViewer(editor);
-
-        }
     }
 
 
