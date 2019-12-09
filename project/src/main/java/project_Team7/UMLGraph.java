@@ -29,6 +29,7 @@ public class UMLGraph extends mxGraphComponent {
      * implementation, we can access this graph in other objects.
      */
     public static UMLGraph thisGraph;
+    public Project project;
 
     /**
      * Each psiclass, psimethod, psifield  are shown with their keys on the project structure window.
@@ -49,15 +50,18 @@ public class UMLGraph extends mxGraphComponent {
         // TODO: reflect code uml information
         // TODO: add keyboard or mouse click events
         super(new mxGraph());
-        getGraph().setModel(UMLGraphModelFactory.createUMLGraphModel(project));
+
 
         thisGraph = this;
         strToClass = new HashMap<>();
         classToStr = new HashMap<>();
         currentStrToClass = new HashMap<>();
         currentClassToStr = new HashMap<>();
+        this.project = project;
 
         updateClassMap(project);
+
+        getGraph().setModel(UMLGraphModelFactory.createUMLGraphModel(project,currentClassToStr));
 
         /* Set a Psi tree change listener to handle changes in the project. We provide code for obtaining an instance
           of PsiField, PsiMethod, PsiClass, or PsiPackage. Implement the updateTree method below.
@@ -77,7 +81,9 @@ public class UMLGraph extends mxGraphComponent {
             public void childReplaced(@NotNull PsiTreeChangeEvent event) {
                 getTargetElement(event).ifPresent(target -> updateGraph(project, target));
             }
+
         });
+        addKeyListener(new MyKeyAdapter(strToClass, classToStr, currentStrToClass, currentClassToStr, this));
     }
 
     /**
@@ -90,7 +96,7 @@ public class UMLGraph extends mxGraphComponent {
      * @param target  a target element
      */
     private void updateGraph(@NotNull Project project, @NotNull PsiElement target) {
-        getGraph().setModel(UMLGraphModelFactory.createUMLGraphModel(project));
+        getGraph().setModel(UMLGraphModelFactory.createUMLGraphModel(project, currentClassToStr));
         updateClassMap(project);
     }
 

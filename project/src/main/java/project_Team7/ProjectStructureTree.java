@@ -73,14 +73,6 @@ public class ProjectStructureTree extends Tree {
     ProjectStructureTree(@NotNull Project project) {
         setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
 
-        thisTree = this;
-        strToClass = new HashMap<>();
-        classToStr = new HashMap<>();
-        currentStrToClass = new HashMap<>();
-        currentClassToStr = new HashMap<>();
-
-        updateClassMap(project);
-
         /** Set a cell renderer to display the name and icon of each node */
         setCellRenderer(new ColoredTreeCellRenderer() {
             @Override
@@ -113,16 +105,16 @@ public class ProjectStructureTree extends Tree {
                 }
                 else if(element instanceof PsiClass) {
                     setIcon(classIcon);
-                    append(identifier +" : " + ((PsiClass) element).getName() + " " +StringUtils.defaultString(currentClassToStr.get(element)));
+                    append(identifier +" : " + ((PsiClass) element).getName());
                 }
                 else if(element instanceof PsiMethod) {
                     setIcon(methodIcon);
-                    append(identifier +" : " + ((PsiMethod) element).getName() + " " +StringUtils.defaultString(currentClassToStr.get(element)));
+                    append(identifier +" : " + ((PsiMethod) element).getName());
 
                 }
                 else if(element instanceof PsiField) {
                     setIcon(fieldIcon);
-                    append(identifier +" : " + ((PsiField) element).getName() + " " +StringUtils.defaultString(currentClassToStr.get(element)));
+                    append(identifier +" : " + ((PsiField) element).getName());
                 }
                 else {
                     setIcon(defaultIcon);
@@ -131,8 +123,6 @@ public class ProjectStructureTree extends Tree {
             }
         });
 
-        /** Set key listener to get the character that user typed and navigate to the psielement. */
-        addKeyListener(new MyKeyAdapter(strToClass, classToStr, currentStrToClass, currentClassToStr, this));
 
         /** Set a mouse listener to handle double-click events */
         addMouseListener(new MouseAdapter() {
@@ -185,7 +175,6 @@ public class ProjectStructureTree extends Tree {
     private void updateTree(@NotNull Project project, @NotNull PsiElement target) {
         // TODO: implement this method
         setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
-        updateClassMap(project);
         publicUpdateTree(target);
     }
 
@@ -240,64 +229,6 @@ public class ProjectStructureTree extends Tree {
         return Optional.empty();
     }
 
-    /**
-     * Update shortcut maps if files are added, deleted or renamed.
-     * @param project
-     */
-    public void updateClassMap(Project project) {
-        /** Clean the map before reconstruct map */
-        final Integer[] count = {0};
-        KeyIterator it = new KeyIterator();
-        strToClass.clear();
-        classToStr.clear();
-        currentClassToStr.clear();
-        currentStrToClass.clear();
-
-
-        /** The visitor to traverse the Java hierarchy and to construct the map */
-        final JavaElementVisitor visitor = new JavaElementVisitor() {
-
-            @Override
-            public void visitPackage(PsiPackage pack) {
-                for(PsiClass Class : pack.getClasses()) {
-                    Class.accept(this);
-                }
-                for(PsiPackage Package : pack.getSubPackages()) {
-                    Package.accept(this);
-                }
-            }
-
-            @Override
-            public void visitClass(PsiClass aClass) {
-                String s = it.next();
-                classToStr.put(aClass, s);
-                strToClass.put(s, aClass);
-                for(PsiElement Child : aClass.getChildren()){
-                    Child.accept(this);
-                }
-            }
-            @Override
-            public void visitMethod(PsiMethod method) {
-                String s = it.next();
-                classToStr.put(method, s);
-                strToClass.put(s, method);
-            }
-
-            @Override
-            public void visitField(PsiField field) {
-                String s = it.next();
-                classToStr.put(field, s);
-                strToClass.put(s, field);
-            }
-        };
-
-        /** Apply the visitor for each root package in the source directory
-         *  and update remain shortcut maps from the maps already construct.
-         */
-        getRootPackages(project).forEach(aPackage -> aPackage.accept(visitor));
-        currentClassToStr.putAll(classToStr);
-        currentStrToClass.putAll(strToClass);
-    }
 
     /**
      * Returns the root package(s) in the source directory of a project. The default package will not be considered, as

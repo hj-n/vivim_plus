@@ -5,6 +5,7 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.psi.*;
 import com.intellij.openapi.project.Project;
 import com.mxgraph.model.*;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 
@@ -19,7 +20,7 @@ class UMLGraphModelFactory {
      * @param project a project
      * @return a graph model to describe the uml diagram of project
      */
-    public static mxIGraphModel createUMLGraphModel(Project project) {
+    public static mxIGraphModel createUMLGraphModel(Project project, HashMap<PsiElement, String> currentClassToStr) {
         // TODO: draw arrows
         // TODO: add expand/collapse feature
         // TODO: add navigating feature
@@ -154,7 +155,7 @@ class UMLGraphModelFactory {
             @Override
             public void visitClass(PsiClass aClass) {
                 // create new vertex
-                mxCell newChild = (mxCell) createVertex(aClass.getName(), parent);
+                mxCell newChild = (mxCell) createVertex(aClass.getName()+ " " + StringUtils.defaultString(currentClassToStr.get(aClass)), parent);
 
                 // create new edge
                 createEdge(parent, newChild);
@@ -181,7 +182,7 @@ class UMLGraphModelFactory {
 
             private void visitLeaf(PsiNameIdentifierOwner element) {
                 // create new vertex
-                mxCell newChild = (mxCell) createVertex(element.getName(), parent);
+                mxCell newChild = (mxCell) createVertex(element.getName() + " " + StringUtils.defaultString(currentClassToStr.get(element)), parent);
 
                 // create new edge
                 createEdge(parent, newChild);

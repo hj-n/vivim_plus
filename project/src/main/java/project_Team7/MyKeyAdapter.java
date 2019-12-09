@@ -16,18 +16,18 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
     private HashMap<PsiElement, String> classToStr;
     private HashMap<String, PsiElement> currentStrToClass;
     private HashMap<PsiElement, String> currentClassToStr;
-    private ProjectStructureTree projectTree;
+    private UMLGraph graph;
 
     /** Construct MyKeyAdapter by reference maps of shortcuts and project tree of ProjectStructureTree.java */
     MyKeyAdapter(HashMap <String, PsiElement> strMap,  HashMap <PsiElement, String> classMap,
                  HashMap <String, PsiElement> curStrMap,  HashMap <PsiElement, String> curClassMap,
-                 ProjectStructureTree tree) {
+                 UMLGraph graph) {
         super();
         strToClass = strMap;
         classToStr = classMap;
         currentStrToClass = curStrMap;
         currentClassToStr = curClassMap;
-        projectTree = tree;
+        this.graph = graph;
     }
 
     @Override
@@ -49,13 +49,7 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
                     currentClassToStr.replace(key, currentClassToStr.get(key).substring(1));
                 }
             }
-            /** This part get first string of the map for render the tree */
-            String firstKey = "";
-            for (String key: currentClassToStr.values())
-            {
-                firstKey = key;
-                break;
-            }
+
             /** This part recover currentClassToStr if all shortcuts are erased */
             if(currentClassToStr.isEmpty()) {
                 for (String key : currentStrToClass.keySet()) {
@@ -69,7 +63,7 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
                     currentStrToClass.put(currentClassToStr.get(key), key);
                 }
                 /** Call updatetree to render the tree */
-                projectTree.publicUpdateTree(currentStrToClass.get(firstKey));
+                graph.getGraph().setModel(UMLGraphModelFactory.createUMLGraphModel(graph.project,currentClassToStr));
             }
 
         }
