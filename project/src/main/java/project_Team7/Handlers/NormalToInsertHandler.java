@@ -1,10 +1,9 @@
-package project_Team7.TypedHandler;
+package project_Team7.Handlers;
 
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import org.jetbrains.annotations.NotNull;
-import project_Team7.EditorTypedHandler;
 import project_Team7.InsertModeHandler;
 import project_Team7.VIMMode;
 

@@ -1,7 +1,6 @@
 package project_Team7.HandlerMap;
 
-import project_Team7.TypedHandler.CommandHandler;
-import project_Team7.TypedHandler.TreeHandler;
+import project_Team7.Handlers.CommandHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,14 +11,13 @@ public class CommandHandlerMap extends BaseHandlerMap {
 
     private CommandHandlerMap() {
         commandHandlerMap = new HashMap<>();
-        CommandHandler handler;
         commandHandlerMap.putAll(createPartMap(new String[]{"move","fold","unfold"}, treeHandler));
         commandHandlerMap.putAll(createPartMap(new String[]{"show","hide"}, codeSegmentHandler));
         commandHandlerMap.putAll(createPartMap(new String[]{"w","q","wq","!q"}, fileHandler));
+        commandHandlerMap.putAll(createPartMap(new String[]{"/"}, searchStringHandler));
     }
 
     static public Map<String, CommandHandler> getMap() {
-
         return uniqueInstance.commandHandlerMap;
     }
 

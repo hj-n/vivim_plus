@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 import project_Team7.HandlerMap.TypedHandlerMap;
-import project_Team7.TypedHandler.TypedHandler;
+import project_Team7.Handlers.TypedHandler;
 
 import java.awt.*;
 import java.util.Map;
@@ -174,5 +174,4 @@ public class EditorTypedHandler implements TypedActionHandler {
         return true;
     }
     /** end of helpers */
-
 }

@@ -1,4 +1,4 @@
-package project_Team7.TypedHandler;
+package project_Team7.Handlers;
 
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;

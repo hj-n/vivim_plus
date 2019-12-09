@@ -1,7 +1,7 @@
 package project_Team7.HandlerMap;
 
 import javafx.util.Pair;
-import project_Team7.TypedHandler.*;
+import project_Team7.Handlers.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,25 +13,18 @@ public class TypedHandlerMap extends BaseHandlerMap {
 
     private TypedHandlerMap() {
         typedHandlerMap = new HashMap<>();
-        TypedHandler handler;
         typedHandlerMap.put(new Pair<>("NORMAL MODE",'t'), treeHandler);
-        typedHandlerMap.putAll(createPartMap("NORMAL MODE",
-                new char[]{'i', 'I','a','A','o','O'}, new NormalToInsertHandler()));
-
-        handler = new CursorVisualHandler();
-        typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{'v', 'V','h','j','k','l','$','w','b'}, handler));
-        typedHandlerMap.putAll(createPartMap("VISUAL MODE", new char[]{'h','j','k','l','$','w','b'}, handler));
-
-        handler = new TextEditHandler();
-        typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{'d','y','p','P'}, handler));
-        typedHandlerMap.putAll(createPartMap("VISUAL MODE", new char[]{'d','y','p','P'}, handler));
-
-        typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{'J','K'}, new MoveOpenTabHandler()));
-        typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{':','/','n','N'}, new CommandMapHandler()));
+        typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{'i', 'I','a','A','o','O'}, normalToInsertHandler));
+        typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{'v', 'V','h','j','k','l','$','w','b'}, cursorVisualHandler));
+        typedHandlerMap.putAll(createPartMap("VISUAL MODE", new char[]{'h','j','k','l','$','w','b'}, cursorVisualHandler));
+        typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{'d','y','p','P'}, textEditHandler));
+        typedHandlerMap.putAll(createPartMap("VISUAL MODE", new char[]{'d','y','p','P'}, textEditHandler));
+        typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{'J','K'}, moveOpenTabHandler));
+        typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{':','/'}, commandMapHandler));
+        typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{'n','N'}, searchStringHandler));
     }
 
     static public Map<Pair<String, Character>, TypedHandler> getMap() {
-
         return uniqueInstance.typedHandlerMap;
     }
 
