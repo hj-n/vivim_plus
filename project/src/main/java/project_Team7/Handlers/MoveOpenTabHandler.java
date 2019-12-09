@@ -5,7 +5,11 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
+import project_Team7.InsertModeHandler;
 import project_Team7.VIMMode;
+
+import java.awt.event.KeyListener;
+import java.util.EventListener;
 
 import static project_Team7.EditorTypedHandler.getMultiExecute;
 import static project_Team7.EditorTypedHandler.setMultiExecute;
@@ -54,6 +58,10 @@ public class MoveOpenTabHandler implements TypedHandler {
             }
             VIMMode.setMode(VIMMode.modeType.NORMAL);
             modeViewer(manager.getSelectedTextEditor());
+            if(manager.getSelectedTextEditor().getContentComponent().getKeyListeners().length == 2) {
+                System.out.println("here is moveTab ");
+                InsertModeHandler.addKeyListener(manager.getSelectedTextEditor());
+            }
         }
         setMultiExecute(0);
     }

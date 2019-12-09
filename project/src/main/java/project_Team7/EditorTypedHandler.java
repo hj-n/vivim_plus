@@ -26,7 +26,7 @@ public class EditorTypedHandler implements TypedActionHandler {
     private static char storedChar = 'x';
     private InsertModeHandler myInsertModeHandler = new InsertModeHandler();
     private boolean hasDocumentListener = false;
-    private String recentDeletedString = null;
+    private static String recentDeletedString = null;
     private static Integer multiExecute = 0;
 
     private Map<Pair<String, Character>, TypedHandler> handlerMap = TypedHandlerMap.getMap();
@@ -35,7 +35,7 @@ public class EditorTypedHandler implements TypedActionHandler {
     }
 
 
-    public String getRecentDeletedString() {
+    public static String getRecentDeletedString() {
         return recentDeletedString;
     }
 
@@ -79,10 +79,11 @@ public class EditorTypedHandler implements TypedActionHandler {
                     setRecentDeletedString(event.getOldFragment().toString());
                 }
             });
+            VIMMode.setMode(VIMMode.modeType.NORMAL);
             hasDocumentListener = true;
         }
         /** add listener to detect ESC, BACKSPACE, and ENTER input */
-        myInsertModeHandler.addKeyListener(editor, this);
+        myInsertModeHandler.addKeyListener(editor);
 
         Caret caret = editor.getCaretModel().getCurrentCaret();
         if(getStoredChar() == 'i'){     /** INSERT MODE */
@@ -118,7 +119,7 @@ public class EditorTypedHandler implements TypedActionHandler {
             }
         }
 
-        VIMMode.setMode(VIMMode.modeType.NORMAL);
+//        VIMMode.setMode(VIMMode.modeType.NORMAL);
         modeViewer(editor);
         switch(charTyped) {
 

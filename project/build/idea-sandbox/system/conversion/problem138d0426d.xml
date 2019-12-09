@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<conversion>
+  <applied-converters>
+    <converter id="android-module-to-java-module" />
+    <converter id="android-proguard-options" />
+    <converter id="android-sdk-library" />
+    <converter id="junit-to-android-junit-configurations" />
+    <converter id="kotlin-non-jvm-source-roots" />
+  </applied-converters>
+  <project-files>
+    <file path="/Users/yoonsookim/Desktop/problem1/.idea/libraries/gradle_wrapper.xml" timestamp="1575897037295" />
+    <file path="/Users/yoonsookim/Desktop/problem1/.idea/libraries/problem1_1_0_SNAPSHOT.xml" timestamp="1575897037298" />
+    <file path="/Users/yoonsookim/Desktop/problem1/.idea/misc.xml" timestamp="1575897037280" />
+    <file path="/Users/yoonsookim/Desktop/problem1/.idea/modules.xml" timestamp="1575897037283" />
+    <file path="/Users/yoonsookim/Desktop/problem1/.idea/workspace.xml" timestamp="1575897100030" />
+    <file path="/Users/yoonsookim/Desktop/problem1/src/main/main.iml" timestamp="1575897037260" />
+    <file path="/Users/yoonsookim/Desktop/problem1/src/test/test.iml" timestamp="1575897037268" />
+  </project-files>
+</conversion>
+

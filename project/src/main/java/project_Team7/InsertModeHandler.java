@@ -13,10 +13,9 @@ import java.awt.event.KeyListener;
 
 public class InsertModeHandler {
 
-    private boolean isESC;
+    private static boolean isESC;
     private String input = null;
-    VisualPosition visualPosition;
-    private static boolean addedKeyListener = false;
+    static VisualPosition visualPosition;
     private static boolean enteredAfterInsertion = false;
 
     public static void setEnteredAfterInsertion(boolean enteredAfterInsertion) {
@@ -27,10 +26,9 @@ public class InsertModeHandler {
     /**
      * Add key listener for the input of ENTER, BACKSPACE, and ESC.
      * @param editor Opened editor
-     * @param parentHandler main handler. The class (object) which called this function
      */
-    public void addKeyListener(@NotNull Editor editor, EditorTypedHandler parentHandler) {
-        if (!addedKeyListener) {
+    public static void addKeyListener(@NotNull Editor editor) {
+        if (editor.getContentComponent().getKeyListeners().length == 2) {
             Caret caret = editor.getCaretModel().getPrimaryCaret();
             final Document document = editor.getDocument();
             final Project project = editor.getProject();
@@ -49,17 +47,19 @@ public class InsertModeHandler {
                         if(VIMMode.getModeToString() == "VISUAL MODE"){
                             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                                 /** Store arbitrary charecter 'x' for recovering initial condition */
-                                parentHandler.setStoredChar('x');
+                                EditorTypedHandler.setStoredChar('x');
                                 VIMMode.setMode(VIMMode.modeType.NORMAL);
+                                System.out.println("here is esc");
                                 editor.getSelectionModel().removeSelection();
                             }
                         }
                         else if (VIMMode.getModeToString() == "INSERT MODE") {    /** When INSERT MODE */
                             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                                if (parentHandler.getStoredChar() != 'x')
+                                if (EditorTypedHandler.getStoredChar() != 'x')
                                     editor.getSettings().setBlockCursor(true);
                                 /** Store arbitrary charecter 'x' for recovering initial condition */
-                                parentHandler.setStoredChar('x');
+                                System.out.println("here is insert esc");
+                                EditorTypedHandler.setStoredChar('x');
                                 isESC = true;
                                 VIMMode.setMode(VIMMode.modeType.NORMAL);
                             } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -78,7 +78,7 @@ public class InsertModeHandler {
                         else {   /** When NORMAL MODE : Immediately undo the things that BACKSPACE and ENTER did */
                             if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
                                 visualPosition = new VisualPosition(caret.getVisualPosition().getLine(), caret.getVisualPosition().getColumn() + 1);
-                                Runnable runnable = () -> document.insertString(caret.getOffset(), parentHandler.getRecentDeletedString());
+                                Runnable runnable = () -> document.insertString(caret.getOffset(), EditorTypedHandler.getRecentDeletedString());
                                 WriteCommandAction.runWriteCommandAction(project, runnable);
                                 caret.moveToVisualPosition(visualPosition);
                             } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -89,7 +89,6 @@ public class InsertModeHandler {
                     } catch (Exception ignored) {}
                 }
             });
-            addedKeyListener = true;
         }
     }
 
