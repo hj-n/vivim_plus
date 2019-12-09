@@ -4,8 +4,6 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.*;
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.openapi.ui.popup.JBPopupListener;
-import com.intellij.openapi.ui.popup.LightweightWindowEvent;
 import org.jetbrains.annotations.NotNull;
 import project_Team7.HandlerMap.CommandHandlerMap;
 import project_Team7.VIMMode;
@@ -95,9 +93,6 @@ public class CommandMapHandler implements TypedHandler {
      * @param editor Opened editor
      */
     private void keyStrokeCommandMode(String command, Editor editor) {
-
-        //commandPanel = new JPanel(new BorderLayout());
-        //JTextField textField = new JTextField(command);
         this.editor = editor;
         this.command = command;
         textField.setText(command);
@@ -128,14 +123,15 @@ public class CommandMapHandler implements TypedHandler {
         else if(spaceIndex > 0) {      // Commands with function & argument (ex) move 9-1)
             key = currentCommandInput.substring(0, spaceIndex);
         }
+        else if(isNatural(currentCommandInput)) {
+            key = " ";
+        }
         else {
             key = currentCommandInput;
         }
         if(handlerMap.containsKey(key))
             handlerMap.get(key).executeCommand(currentCommandInput, editor);
-        else if(isNatural(currentCommandInput)){
-            handleMoveLine(Integer.parseInt(currentCommandInput), editor);
-        }
+
         setProperCursorShape(editor);
     }
 
@@ -152,13 +148,4 @@ public class CommandMapHandler implements TypedHandler {
         }
         return true;
     }
-
-    private void handleMoveLine(int rowNum, Editor editor){
-        Caret caret = editor.getCaretModel().getCurrentCaret();
-        caret.moveToOffset(rowNum);
-        caret.moveToVisualPosition(new VisualPosition(rowNum - 1, 0));
-        editor.getScrollingModel().scrollToCaret(ScrollType.CENTER_UP);
-        System.out.println("rowNum is " + rowNum);
-    }
-
 }

@@ -1,6 +1,7 @@
 package project_Team7.HandlerMap;
 
 import project_Team7.Handlers.CommandHandler;
+import project_Team7.Handlers.MoveLineHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,7 @@ public class CommandHandlerMap extends BaseHandlerMap {
         commandHandlerMap.putAll(createPartMap(new String[]{"show","hide"}, codeSegmentHandler));
         commandHandlerMap.putAll(createPartMap(new String[]{"w","q","wq","!q"}, fileHandler));
         commandHandlerMap.putAll(createPartMap(new String[]{"/"}, searchStringHandler));
+        commandHandlerMap.putAll(createPartMap(new String[]{" "}, moveLineHandler));
     }
 
     static public Map<String, CommandHandler> getMap() {
