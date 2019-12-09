@@ -7,7 +7,7 @@ import project_Team7.EditorTypedHandler;
 import project_Team7.TreeWindowFactory;
 import project_Team7.VIMMode;
 
-public class TreeHandler extends TypedHandler {
+public class TreeOpenHandler implements TypedHandler {
 
     @Override
     public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {

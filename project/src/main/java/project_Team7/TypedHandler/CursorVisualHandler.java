@@ -6,12 +6,11 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.editor.VisualPosition;
 import org.jetbrains.annotations.NotNull;
-import project_Team7.EditorTypedHandler;
 import project_Team7.VIMMode;
 
 import static project_Team7.EditorTypedHandler.*;
 
-public class CursorVisualHandler extends TypedHandler {
+public class CursorVisualHandler implements TypedHandler {
 
     private int initialVisualOffsetStart = 0;
     private int initialVisualOffsetEnd = 0;

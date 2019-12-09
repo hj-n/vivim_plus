@@ -4,12 +4,11 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import org.jetbrains.annotations.NotNull;
-import project_Team7.EditorTypedHandler;
 import project_Team7.VIMMode;
 
 import static project_Team7.EditorTypedHandler.*;
 
-public class TextEditHandler extends TypedHandler {
+public class TextEditHandler implements TypedHandler {
 
     private String clipBoard = "";
 

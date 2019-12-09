@@ -6,11 +6,11 @@ import project_Team7.TypedHandler.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HandlerMapFactory {
+public class HandlerMapCreator {
     static public Map<Pair<String, Character>, TypedHandler> createHandlerMap() {
         Map<Pair<String, Character>, TypedHandler> handlers = new HashMap<>();
         TypedHandler handler;
-        handlers.put(new Pair<>("NORMAL MODE",'t'), new TreeHandler());
+        handlers.put(new Pair<>("NORMAL MODE",'t'), new TreeOpenHandler());
         handlers.putAll(createPartMap("NORMAL MODE",
                 new char[]{'i', 'I','a','A','o','O'}, new NormalToInsertHandler()));
 
@@ -23,7 +23,7 @@ public class HandlerMapFactory {
         handlers.putAll(createPartMap("VISUAL MODE", new char[]{'d','y','p','P'}, handler));
 
         handlers.putAll(createPartMap("NORMAL MODE", new char[]{'J','K'}, new MoveOpenTabHandler()));
-        handlers.putAll(createPartMap("NORMAL MODE", new char[]{':','/','n','N'}, new CommandHandler()));
+        handlers.putAll(createPartMap("NORMAL MODE", new char[]{':','/','n','N'}, new CommandMapHandler()));
         return handlers;
     }
 

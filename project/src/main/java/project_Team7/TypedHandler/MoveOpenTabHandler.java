@@ -5,13 +5,12 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
-import project_Team7.EditorTypedHandler;
 import project_Team7.VIMMode;
 
 import static project_Team7.EditorTypedHandler.getMultiExecute;
 import static project_Team7.EditorTypedHandler.setMultiExecute;
 
-public class MoveOpenTabHandler extends TypedHandler {
+public class MoveOpenTabHandler implements TypedHandler {
     @Override
     public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {
         if(charTyped == 'J')

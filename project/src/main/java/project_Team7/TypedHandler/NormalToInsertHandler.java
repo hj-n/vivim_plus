@@ -11,7 +11,7 @@ import project_Team7.VIMMode;
 import static project_Team7.EditorTypedHandler.setStoredChar;
 
 
-public class NormalToInsertHandler extends TypedHandler {
+public class NormalToInsertHandler implements TypedHandler {
 
     @Override
     public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {

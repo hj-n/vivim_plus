@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import static project_Team7.EditorTypedHandler.*;
 
 
-public class CommandHandler extends TypedHandler {
+public class CommandMapHandler implements TypedHandler {
 
     private String currentCommand = null;
     private String currentSearchingString = null;
@@ -258,12 +258,7 @@ public class CommandHandler extends TypedHandler {
             rowNum = Integer.parseInt(currentCommandInput);
             for (FoldRegion f : editor.getFoldingModel().getAllFoldRegions()) {
                 if (editor.getDocument().getLineNumber(f.getStartOffset()) + 1 == rowNum && f.isExpanded() == !isShowing) {
-                    editor.getFoldingModel().runBatchFoldingOperation(new Runnable() {
-                        @Override
-                        public void run() {
-                            f.setExpanded(isShowing);
-                        }
-                    });
+                    editor.getFoldingModel().runBatchFoldingOperation(() -> f.setExpanded(isShowing));
                     editor.getCaretModel().getCurrentCaret().moveToOffset(f.getStartOffset());
                     editor.getScrollingModel().scrollToCaret(ScrollType.CENTER_UP);
                 }

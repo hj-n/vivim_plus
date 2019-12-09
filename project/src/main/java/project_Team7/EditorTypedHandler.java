@@ -1,34 +1,22 @@
 package project_Team7;
 
-import android.os.SystemPropertiesProto;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
+
 import com.intellij.openapi.ui.popup.JBPopup;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.openapi.ui.popup.JBPopupListener;
-import com.intellij.openapi.ui.popup.LightweightWindowEvent;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
 import com.intellij.ui.awt.RelativePoint;
 import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.ui.Messages;
-import project_Team7.TypedHandler.TreeHandler;
+
+
 import project_Team7.TypedHandler.TypedHandler;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class EditorTypedHandler implements TypedActionHandler {
 
@@ -36,11 +24,10 @@ public class EditorTypedHandler implements TypedActionHandler {
     private static char storedChar = 'x';
     private InsertModeHandler myInsertModeHandler = new InsertModeHandler();
     private boolean hasDocumentListener = false;
-    private String recentTypedString = null;
     private String recentDeletedString = null;
     private static Integer multiExecute = 0;
 
-    private Map<Pair<String, Character>, TypedHandler> handlers = HandlerMapFactory.createHandlerMap();
+    private Map<Pair<String, Character>, TypedHandler> handlers = HandlerMapCreator.createHandlerMap();
 
     public EditorTypedHandler() {
     }
@@ -51,7 +38,6 @@ public class EditorTypedHandler implements TypedActionHandler {
     }
 
     public void setRecentTypedString(String s) {
-        recentTypedString = s;
     }
 
     public void setRecentDeletedString(String s) {

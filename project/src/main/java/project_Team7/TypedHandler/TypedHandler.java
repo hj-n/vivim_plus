@@ -9,8 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import project_Team7.EditorTypedHandler;
 import project_Team7.VIMMode;
 
-public abstract class TypedHandler {
-    abstract public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext);
+public interface TypedHandler {
+
+    void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext);
 
     /**
      * In modern vim plugin, there exists a convention which represents cursor
@@ -20,7 +21,7 @@ public abstract class TypedHandler {
      * @param editor Opened editor
      */
 
-    protected void setProperCursorShape(Editor editor) {
+    default void setProperCursorShape(Editor editor) {
         if(VIMMode.getModeToString() == "INSERT MODE" ) {
             editor.getSettings().setBlockCursor(false);
         }
@@ -33,7 +34,7 @@ public abstract class TypedHandler {
      * This method continuously make popup to show user the current MODE.
      * @param editor Opened editor
      */
-    protected void modeViewer(Editor editor){
+    default void modeViewer(Editor editor){
         JBPopupFactory jbPopupFactory = JBPopupFactory.getInstance();
         JBPopup mes = jbPopupFactory.createMessage(VIMMode.getModeToString());
         mes.setRequestFocus(false);
