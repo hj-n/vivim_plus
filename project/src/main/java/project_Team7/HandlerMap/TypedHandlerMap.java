@@ -1,10 +1,11 @@
 package project_Team7.HandlerMap;
 
-import javafx.util.Pair;
+import com.intellij.openapi.util.Pair;
 import project_Team7.Handlers.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class TypedHandlerMap extends BaseHandlerMap {
 

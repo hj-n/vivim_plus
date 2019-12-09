@@ -3,7 +3,7 @@ package project_Team7;
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 
 
 

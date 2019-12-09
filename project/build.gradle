@@ -16,6 +16,8 @@ repositories {
 dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.5.2"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.5.2"
+    compile group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
+
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
