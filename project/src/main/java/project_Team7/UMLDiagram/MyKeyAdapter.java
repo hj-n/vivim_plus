@@ -1,7 +1,9 @@
-package project_Team7;
+package project_Team7.UMLDiagram;
 
 import com.intellij.psi.*;
 import com.intellij.ui.KeyStrokeAdapter;
+import project_Team7.EditorTypedHandler;
+import project_Team7.VIMMode;
 
 import java.awt.event.KeyEvent;
 import java.util.*;

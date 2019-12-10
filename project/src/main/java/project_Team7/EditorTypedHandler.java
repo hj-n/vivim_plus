@@ -22,7 +22,6 @@ import java.util.Map;
 
 public class EditorTypedHandler implements TypedActionHandler {
 
-
     private static char storedChar = 'x';
     private InsertModeHandler myInsertModeHandler = new InsertModeHandler();
     private boolean hasDocumentListener = false;
@@ -34,13 +33,10 @@ public class EditorTypedHandler implements TypedActionHandler {
     public EditorTypedHandler() {
     }
 
-
     public static String getRecentDeletedString() {
         return recentDeletedString;
     }
 
-    public void setRecentTypedString(String s) {
-    }
 
     public void setRecentDeletedString(String s) {
         recentDeletedString = s;
@@ -75,7 +71,6 @@ public class EditorTypedHandler implements TypedActionHandler {
             editor.getDocument().addDocumentListener(new DocumentListener() {
                 @Override
                 public void documentChanged(@NotNull DocumentEvent event) {
-                    setRecentTypedString(event.getNewFragment().toString());
                     setRecentDeletedString(event.getOldFragment().toString());
                 }
             });
@@ -83,44 +78,20 @@ public class EditorTypedHandler implements TypedActionHandler {
             hasDocumentListener = true;
         }
         /** add listener to detect ESC, BACKSPACE, and ENTER input */
-        myInsertModeHandler.addKeyListener(editor);
+        InsertModeHandler.addKeyListener(editor);
 
-        Caret caret = editor.getCaretModel().getCurrentCaret();
         if(getStoredChar() == 'i'){     /** INSERT MODE */
             VIMMode.setMode(VIMMode.modeType.INSERT);
             modeViewer(editor);
             myInsertModeHandler.execute(editor, charTyped);
         }
-        else{   /** NORMAL MODE */
-            normalModeControl(editor, charTyped, caret);
+        else{   /** NORMAL,VISUAL MODE */
+            if(handlerMap.containsKey(new Pair<>(VIMMode.getModeToString(),charTyped)))
+                handlerMap.get(new Pair<>(VIMMode.getModeToString(),charTyped)).execute(editor, charTyped, dataContext);
         }
-        //added
-        if(handlerMap.containsKey(new Pair<>(VIMMode.getModeToString(),charTyped)))
-            handlerMap.get(new Pair<>(VIMMode.getModeToString(),charTyped)).execute(editor, charTyped, dataContext); //I will use this
-
         /** Set correct cursor shape for each mode */
         setProperCursorShape(editor);
     }
-
-    /**
-     * Main Function of controlling normal mode. performs matching functionality
-     * for input shortcut, which is given by the argument 'charTyped'.
-     * @param editor Opened editor
-     * @param charTyped the argument which denotes the shortcuts for command mode
-     * @param caret The Caret of the opened editor
-     */
-    private void normalModeControl(Editor editor, char charTyped, Caret caret) {
-        if(isNatural(charTyped+"") || charTyped == '0'){
-            if(multiExecute != 0){
-                multiExecute = multiExecute * 10 + Integer.parseInt(charTyped + "");
-            }
-            else{
-                multiExecute = Integer.parseInt(charTyped+"");
-            }
-        }
-        modeViewer(editor);
-    }
-
 
     /**
      * In modern vim plugin, there exists a convention which represents cursor
@@ -131,14 +102,13 @@ public class EditorTypedHandler implements TypedActionHandler {
      */
 
     private void setProperCursorShape(Editor editor) {
-        if(VIMMode.getModeToString() == "INSERT MODE" ) {
+        if(VIMMode.getModeToString().equals("INSERT MODE")) {
             editor.getSettings().setBlockCursor(false);
         }
         else {
             editor.getSettings().setBlockCursor(true);
         }
     }
-
 
     /**
      * This method continuously make popup to show user the current MODE.
@@ -151,18 +121,5 @@ public class EditorTypedHandler implements TypedActionHandler {
         mes.show(RelativePoint.getSouthEastOf(editor.getContentComponent()));
     }
 
-    private boolean isNatural(String strNum){
-        if(strNum == null){
-            return false;
-        }
-        try{
-            Integer integer = Integer.parseInt(strNum);
-            if(integer < 0)
-                return false;
-        }catch(NumberFormatException e){
-            return false;
-        }
-        return true;
-    }
     /** end of helpers */
 }

@@ -1,4 +1,4 @@
-package project_Team7;
+package project_Team7.UMLDiagram;
 
 import com.intellij.ide.projectView.impl.nodes.PackageUtil;
 import com.intellij.openapi.project.Project;
@@ -8,9 +8,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
-
 import org.jetbrains.annotations.NotNull;
-
 import javax.swing.*;
 import java.util.*;
 

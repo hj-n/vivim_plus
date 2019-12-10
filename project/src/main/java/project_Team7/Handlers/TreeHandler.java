@@ -6,8 +6,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import project_Team7.ProjectStructureTree;
-import project_Team7.TreeWindowFactory;
+import project_Team7.StructureTree.ProjectStructureTree;
+import project_Team7.StructureTree.TreeWindowFactory;
 import project_Team7.VIMMode;
 
 public class TreeHandler implements TypedHandler,CommandHandler {

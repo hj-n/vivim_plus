@@ -25,6 +25,8 @@ public class TypedHandlerMap extends BaseHandlerMap {
         typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{'J','K'}, moveOpenTabHandler));
         typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{':','/'}, commandMapHandler));
         typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{'n','N'}, searchStringHandler));
+        typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{'0','1','2','3','4','5','6','7','8','9'}, multiExecuteHandler));
+        typedHandlerMap.putAll(createPartMap("VISUAL MODE", new char[]{'0','1','2','3','4','5','6','7','8','9'}, multiExecuteHandler));
     }
 
     static public Map<Pair<String, Character>, TypedHandler> getMap() {

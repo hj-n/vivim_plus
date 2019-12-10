@@ -3,7 +3,7 @@ package project_Team7.Handlers;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import org.jetbrains.annotations.NotNull;
-import project_Team7.UMLWindowFactory;
+import project_Team7.UMLDiagram.UMLWindowFactory;
 import project_Team7.VIMMode;
 
 import java.awt.*;

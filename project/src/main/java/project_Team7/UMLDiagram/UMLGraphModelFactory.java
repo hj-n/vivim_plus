@@ -1,4 +1,4 @@
-package project_Team7;
+package project_Team7.UMLDiagram;
 
 import com.intellij.ide.projectView.impl.nodes.PackageUtil;
 import com.intellij.openapi.roots.ProjectRootManager;

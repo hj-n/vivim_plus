@@ -1,4 +1,4 @@
-package project_Team7;
+package project_Team7.UMLDiagram;
 
 
 import java.util.*;

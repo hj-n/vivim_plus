@@ -8,7 +8,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase;
 
 // for linux
 import org.junit.jupiter.api.Test;
-
+import project_Team7.UMLDiagram.KeyIterator;
 
 
 public class KeyIteratorTest extends BasePlatformTestCase {

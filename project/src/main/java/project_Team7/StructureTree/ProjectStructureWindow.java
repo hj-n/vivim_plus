@@ -1,10 +1,9 @@
-package project_Team7;
+package project_Team7.StructureTree;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.ui.components.JBScrollPane;
 import org.jetbrains.annotations.NotNull;
-
 import javax.swing.*;
 import javax.swing.tree.TreeModel;
 import java.awt.*;

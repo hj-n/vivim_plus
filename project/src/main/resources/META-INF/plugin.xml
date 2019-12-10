@@ -16,8 +16,8 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <toolWindow id="Project Structure" anchor="right" factoryClass="project_Team7.TreeWindowFactory"/>
-        <toolWindow id="UML Diagram" anchor="right" factoryClass="project_Team7.UMLWindowFactory"/>
+        <toolWindow id="Project Structure" anchor="right" factoryClass="project_Team7.StructureTree.TreeWindowFactory"/>
+        <toolWindow id="UML Diagram" anchor="right" factoryClass="project_Team7.UMLDiagram.UMLWindowFactory"/>
         <editorTypedHandler id="vim command" implementationClass="project_Team7.EditorTypedHandler"/>
     </extensions>
 
