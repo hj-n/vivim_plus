@@ -115,7 +115,6 @@ public class CommandMapHandler implements TypedHandler {
     private void handleCommands(Editor editor) {
         String currentCommandInput = currentCommand;
         int spaceIndex = currentCommandInput.indexOf(" ");
-        System.out.println(spaceIndex); //debugging
         String key;
         if(isSearch) {
             key = "/";

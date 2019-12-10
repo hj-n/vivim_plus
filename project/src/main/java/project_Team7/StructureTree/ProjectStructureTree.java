@@ -50,15 +50,6 @@ public class ProjectStructureTree extends Tree {
      */
     public static ProjectStructureTree thisTree;
 
-    /**
-     * Each psiclass, psimethod, psifield  are shown with their keys on the project structure window.
-     * By keylistener, this class gets the character that user typed.
-     * First letter of key are erased if it is same as a charater that user typed. If not, the whole key is erased.
-     **/
-    private HashMap<PsiElement, String> classToStr;
-    private HashMap<String, PsiElement> strToClass;
-    private HashMap<PsiElement, String> currentClassToStr;
-    private HashMap<String, PsiElement> currentStrToClass;
 
     /**
      * Creates a project structure tree for a given project.
@@ -67,7 +58,7 @@ public class ProjectStructureTree extends Tree {
      */
     ProjectStructureTree(@NotNull Project project) {
         setModel(ProjectTreeModelFactory.createProjectTreeModel(project));
-
+        thisTree = this;
         /** Set a cell renderer to display the name and icon of each node */
         setCellRenderer(new ColoredTreeCellRenderer() {
             @Override
@@ -224,35 +215,4 @@ public class ProjectStructureTree extends Tree {
         return Optional.empty();
     }
 
-
-    /**
-     * Returns the root package(s) in the source directory of a project. The default package will not be considered, as
-     * it includes all Java classes. Note that classes in the default package (i.e., having no package statement) will
-     * be ignored for this assignment. To be completed, this case must be separately handled.
-     *
-     * @param project a project
-     * @return a set of root packages
-     */
-    private static Set<PsiPackage> getRootPackages(Project project) {
-        final Set<PsiPackage> rootPackages = new HashSet<>();
-        PsiElementVisitor visitor = new PsiElementVisitor() {
-            @Override
-            public void visitDirectory(PsiDirectory dir) {
-                final PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(dir);
-                if (psiPackage != null && !PackageUtil.isPackageDefault(psiPackage))
-                    rootPackages.add(psiPackage);
-                else
-                    Arrays.stream(dir.getSubdirectories()).forEach(sd -> sd.accept(this));
-            }
-        };
-
-        ProjectRootManager rootManager = ProjectRootManager.getInstance(project);
-        PsiManager psiManager = PsiManager.getInstance(project);
-        Arrays.stream(rootManager.getContentSourceRoots())
-                .map(psiManager::findDirectory)
-                .filter(Objects::nonNull)
-                .forEach(dir -> dir.accept(visitor));
-
-        return rootPackages;
-    }
 }

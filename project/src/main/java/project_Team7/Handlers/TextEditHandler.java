@@ -87,7 +87,6 @@ public class TextEditHandler implements TypedHandler {
                     for(int i = 0; i < exeNum; i++) {
                         editor.getDocument().replaceString(caret.getVisualLineEnd(), caret.getVisualLineEnd(), clipBoard);
                         caret.moveToOffset(caret.getVisualLineEnd());
-                        System.out.println(exeNum);
                     }
                     setMultiExecute(0);
                     clipBoard = original;

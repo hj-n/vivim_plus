@@ -76,7 +76,6 @@ public class TreeHandler implements TypedHandler,CommandHandler {
         currentCommandInput = currentCommandInput.substring(7);
         if(ProjectStructureTree.getIdentifierToElement().containsKey(currentCommandInput)) {
             PsiElement element = (PsiElement) ProjectStructureTree.getIdentifierToElement().get(currentCommandInput);
-            System.out.println(element.getChildren().length);
             if(element instanceof PsiClass) {
                 if(((PsiClass) element).getFields().length != 0)
                     ProjectStructureTree.thisTree.publicUpdateTree(((PsiClass) element).getFields()[0]);
