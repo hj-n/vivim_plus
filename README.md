@@ -1,4 +1,4 @@
-# SimVim
+# ViVim
 
 Convienient, light, simple vim. 
 
@@ -30,7 +30,7 @@ Actually, It is easy to notice that **ideaVim**, the plugin that helps developer
 
 The first release of ideaVim was before 2012, only three years after the release of IntelliJ IDEA community ver. Therefore, the code used several tricks to implement vim functionalities due to the lack of libraries for plugin Development. For example, ideaVim code designed the shape of the cursor to use block cursor. In our plugin, we can easily use the pre-designed block cursor using the predefined function `editor.getSettings().getBlockCursor()`. Due to these poor early designs, now the code size of the ideaVim became too large, and it also has huge complexity. Therefore, it became reasonable to reimplement vim functionalities using upgraded support of the IDEA plugin development toolkit. We tried to make the code as simple as we can and made the common interface to add a new function, using these new libraries. 
 
-Also, as the "original vim" had developed for a long time since it's the first release, some functions became too hard to access. This problem occurs primarily in "navigation". It is somewhat complicated to navigate in vim. For example, we have to type the word "tab" in the command mode to move to a specific tab or file. Also, there is no way to see the overall structure of the project in vim. Therefore, we decided to reinforce the features of navigation and achieved it by developing **SimVim**.
+Also, as the "original vim" had developed for a long time since it's the first release, some functions became too hard to access. This problem occurs primarily in "navigation". It is somewhat complicated to navigate in vim. For example, we have to type the word "tab" in the command mode to move to a specific tab or file. Also, there is no way to see the overall structure of the project in vim. Therefore, we decided to reinforce the features of navigation and achieved it by developing **ViVim**.
 
 
 
