@@ -67,21 +67,21 @@ public class UMLGraph extends mxGraphComponent {
         PsiManager.getInstance(project).addPsiTreeChangeListener(new PsiTreeChangeAdapter() {
             @Override
             public void childAdded(@NotNull PsiTreeChangeEvent event) {
-                getTargetElement(event).ifPresent(target -> updateGraph(project, target));
+                getTargetElement(event).ifPresent(target -> updateGraph(project));
             }
 
             @Override
             public void childRemoved(@NotNull PsiTreeChangeEvent event) {
-                getTargetElement(event).ifPresent(target -> updateGraph(project, target));
+                getTargetElement(event).ifPresent(target -> updateGraph(project));
             }
 
             @Override
             public void childReplaced(@NotNull PsiTreeChangeEvent event) {
-                getTargetElement(event).ifPresent(target -> updateGraph(project, target));
+                getTargetElement(event).ifPresent(target -> updateGraph(project));
             }
 
         });
-        addKeyListener(new MyKeyAdapter(strToClass, classToStr, currentStrToClass, currentClassToStr, this));
+        addKeyListener(new UMLKeyAdapter(strToClass, classToStr, currentStrToClass, currentClassToStr, this));
     }
 
     /**
@@ -91,9 +91,8 @@ public class UMLGraph extends mxGraphComponent {
      * {@link JTree::scrollPathToVisibles} to display the corresponding node in GUI.
      *
      * @param project a project
-     * @param target  a target element
      */
-    private void updateGraph(@NotNull Project project, @NotNull PsiElement target) {
+    public void updateGraph(@NotNull Project project) {
         getGraph().setModel(UMLGraphModelFactory.createUMLGraphModel(project, currentClassToStr));
         updateClassMap(project);
     }

@@ -1,17 +1,20 @@
-package project_Team7;
+package project_Team7.Handlers;
 
 import com.android.tools.layoutlib.annotations.NotNull;
+import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.VisualPosition;
 import com.intellij.openapi.project.Project;
+import project_Team7.EditorTypedHandler;
+import project_Team7.VIMMode;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class InsertModeHandler {
+public class InsertModeHandler implements TypedHandler {
 
     private static boolean isESC;
     private String input = null;
@@ -97,11 +100,14 @@ public class InsertModeHandler {
      * When the current mode is the INSERT MODE, this function will be called and
      * write typed character on the editor.
      * @param editor Opened editor
-     * @param c input char (typed char)
+     * @param charTyped input char (typed char)
      */
-    public void execute(@NotNull Editor editor, char c) {
+    @Override
+    public void execute(@NotNull Editor editor, char charTyped, @NotNull DataContext dataContext) {
+        VIMMode.setMode(VIMMode.modeType.INSERT);
+        modeViewer(editor);
         isESC = false;
-        input = String.valueOf(c);
+        input = String.valueOf(charTyped);
         Caret caret = editor.getCaretModel().getPrimaryCaret();
         final Document document = editor.getDocument();
         final Project project = editor.getProject();

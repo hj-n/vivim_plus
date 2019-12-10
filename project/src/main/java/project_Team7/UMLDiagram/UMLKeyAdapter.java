@@ -13,7 +13,7 @@ import java.util.*;
  * We implemented the keyPressed function to get the character that
  * user typed and navigate to the PsiElement.
  * */
-public class MyKeyAdapter extends KeyStrokeAdapter {
+public class UMLKeyAdapter extends KeyStrokeAdapter {
     private HashMap<String, PsiElement> strToClass;
     private HashMap<PsiElement, String> classToStr;
     private HashMap<String, PsiElement> currentStrToClass;
@@ -21,9 +21,9 @@ public class MyKeyAdapter extends KeyStrokeAdapter {
     private UMLGraph graph;
 
     /** Construct MyKeyAdapter by reference maps of shortcuts and project tree of ProjectStructureTree.java */
-    MyKeyAdapter(HashMap <String, PsiElement> strMap,  HashMap <PsiElement, String> classMap,
-                 HashMap <String, PsiElement> curStrMap,  HashMap <PsiElement, String> curClassMap,
-                 UMLGraph graph) {
+    UMLKeyAdapter(HashMap <String, PsiElement> strMap, HashMap <PsiElement, String> classMap,
+                  HashMap <String, PsiElement> curStrMap, HashMap <PsiElement, String> curClassMap,
+                  UMLGraph graph) {
         super();
         strToClass = strMap;
         classToStr = classMap;

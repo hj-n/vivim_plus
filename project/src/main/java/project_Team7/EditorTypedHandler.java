@@ -15,9 +15,9 @@ import org.jetbrains.annotations.NotNull;
 
 
 import project_Team7.HandlerMap.TypedHandlerMap;
+import project_Team7.Handlers.InsertModeHandler;
 import project_Team7.Handlers.TypedHandler;
 
-import java.awt.*;
 import java.util.Map;
 
 public class EditorTypedHandler implements TypedActionHandler {
@@ -80,15 +80,12 @@ public class EditorTypedHandler implements TypedActionHandler {
         /** add listener to detect ESC, BACKSPACE, and ENTER input */
         InsertModeHandler.addKeyListener(editor);
 
-        if(getStoredChar() == 'i'){     /** INSERT MODE */
-            VIMMode.setMode(VIMMode.modeType.INSERT);
-            modeViewer(editor);
-            myInsertModeHandler.execute(editor, charTyped);
-        }
-        else{   /** NORMAL,VISUAL MODE */
-            if(handlerMap.containsKey(new Pair<>(VIMMode.getModeToString(),charTyped)))
-                handlerMap.get(new Pair<>(VIMMode.getModeToString(),charTyped)).execute(editor, charTyped, dataContext);
-        }
+        char key = charTyped;
+        if(VIMMode.getModeToString().equals("INSERT MODE"))
+            key = ' ';
+        if(handlerMap.containsKey(new Pair<>(VIMMode.getModeToString(),key)))
+            handlerMap.get(new Pair<>(VIMMode.getModeToString(),key)).execute(editor, charTyped, dataContext);
+
         /** Set correct cursor shape for each mode */
         setProperCursorShape(editor);
     }

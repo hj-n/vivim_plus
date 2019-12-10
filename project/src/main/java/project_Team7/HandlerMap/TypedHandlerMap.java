@@ -17,6 +17,7 @@ public class TypedHandlerMap extends BaseHandlerMap {
         typedHandlerMap.put(new Pair<>("NORMAL MODE",'t'), treeHandler);
         typedHandlerMap.put(new Pair<>("NORMAL MODE",'e'), terminalHandler);
         typedHandlerMap.put(new Pair<>("NORMAL MODE",'f'), umlHandler);
+        typedHandlerMap.put(new Pair<>("INSERT MODE", ' '), insertModeHandler);
         typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{'i', 'I','a','A','o','O'}, normalToInsertHandler));
         typedHandlerMap.putAll(createPartMap("NORMAL MODE", new char[]{'v', 'V','h','j','k','l','$','w','b'}, cursorVisualHandler));
         typedHandlerMap.putAll(createPartMap("VISUAL MODE", new char[]{'h','j','k','l','$','w','b'}, cursorVisualHandler));

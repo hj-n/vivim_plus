@@ -16,4 +16,5 @@ public class BaseHandlerMap {
     protected static final TerminalHandler terminalHandler = new TerminalHandler();
     protected static final UMLHandler umlHandler = new UMLHandler();
     protected static final MultiExecuteHandler multiExecuteHandler = new MultiExecuteHandler();
+    protected static final InsertModeHandler insertModeHandler = new InsertModeHandler();
 }
