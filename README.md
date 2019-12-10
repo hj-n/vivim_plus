@@ -1,6 +1,8 @@
-# Team 7 group project
+# SimVim
 
-POSTECH CSED332 Software Design Method (2019 Fall)
+Convienient, light, simple vim. 
+
+Implemented by the undergraduated students from POSTECH, POSTECH CSED332 Software Design Method (2019 Fall)
 
 
 ### Contributor
@@ -39,5 +41,32 @@ Also, as the "original vim" had developed for a long time since it's the first r
 ![Functionalities layout](materials/images/functionalites.jpeg)
 
 #### Summary
+
+- Basic vim functionalities
+  - Save / close file
+  - Tab control
+  - Cursor movement
+  - Delete / Copy / Paste
+  - Search / iterate thorugh found strings
+  - Multiple execution
+- Insert mode
+- Commnad mode
+- Visual mode
+  - Basic visual mode
+  - Visual linde mode
+- Open / Close code segment
+- Project tree structure
+  - Show the tree structure of the project 
+  - Expand / minimize certain node of the tree
+  - Assign identifier to each node
+  - move / open to the code corressponding to certain node
+- UML diagram
+  - Show the diagram of the project structure
+  - Generate shortcut to each classes
+  - Navigate using the shortcut
+- Integrating terminal
+  - Access terminal window
+
+Reference our [user scenario](wikis/explanation/user_scenario) for the specific functionalities.
 
 
