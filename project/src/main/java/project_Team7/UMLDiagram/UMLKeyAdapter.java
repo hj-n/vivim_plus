@@ -65,7 +65,7 @@ public class UMLKeyAdapter extends KeyStrokeAdapter {
                     currentStrToClass.put(currentClassToStr.get(key), key);
                 }
                 /** Call updatetree to render the tree */
-                graph.getGraph().setModel(UMLGraphModelFactory.createUMLGraphModel(graph.project,currentClassToStr));
+                graph.getGraph().setModel(UMLGraphModelFactory.createUMLGraphModel(graph.getProject(),currentClassToStr));
             }
 
         }
@@ -84,6 +84,7 @@ public class UMLKeyAdapter extends KeyStrokeAdapter {
                 currentClassToStr.clear();
                 currentStrToClass.putAll(strToClass);
                 currentClassToStr.putAll(classToStr);
+                graph.updateGraph(graph.getProject());
             }
         }
 
@@ -94,6 +95,7 @@ public class UMLKeyAdapter extends KeyStrokeAdapter {
             currentClassToStr.clear();
             currentStrToClass.putAll(strToClass);
             currentClassToStr.putAll(classToStr);
+            graph.updateGraph(graph.getProject());
         }
     }
 

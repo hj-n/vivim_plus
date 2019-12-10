@@ -27,7 +27,7 @@ public class UMLGraph extends mxGraphComponent {
      * implementation, we can access this graph in other objects.
      */
     public static UMLGraph thisGraph;
-    public Project project;
+    private Project project;
 
     /**
      * Each psiclass, psimethod, psifield  are shown with their keys on the project structure window.
@@ -38,6 +38,10 @@ public class UMLGraph extends mxGraphComponent {
     private HashMap<String, PsiElement> strToClass;
     private HashMap<PsiElement, String> currentClassToStr;
     private HashMap<String, PsiElement> currentStrToClass;
+
+    public Project getProject() {
+        return project;
+    }
 
     /**
      * Creates a UML graph for a given project.
