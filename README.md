@@ -20,6 +20,10 @@ Our project is to implement a convenient, modernized vim plugin for the IntelliJ
 
 We especially motivated from the Google Chrome plugin `vimium`, which provides vim shortcuts while exploring window. However, the plugin has more simple, but more powerful and convenient shortcuts, comparing to the original vim shortcuts. One of our goal, "convenient" is especially influenced by this factor.
 
+### Functionalities
 
+#### Layout
+
+![Functionalities layout](materials/images/functionalites.jpeg)
 
 
