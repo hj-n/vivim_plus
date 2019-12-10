@@ -23,20 +23,15 @@ import java.util.Map;
 public class EditorTypedHandler implements TypedActionHandler {
 
     private static char storedChar = 'x';
-    private InsertModeHandler myInsertModeHandler = new InsertModeHandler();
     private boolean hasDocumentListener = false;
     private static String recentDeletedString = null;
     private static Integer multiExecute = 0;
 
     private Map<Pair<String, Character>, TypedHandler> handlerMap = TypedHandlerMap.getMap();
 
-    public EditorTypedHandler() {
-    }
-
     public static String getRecentDeletedString() {
         return recentDeletedString;
     }
-
 
     public void setRecentDeletedString(String s) {
         recentDeletedString = s;
@@ -107,16 +102,4 @@ public class EditorTypedHandler implements TypedActionHandler {
         }
     }
 
-    /**
-     * This method continuously make popup to show user the current MODE.
-     * @param editor Opened editor
-     */
-    private void modeViewer(Editor editor){
-        JBPopupFactory jbPopupFactory = JBPopupFactory.getInstance();
-        JBPopup mes = jbPopupFactory.createMessage(VIMMode.getModeToString());
-        mes.setRequestFocus(false);
-        mes.show(RelativePoint.getSouthEastOf(editor.getContentComponent()));
-    }
-
-    /** end of helpers */
 }
