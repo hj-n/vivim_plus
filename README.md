@@ -2,7 +2,7 @@
 
 Convienient, light, simple vim. 
 
-Implemented by the undergraduated students from POSTECH, POSTECH CSED332 Software Design Method (2019 Fall)
+Implemented by the undergraduated students from POSTECH, HIT, UTT, as the group project of POSTECH CSED332 Software Design Method (2019 Fall) class.
 
 
 ### Contributor
