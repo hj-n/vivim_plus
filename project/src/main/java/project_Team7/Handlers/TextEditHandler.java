@@ -5,7 +5,7 @@ import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import org.jetbrains.annotations.NotNull;
 import project_Team7.VIMMode;
-
+import project_Team7.EditorTypedHandler;
 import static project_Team7.EditorTypedHandler.*;
 
 public class TextEditHandler implements TypedHandler {
@@ -24,6 +24,7 @@ public class TextEditHandler implements TypedHandler {
                 if (caret.getSelectedText() != null) {
                     clipBoard = caret.getSelectedText();
                     editor.getDocument().replaceString(caret.getSelectionStart(), caret.getSelectionEnd(), "");
+                    setStoredChar('x');
                 } else {
                     if (getStoredChar() == 'd') {
                         clipBoard = "";
@@ -50,6 +51,7 @@ public class TextEditHandler implements TypedHandler {
                 if (caret.getSelectedText() != null) {
                     clipBoard = caret.getSelectedText();
                     caret.removeSelection();
+                    setStoredChar('x');
                 } else {
                     if (getStoredChar() == 'y') {
                         clipBoard = "";
@@ -108,6 +110,5 @@ public class TextEditHandler implements TypedHandler {
                 modeViewer(editor);
                 break;
         }
-
     }
 }
