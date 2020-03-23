@@ -2,8 +2,7 @@
 
 Convienient, light, simple vim. 
 
-Implemented by the undergraduated students from POSTECH, HIT, UTT, as the group project of POSTECH CSED332 Software Design Method (2019 Fall) class.
-
+*Preparing for Release!!!*
 
 ### Contributor
 
@@ -67,6 +66,6 @@ Also, as the "original vim" had developed for a long time since it's the first r
 - Integrating terminal
   - Access terminal window
 
-Reference our [user scenario](https://csed332.postech.ac.kr/team7/team7_project/wikis/explanations/user_scenario) for the specific functionalities.
+Reference our [user scenario]() for the specific functionalities.
 
 
