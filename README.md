@@ -66,6 +66,4 @@ Also, as the "original vim" had developed for a long time since it's the first r
 - Integrating terminal
   - Access terminal window
 
-Reference our [user scenario]() for the specific functionalities.
-
 
